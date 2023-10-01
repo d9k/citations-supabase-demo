@@ -299,5 +299,16 @@
     "https://esm.sh/v132/wouter@2.9.2/X-ZS9yZWFjdA/denonext/wouter.mjs": "3802b7412704e1d2a7be6ec59849e52f25c773ec38881034d7fced3527c5dd9b",
     "https://esm.sh/wouter@2.9.2/static-location?external=react": "c94ee2227d28fb2da9df476b74bef2edcf56899e6398feebea1b000f3ca7d58d",
     "https://esm.sh/wouter@2.9.2?external=react": "285a8e313b91dac5516d3d461ee131bbf7d397c6af213d711377af75e1fc49c0"
+  },
+  "npm": {
+    "specifiers": {
+      "@types/node": "@types/node@18.11.18"
+    },
+    "packages": {
+      "@types/node@18.11.18": {
+        "integrity": "sha512-DHQpWGjyQKSHj3ebjFI/wRKcqQcdR+MoFBygntYOZytCqNfkd2ZC4ARDJ2DQqhjH5p85Nnd3jhUJIXrszFX/JA==",
+        "dependencies": {}
+      }
+    }
   }
 }

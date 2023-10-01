@@ -17,6 +17,7 @@ function ClientApp() {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={__REACT_QUERY_DEHYDRATED_STATE}>
+          {/* @ts-ignore 'Router' cannot be used as a JSX component. */}
           <Router>
             <SearchParamsProvider
               value={new URLSearchParams(window.location.search)}
