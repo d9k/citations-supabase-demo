@@ -62,7 +62,7 @@ server.get("*", async (context) => {
   /**
    * Render the request
    */
-  let result = await server.render(<ServerApp context={context} />);
+  const result = await server.render(<ServerApp context={context} />);
 
   return context.body(result, 200, {
     "content-type": "text/html; charset=utf-8",

@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 import React, { lazy, Suspense } from "react";
 
 import useAsset from "ultra/hooks/use-asset.js";

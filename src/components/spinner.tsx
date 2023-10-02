@@ -1,7 +1,7 @@
 import React from "react";
 
 export type Spinner = {
-  active: boolean;
+  active?: boolean;
 }
 
 export default function Spinner({ active = true }: Spinner) {
