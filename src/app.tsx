@@ -1,5 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 import React, { lazy, Suspense } from "react";
+// import { Button, MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
+import { Button, MantineProvider } from '@mantine/core';
 
 import useAsset from "ultra/hooks/use-asset.js";
 import Spinner from "./components/spinner.tsx";
@@ -11,6 +13,10 @@ const Comments = lazy(() => import("./components/comments.tsx"));
 import { QueryClient } from "@tanstack/react-query";
 import { queryClient } from "./react-query/query-client.ts";
 
+// const theme = createTheme({
+//   /** Put your mantine theme override here */
+// });
+
 export default function App({ cache }: any) {
   console.log("Hello world!");
   return (
@@ -21,9 +27,13 @@ export default function App({ cache }: any) {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="shortcut icon" href={useAsset("/favicon.ico")} />
           <link rel="stylesheet" href={useAsset("/style.css")} />
+          {/* <ColorSchemeScript /> */}
         </head>
         <body>
           <QueryClientProvider client={queryClient}>
+          {/* <MantineProvider withGlobalStyles withNormalizeCSS> */}
+          <MantineProvider>
+          {/* <MantineProvider theme={theme}> */}
             <main>
               <h1>
                 <span></span>__<span></span>
@@ -45,11 +55,15 @@ export default function App({ cache }: any) {
                 libraries.
               </p>
 
+              <Button>__TEST__</Button>
+
               <h2>Comments:</h2>
+
               <Suspense fallback={<Spinner />}>
                 <Comments date={+new Date()} />
               </Suspense>
             </main>
+            </MantineProvider>
             </QueryClientProvider>
         </body>
       </html>

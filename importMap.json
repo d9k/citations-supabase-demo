@@ -1,5 +1,7 @@
 {
   "imports": {
+    "@mantine/core": "https://esm.sh/@mantine/core@6.0.21?external=react",
+    "@mantine/hooks": "https://esm.sh/@mantine/hooks@6.0.21?external=react",
     "react": "https://esm.sh/react@18.2.0?dev",
     "react/": "https://esm.sh/react@18.2.0/",
     "react-dom": "https://esm.sh/react-dom@18.2.0",
