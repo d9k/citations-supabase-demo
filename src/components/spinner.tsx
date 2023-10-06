@@ -1,3 +1,4 @@
+import { continueFromInitialStream } from "ultra/lib/stream.ts";
 import React from "react";
 
 export type Spinner = {
@@ -5,6 +6,7 @@ export type Spinner = {
 }
 
 export default function Spinner({ active = true }: Spinner) {
+  console.log('Spinner log');
   return (
     <div
       className={["spinner", active && "spinner--active"].join(" ")}

@@ -5,7 +5,7 @@ import App from "./src/app.tsx";
 // Wouter
 import { Router } from "wouter";
 import staticLocationHook from "wouter/static-location";
-import { SearchParamsProvider } from "/wouter/index.tsx";
+import { SearchParamsProvider } from "/~/wouter/index.tsx";
 
 // React Helmet Async
 import { HelmetProvider } from "react-helmet-async";
@@ -13,8 +13,8 @@ import useServerInsertedHTML from "ultra/hooks/use-server-inserted-html.js";
 
 // React Query
 import { QueryClientProvider } from "@tanstack/react-query";
-import { useDehydrateReactQuery } from "./src/react-query/useDehydrateReactQuery.tsx";
-import { queryClient } from "./src/react-query/query-client.ts";
+import { useDehydrateReactQuery } from "/~/react-query/useDehydrateReactQuery.tsx";
+import { queryClient } from "/~/react-query/query-client.ts";
 
 import * as dotenv from "dotenv";
 
@@ -80,4 +80,11 @@ server.get("*", async (context) => {
 if (import.meta.main) {
   serve(server.fetch);
 }
+
+if (server.importMap) {
+  server.importMap.imports["/~/"] = "/_ultra/compiler/src/";
+}
+
+// console.log(server.importMap);
+
 export default server;
