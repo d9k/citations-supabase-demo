@@ -4,14 +4,14 @@ import React, { lazy, Suspense } from "react";
 import { Button, MantineProvider } from '@mantine/core';
 
 import useAsset from "ultra/hooks/use-asset.js";
-import Spinner from "./components/spinner.tsx";
+import Spinner from "/components/spinner.tsx";
 
 import { QueryClientProvider } from "@tanstack/react-query";
 
-const Comments = lazy(() => import("./components/comments.tsx"));
+const Comments = lazy(() => import("/components/comments.tsx"));
 
 import { QueryClient } from "@tanstack/react-query";
-import { queryClient } from "./react-query/query-client.ts";
+import { queryClient } from "/react-query/query-client.ts";
 
 // const theme = createTheme({
 //   /** Put your mantine theme override here */

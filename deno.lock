@@ -150,6 +150,7 @@
     "https://deno.land/std@0.193.0/semver/try_parse.ts": "fc7eeafc18686563b0cc35b518eda57690e513e634527a0ff48c600ba7798ce4",
     "https://deno.land/std@0.193.0/semver/try_parse_range.ts": "49be2271c4c07374fc2d986d5212fab7bb1f49daa485141e9bedd78d851ca5ca",
     "https://deno.land/std@0.193.0/semver/types.ts": "d44f442c2f27dd89bd6695b369e310b80549746f03c38f241fe28a83b33dd429",
+    "https://deno.land/std@0.203.0/dotenv/mod.ts": "1da8c6d0e7f7d8a5c2b19400b763bc11739df24acec235dda7ea2cfd3d300057",
     "https://deno.land/std@0.97.0/_util/assert.ts": "2f868145a042a11d5ad0a3c748dcf580add8a0dbc0e876eaa0026303a5488f58",
     "https://deno.land/std@0.97.0/_util/os.ts": "e282950a0eaa96760c0cf11e7463e66babd15ec9157d4c9ed49cc0925686f6a7",
     "https://deno.land/std@0.97.0/encoding/base64.ts": "eecae390f1f1d1cae6f6c6d732ede5276bf4b9cd29b1d281678c054dc5cc009e",

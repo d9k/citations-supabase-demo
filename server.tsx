@@ -5,7 +5,7 @@ import App from "./src/app.tsx";
 // Wouter
 import { Router } from "wouter";
 import staticLocationHook from "wouter/static-location";
-import { SearchParamsProvider } from "./src/wouter/index.tsx";
+import { SearchParamsProvider } from "/wouter/index.tsx";
 
 // React Helmet Async
 import { HelmetProvider } from "react-helmet-async";
@@ -15,6 +15,15 @@ import useServerInsertedHTML from "ultra/hooks/use-server-inserted-html.js";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useDehydrateReactQuery } from "./src/react-query/useDehydrateReactQuery.tsx";
 import { queryClient } from "./src/react-query/query-client.ts";
+
+import * as dotenv from "dotenv";
+
+const { load: loadDotEnv } = dotenv;
+
+const env = await loadDotEnv();
+const { SUPABASE_URL, SUPABASE_ANON_KEY } = env;
+
+console.log(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const server = await createServer({
   importMapPath: import.meta.resolve("./importMap.json"),
