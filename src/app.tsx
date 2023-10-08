@@ -14,7 +14,7 @@ const Comments = lazy(() => import("/~/components/comments.tsx"));
 import { QueryClient } from "@tanstack/react-query";
 import { queryClient } from "/~/react-query/query-client.ts";
 // import { ColoredBlock } from "./components/demoColorBlock.tsx.bk";
-import { ComposeProviders } from "/~/shared/helpers/ComposeProviders.jsx";
+import { ComposeProviders } from "./shared/react/ComposeProviders.tsx";
 
 // const theme = createTheme({
 //   /** Put your mantine theme override here */
