@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import React, { lazy, Suspense } from "react";
+import React, { lazy, ReactNode, Suspense } from "react";
 // import { Button, MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
 import { Button } from '@mantine/core';
 import { MantineProviderMod } from "/~/providers/mantine.tsx";
@@ -13,10 +13,28 @@ const Comments = lazy(() => import("/~/components/comments.tsx"));
 
 import { QueryClient } from "@tanstack/react-query";
 import { queryClient } from "/~/react-query/query-client.ts";
+// import { ColoredBlock } from "./components/demoColorBlock.tsx.bk";
+import { ComposeProviders } from "/~/shared/helpers/ComposeProviders.jsx";
 
 // const theme = createTheme({
 //   /** Put your mantine theme override here */
 // });
+
+type BodyProvidersProps = {
+  children: ReactNode;
+}
+
+const BodyProviders = ({children}: BodyProvidersProps) => (
+  <ComposeProviders
+    providers={[
+      [QueryClientProvider, {client: queryClient}],
+      [MantineProviderMod],
+    ]}
+  >
+    {/* @ts-ignore Type 'ReactNode' is not assignable to type 'null | undefined'. */}
+    {children}
+  </ComposeProviders>
+);
 
 export default function App({ cache }: any) {
   console.log("Hello world!");
@@ -31,10 +49,12 @@ export default function App({ cache }: any) {
           {/* <ColorSchemeScript /> */}
         </head>
         <body>
-          <QueryClientProvider client={queryClient}>
+          <BodyProviders>
+          {/* <QueryClientProvider client={queryClient}>
+          <MantineProviderMod> */}
           {/* <MantineProvider withGlobalStyles withNormalizeCSS> */}
-          <MantineProviderMod>
           {/* <MantineProvider theme={theme}> */}
+
             <main>
               <h1>
                 <span></span>__<span></span>
@@ -56,6 +76,8 @@ export default function App({ cache }: any) {
                 libraries.
               </p>
 
+              {/* <ColoredBlock>Colored block content</ColoredBlock> */}
+
               <Button>__TEST__</Button>
 
               <h2>Comments:</h2>
@@ -64,8 +86,9 @@ export default function App({ cache }: any) {
                 <Comments date={+new Date()} />
               </Suspense>
             </main>
-            </MantineProviderMod>
-            </QueryClientProvider>
+            {/* </MantineProviderMod>
+            </QueryClientProvider> */}
+            </BodyProviders>
         </body>
       </html>
   );
