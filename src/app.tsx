@@ -1,4 +1,8 @@
 // deno-lint-ignore-file no-explicit-any
+
+
+// TODO add slash to fix "Module has no exported member 'useFela'"
+// <reference types="./shared/types/fela-fix.d.ts" />
 import React, { lazy, ReactNode, Suspense } from "react";
 // import { Button, MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
 import { Button } from '@mantine/core';
@@ -13,8 +17,9 @@ const Comments = lazy(() => import("/~/components/comments.tsx"));
 
 import { QueryClient } from "@tanstack/react-query";
 import { queryClient } from "/~/react-query/query-client.ts";
-// import { ColoredBlock } from "./components/demoColorBlock.tsx.bk";
-import { ComposeProviders } from "./shared/react/ComposeProviders.tsx";
+import { DemoColorBlock } from "./components/demoColorBlock.tsx";
+import { ComposeProviders } from "/~/shared/react/ComposeProviders.tsx";
+import { FelaRendererProvider } from "/~/providers/fela.tsx";
 
 // const theme = createTheme({
 //   /** Put your mantine theme override here */
@@ -29,6 +34,7 @@ const BodyProviders = ({children}: BodyProvidersProps) => (
     providers={[
       [QueryClientProvider, {client: queryClient}],
       [MantineProviderMod],
+      [FelaRendererProvider]
     ]}
   >
     {/* @ts-ignore Type 'ReactNode' is not assignable to type 'null | undefined'. */}
@@ -76,7 +82,7 @@ export default function App({ cache }: any) {
                 libraries.
               </p>
 
-              {/* <ColoredBlock>Colored block content</ColoredBlock> */}
+              <DemoColorBlock>Colored block content</DemoColorBlock>
 
               <Button>__TEST__</Button>
 
