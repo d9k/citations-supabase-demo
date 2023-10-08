@@ -6,7 +6,6 @@
 
     "fela": "https://esm.sh/fela@12.2.1",
     "fela-tools": "https://esm.sh/fela-tools@12.2.1",
-    "react-fela": "https://esm.sh/react-fela@12.2.1?external=react",
 
     "@mantine/core": "https://esm.sh/@mantine/core@6.0.21?external=react,@types/react",
     "@mantine/hooks": "https://esm.sh/@mantine/hooks@6.0.21?external=react,@types/react",

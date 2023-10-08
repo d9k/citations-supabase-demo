@@ -1,8 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
 
-
-// TODO add slash to fix "Module has no exported member 'useFela'"
-// <reference types="./shared/types/fela-fix.d.ts" />
 import React, { lazy, ReactNode, Suspense } from "react";
 // import { Button, MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
 import { Button } from '@mantine/core';

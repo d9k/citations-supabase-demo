@@ -1,6 +1,6 @@
 // import { styled } from "@compiled/react";
 
-import { useFela } from "react-fela";
+import { useFela } from "/~/deps/react-fela/index.ts";
 
 import { ReactNode } from "react";
 import { WithChildren } from "/~/shared/react/WithChildren.tsx";
