@@ -1,6 +1,6 @@
 // import { styled } from "@compiled/react";
 
-import { useFela } from "/~/deps/react-fela/index.ts";
+import { useFela } from "react-fela";
 
 import { ReactNode } from "react";
 import { WithChildren } from "/~/shared/react/WithChildren.tsx";
@@ -15,6 +15,7 @@ import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 
 export const DemoColorBlock = ({children}: WithChildren) => {
     const { css } = useFela()
+    // const css = (props:any) => '';
 
     return (
         <div className={css({

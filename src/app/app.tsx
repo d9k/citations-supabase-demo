@@ -13,8 +13,8 @@ const Comments = lazy(() => import("/~/entities/ui/comments.tsx"));
 
 import { QueryClient } from "@tanstack/react-query";
 import { queryClient } from "./react-query/query-client.ts";
-import { DemoColorBlock } from "/~/shared/ui/demoColorBlock.tsx";
 import { ComposeProviders } from "/~/shared/react/ComposeProviders.tsx";
+import { DemoColorBlock } from "/~/shared/ui/demoColorBlock.tsx";
 
 import { FelaRendererProvider } from "./providers/fela.tsx";
 import { MantineProviderMod } from "./providers/mantine.tsx";
