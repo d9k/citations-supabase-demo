@@ -2,22 +2,22 @@
 
 import React, { lazy, ReactNode, Suspense } from "react";
 // import { Button, MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
-import { Button } from '@mantine/core';
-import { MantineProviderMod } from "./providers/mantine.tsx";
+import { Button, ColorSchemeScript } from '@mantine/core';
 
 import useAsset from "ultra/hooks/use-asset.js";
-import Spinner from "../shared/ui/spinner.tsx";
+import Spinner from "/~/shared/ui/spinner.tsx";
 
 import { QueryClientProvider } from "@tanstack/react-query";
 
-const Comments = lazy(() => import("../entities/ui/comments.tsx"));
+const Comments = lazy(() => import("/~/entities/ui/comments.tsx"));
 
 import { QueryClient } from "@tanstack/react-query";
 import { queryClient } from "./react-query/query-client.ts";
-import { DemoColorBlock } from "../shared/ui/demoColorBlock.tsx";
+import { DemoColorBlock } from "/~/shared/ui/demoColorBlock.tsx";
 import { ComposeProviders } from "/~/shared/react/ComposeProviders.tsx";
-import { FelaRendererProvider } from "./providers/fela.tsx";
 
+import { FelaRendererProvider } from "./providers/fela.tsx";
+import { MantineProviderMod } from "./providers/mantine.tsx";
 // const theme = createTheme({
 //   /** Put your mantine theme override here */
 // });
@@ -48,8 +48,9 @@ export default function App({ cache }: any) {
           <title>Ultra</title>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="shortcut icon" href={useAsset("/favicon.ico")} />
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mantine/core@7.1.2/esm/index.css" />
           <link rel="stylesheet" href={useAsset("/style.css")} />
-          {/* <ColorSchemeScript /> */}
+          <ColorSchemeScript />
         </head>
         <body>
           <BodyProviders>
