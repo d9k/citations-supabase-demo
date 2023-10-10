@@ -1,11 +1,11 @@
 import { serve } from "https://deno.land/std@0.176.0/http/server.ts";
 import { type Context, createServer } from "ultra/server.ts";
-import App from "./src/app.tsx";
+import App from "/~/app/app.tsx";
 
 // Wouter
 import { Router } from "wouter";
 import staticLocationHook from "wouter/static-location";
-import { SearchParamsProvider } from "/~/wouter/index.tsx";
+import { SearchParamsProvider } from "/~/app/wouter/index.tsx";
 
 // React Helmet Async
 import { HelmetProvider } from "react-helmet-async";
@@ -13,8 +13,8 @@ import useServerInsertedHTML from "ultra/hooks/use-server-inserted-html.js";
 
 // React Query
 import { QueryClientProvider } from "@tanstack/react-query";
-import { useDehydrateReactQuery } from "/~/react-query/useDehydrateReactQuery.tsx";
-import { queryClient } from "/~/react-query/query-client.ts";
+import { useDehydrateReactQuery } from "/~/app/react-query/useDehydrateReactQuery.tsx";
+import { queryClient } from "/~/app/react-query/query-client.ts";
 
 import * as dotenv from "dotenv";
 

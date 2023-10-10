@@ -3,20 +3,20 @@
 import React, { lazy, ReactNode, Suspense } from "react";
 // import { Button, MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
 import { Button } from '@mantine/core';
-import { MantineProviderMod } from "/~/providers/mantine.tsx";
+import { MantineProviderMod } from "./providers/mantine.tsx";
 
 import useAsset from "ultra/hooks/use-asset.js";
-import Spinner from "/~/components/spinner.tsx";
+import Spinner from "../shared/ui/spinner.tsx";
 
 import { QueryClientProvider } from "@tanstack/react-query";
 
-const Comments = lazy(() => import("/~/components/comments.tsx"));
+const Comments = lazy(() => import("../entities/ui/comments.tsx"));
 
 import { QueryClient } from "@tanstack/react-query";
-import { queryClient } from "/~/react-query/query-client.ts";
-import { DemoColorBlock } from "./components/demoColorBlock.tsx";
+import { queryClient } from "./react-query/query-client.ts";
+import { DemoColorBlock } from "../shared/ui/demoColorBlock.tsx";
 import { ComposeProviders } from "/~/shared/react/ComposeProviders.tsx";
-import { FelaRendererProvider } from "/~/providers/fela.tsx";
+import { FelaRendererProvider } from "./providers/fela.tsx";
 
 // const theme = createTheme({
 //   /** Put your mantine theme override here */
