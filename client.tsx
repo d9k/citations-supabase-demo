@@ -1,9 +1,8 @@
 import hydrate from "ultra/hydrate.js";
 import App from "/~/app/app.tsx";
 
-// Wouter
-import { Router } from "wouter";
-import { SearchParamsProvider } from "/~/app/wouter/index.tsx";
+// React Router
+import { BrowserRouter } from "react-router-dom";
 
 import { HelmetProvider } from "react-helmet-async";
 
@@ -18,13 +17,9 @@ function ClientApp() {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={__REACT_QUERY_DEHYDRATED_STATE}>
           {/* @ts-ignore 'Router' cannot be used as a JSX component. */}
-          <Router>
-            <SearchParamsProvider
-              value={new URLSearchParams(window.location.search)}
-            >
+          <BrowserRouter>
               <App />
-            </SearchParamsProvider>
-          </Router>
+          </BrowserRouter>
         </Hydrate>
       </QueryClientProvider>
     </HelmetProvider>

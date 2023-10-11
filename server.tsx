@@ -2,10 +2,8 @@ import { serve } from "https://deno.land/std@0.176.0/http/server.ts";
 import { type Context, createServer } from "ultra/server.ts";
 import App from "/~/app/app.tsx";
 
-// Wouter
-import { Router } from "wouter";
-import staticLocationHook from "wouter/static-location";
-import { SearchParamsProvider } from "/~/app/wouter/index.tsx";
+// React Router
+import { StaticRouter } from "react-router-dom/server";
 
 // React Helmet Async
 import { HelmetProvider } from "react-helmet-async";
@@ -54,11 +52,9 @@ function ServerApp({ context }: { context: Context }) {
   return (
     <HelmetProvider context={helmetContext}>
       <QueryClientProvider client={queryClient}>
-        <Router hook={staticLocationHook(requestUrl.pathname)}>
-          <SearchParamsProvider value={requestUrl.searchParams}>
-            <App />
-          </SearchParamsProvider>
-        </Router>
+        <StaticRouter location={new URL(context.req.url).pathname}>
+          <App />
+        </StaticRouter>
       </QueryClientProvider>
     </HelmetProvider>
   );
