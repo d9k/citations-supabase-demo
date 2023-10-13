@@ -19,7 +19,11 @@ export const DemoColorBlock = ({children}: WithChildren) => {
 
     return (
         <div className={css({
-            backgroundColor: '#ff5630',
+            /** @See [Fela shorthand expand with merge SSR · Issue #789 · robinweser/fela](https://github.com/robinweser/fela/issues/789)
+             * Prop `className` did not match (client/server)
+             * */
+            // backgroundColor: '#ff5630',
+            background: '#ff5630',
         })}>
             <h2>Colored block</h2>
             {children}
