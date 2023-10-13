@@ -14,7 +14,7 @@ const Comments = lazy(() => import("/~/entities/ui/comments.tsx"));
 import { QueryClient } from "@tanstack/react-query";
 import { queryClient } from "./react-query/query-client.ts";
 import { ComposeProviders } from "/~/shared/react/ComposeProviders.tsx";
-import { DemoColorBlock } from "/~/shared/ui/demoColorBlock.tsx";
+import { DemoFelaColorBlock } from "/~/shared/ui/demoFelaColorBlock.tsx";
 
 // import { FelaRendererProvider } from "./providers/fela.tsx";
 import { MantineProviderMod } from "./providers/mantine.tsx";
@@ -81,7 +81,7 @@ export default function App({ cache }: any) {
                 libraries.
               </p>
 
-              <DemoColorBlock>Colored block content</DemoColorBlock>
+              <DemoFelaColorBlock>Fela colored block content</DemoFelaColorBlock>
 
               <Button>__TEST__</Button>
 

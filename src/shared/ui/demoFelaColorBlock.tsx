@@ -13,7 +13,7 @@ import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 //     children: ReactNode;
 // }
 
-export const DemoColorBlock = ({children}: WithChildren) => {
+export const DemoFelaColorBlock = ({children}: WithChildren) => {
     const { css } = useFela()
     // const css = (props:any) => '';
 
@@ -25,7 +25,7 @@ export const DemoColorBlock = ({children}: WithChildren) => {
             // backgroundColor: '#ff5630',
             background: '#ff5630',
         })}>
-            <h2>Colored block</h2>
+            <h2>Fela colored block</h2>
             {children}
         </div>
     );
