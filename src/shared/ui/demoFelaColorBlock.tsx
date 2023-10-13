@@ -24,6 +24,18 @@ export const DemoFelaColorBlock = ({children}: WithChildren) => {
              * */
             // backgroundColor: '#ff5630',
             background: '#ff5630',
+            display: 'flex',
+            flexDirection: 'column',
+            invalidKey: 'invalidValue',
+            ':hover': {
+                background: 'green',
+                foo: {
+                    background: 'blue'
+                }
+              },
+              'nested': {
+                background: 'yellow'
+              }
         })}>
             <h2>Fela colored block</h2>
             {children}

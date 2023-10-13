@@ -8,6 +8,8 @@
     "fela-dom": "https://esm.sh/fela-dom@11.4.0",
     "fela-beautifier": "https://esm.sh/fela-beautifier@11.4.0",
     "fela-tools": "https://esm.sh/fela-tools@11.4.0",
+    "fela-preset-web": "https://esm.sh/fela-preset-web@11.4.0",
+    "fela-plugin-validator": "https://esm.sh/fela-plugin-validator@11.4.0",
 
     "@mantine/core": "https://esm.sh/@mantine/core@7.1.2?external=react,@types/react",
     "@mantine/hooks": "https://esm.sh/@mantine/hooks@7.1.2?external=react,@types/react",
