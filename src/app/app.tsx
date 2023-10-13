@@ -16,7 +16,7 @@ import { queryClient } from "./react-query/query-client.ts";
 import { ComposeProviders } from "/~/shared/react/ComposeProviders.tsx";
 import { DemoColorBlock } from "/~/shared/ui/demoColorBlock.tsx";
 
-import { FelaRendererProvider } from "./providers/fela.tsx";
+// import { FelaRendererProvider } from "./providers/fela.tsx";
 import { MantineProviderMod } from "./providers/mantine.tsx";
 // const theme = createTheme({
 //   /** Put your mantine theme override here */
@@ -29,9 +29,10 @@ type BodyProvidersProps = {
 const BodyProviders = ({children}: BodyProvidersProps) => (
   <ComposeProviders
     providers={[
-      [QueryClientProvider, {client: queryClient}],
+      // уже есть в server.ts, client.ts
+      // [QueryClientProvider, {client: queryClient}],
       [MantineProviderMod],
-      [FelaRendererProvider]
+      // [FelaRendererProvider]
     ]}
   >
     {/* @ts-ignore Type 'ReactNode' is not assignable to type 'null | undefined'. */}

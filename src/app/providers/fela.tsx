@@ -7,7 +7,7 @@ import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 
 
 /** @see https://fela.js.org/docs/latest/advanced/renderer-configuration */
-const renderer = createRenderer({
+export const felaRenderer = createRenderer({
   // selectorPrefix: process.env.NODE_ENV !== 'production' ? 'fela_' : '';
   // selectorPrefix: process.env.NODE_ENV !== 'production' ? 'fela_' : '';
   devMode: true,
@@ -17,7 +17,7 @@ const renderer = createRenderer({
 console.log('providers/fela.tsx: renderer created');
 
 export const FelaRendererProvider = ({children}: WithChildren) => (
-  <RendererProvider renderer={renderer}>
+  <RendererProvider renderer={felaRenderer}>
     {children}
   </RendererProvider>
 )

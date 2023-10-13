@@ -296,6 +296,7 @@
     "https://deno.land/x/ultra@v2.3.8/lib/utils/non-nullable.ts": "12ad6962526d24ba97067e8e6ca3446e7cbd847ca6014168f87be15449f8389a",
     "https://deno.land/x/ultra@v2.3.8/lib/utils/url.ts": "bed727fb678cc5018e9955da7659a15e41d350bf713aa64668533aa7e62c4733",
     "https://deno.land/x/ultra@v2.3.8/server.ts": "789d1063d1fecb6e7bfc2d3c9a3a02d93656572bef52865c50d9cee6d4f2c3e8",
+    "https://deno.land/x/ultra@v2.3.8/stream.ts": "fec76f06e425273a42c6a62d4631671cb3cc62160363bc17381b919fc1ff2e8a",
     "https://deno.land/x/wait@0.1.12/deps.ts": "5e26f3a59058cd8870ff0168340a1808c13fef289940ecc8c96e46a89a17514d",
     "https://deno.land/x/wait@0.1.12/log_symbols.ts": "cdf2d0aa44754d10fddd55999e933886a4d753f2acfc1219f629427ccc776ac7",
     "https://deno.land/x/wait@0.1.12/mod.ts": "83211441439cd0f794f4e95fbb6c766929dd6886169100d3bdf2ea1ea5e3adfe",
