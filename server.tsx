@@ -15,6 +15,8 @@ import { useDehydrateReactQuery } from "/~/app/react-query/useDehydrateReactQuer
 import { queryClient } from "/~/app/react-query/query-client.ts";
 
 import * as dotenv from "dotenv";
+import { createHeadInsertionTransformStream } from "ultra/lib/stream.ts";
+import { FelaRendererProvider, felaRenderer } from "/~/app/providers/fela.tsx";
 
 const { load: loadDotEnv } = dotenv;
 
@@ -27,6 +29,9 @@ const server = await createServer({
   importMapPath: import.meta.resolve("./importMap.json"),
   browserEntrypoint: import.meta.resolve("./client.tsx"),
 });
+
+// deno-lint-ignore no-explicit-any
+(window as any).isServer = true;
 
 // deno-lint-ignore no-explicit-any
 const helmetContext: Record<string, any> = {};
@@ -53,7 +58,9 @@ function ServerApp({ context }: { context: Context }) {
     <HelmetProvider context={helmetContext}>
       <QueryClientProvider client={queryClient}>
         <StaticRouter location={new URL(context.req.url).pathname}>
-          <App />
+          <FelaRendererProvider>
+            <App />
+          </FelaRendererProvider>
         </StaticRouter>
       </QueryClientProvider>
     </HelmetProvider>
@@ -69,6 +76,20 @@ server.get("*", async (context) => {
    */
   const result = await server.render(<ServerApp context={context} />);
 
+  // const felaStylesInject = createHeadInsertionTransformStream(() => {
+  //   console.log('felaStylesInject: start');
+
+  //   const felaStylesMarkup = felaRenderer.renderToMarkup();
+
+  //   console.log('felaStylesInject: felaStylesMarkup:', felaStylesMarkup);
+
+  //   // return Promise.resolve(felaStylesMarkup);
+  //   return Promise.resolve('__TEST_1__');
+  // });
+
+  // const resultWithFelaStyles = result.pipeThrough(felaStylesInject);
+
+  // return context.body(resultWithFelaStyles, 200, {
   return context.body(result, 200, {
     "content-type": "text/html; charset=utf-8",
   });

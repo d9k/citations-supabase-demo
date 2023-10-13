@@ -14,24 +14,36 @@ const Comments = lazy(() => import("/~/entities/ui/comments.tsx"));
 import { QueryClient } from "@tanstack/react-query";
 import { queryClient } from "./react-query/query-client.ts";
 import { ComposeProviders } from "/~/shared/react/ComposeProviders.tsx";
-import { DemoColorBlock } from "/~/shared/ui/demoColorBlock.tsx";
+import { DemoFelaColorBlock } from "/~/shared/ui/demoFelaColorBlock.tsx";
+// import { DemoScssColorBlock } from "/~/shared/ui/demoScssColorBlock/index.tsx";
 
-import { FelaRendererProvider } from "./providers/fela.tsx";
+// import { FELA_TEMPLATE_SERVER_RENDERED_STYLES, FelaRendererProvider } from "./providers/fela.tsx";
 import { MantineProviderMod } from "./providers/mantine.tsx";
 // const theme = createTheme({
 //   /** Put your mantine theme override here */
 // });
 
-type BodyProvidersProps = {
-  children: ReactNode;
-}
+import { isServer } from "/~/shared/utils/isServer.ts";
+import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 
-const BodyProviders = ({children}: BodyProvidersProps) => (
+
+const HtmlProviders = ({children}: WithChildren) => (
   <ComposeProviders
     providers={[
-      [QueryClientProvider, {client: queryClient}],
+      // уже есть!!!
+      // [QueryClientProvider, {client: queryClient}],
+      // [FelaRendererProvider]
+    ]}
+  >
+    {/* @ts-ignore Type 'ReactNode' is not assignable to type 'null | undefined'. */}
+    {children}
+  </ComposeProviders>
+);
+
+const BodyProviders = ({children}: WithChildren) => (
+  <ComposeProviders
+    providers={[
       [MantineProviderMod],
-      [FelaRendererProvider]
     ]}
   >
     {/* @ts-ignore Type 'ReactNode' is not assignable to type 'null | undefined'. */}
@@ -41,7 +53,11 @@ const BodyProviders = ({children}: BodyProvidersProps) => (
 
 export default function App({ cache }: any) {
   console.log("Hello world!");
+
+  // const felaStyles = isServer() ? FELA_TEMPLATE_SERVER_RENDERED_STYLES : null;
+
   return (
+    <HtmlProviders>
       <html lang="en">
         <head>
           <meta charSet="utf-8" />
@@ -50,6 +66,7 @@ export default function App({ cache }: any) {
           <link rel="shortcut icon" href={useAsset("/favicon.ico")} />
           <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mantine/core@7.1.2/esm/index.css" />
           <link rel="stylesheet" href={useAsset("/style.css")} />
+          {/* { felaStyles } */}
           <ColorSchemeScript />
         </head>
         <body>
@@ -58,7 +75,6 @@ export default function App({ cache }: any) {
           <MantineProviderMod> */}
           {/* <MantineProvider withGlobalStyles withNormalizeCSS> */}
           {/* <MantineProvider theme={theme}> */}
-
             <main>
               <h1>
                 <span></span>__<span></span>
@@ -80,7 +96,8 @@ export default function App({ cache }: any) {
                 libraries.
               </p>
 
-              <DemoColorBlock>Colored block content</DemoColorBlock>
+              {/* <DemoScssColorBlock>Scss colored block content</DemoScssColorBlock> */}
+              <DemoFelaColorBlock>Fela colored block content</DemoFelaColorBlock>
 
               <Button>__TEST__</Button>
 
@@ -92,8 +109,9 @@ export default function App({ cache }: any) {
             </main>
             {/* </MantineProviderMod>
             </QueryClientProvider> */}
-            </BodyProviders>
+          </BodyProviders>
         </body>
       </html>
+    </HtmlProviders>
   );
 }
