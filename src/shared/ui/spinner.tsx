@@ -1,11 +1,11 @@
 import { continueFromInitialStream } from "ultra/lib/stream.ts";
 import React from "react";
 
-export type Spinner = {
+export type SpinnerProps = {
   active?: boolean;
 }
 
-export default function Spinner({ active = true }: Spinner) {
+export const Spinner = ({ active = true }: SpinnerProps) => {
   console.log('Spinner log');
   return (
     <div

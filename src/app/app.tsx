@@ -2,7 +2,7 @@
 
 import React, { lazy, Suspense } from "react";
 import { Button } from '@mantine/core';
-import Spinner from "/~/shared/ui/spinner.tsx";
+import { Spinner } from "/~/shared/ui/spinner.tsx";
 import { DemoFelaColorBlock } from "/~/shared/ui/demoFelaColorBlock.tsx";
 import { AppRoutes } from '/~/app/routes/index.tsx';
 import { HtmlTemplate } from '/~/widgets/templates/HtmlTemplate.tsx';
