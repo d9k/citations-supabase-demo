@@ -18,6 +18,7 @@ import { DemoFelaColorBlock } from "/~/shared/ui/demoFelaColorBlock.tsx";
 
 // import { FelaRendererProvider } from "./providers/fela.tsx";
 import { MantineProviderMod } from "./providers/mantine.tsx";
+import { HtmlTemplate } from "/~/widgets/templates/HtmlTemplate.tsx";
 // const theme = createTheme({
 //   /** Put your mantine theme override here */
 // });
@@ -43,23 +44,22 @@ const BodyProviders = ({children}: BodyProvidersProps) => (
 export default function App({ cache }: any) {
   console.log("Hello world!");
   return (
-      <html lang="en">
-        <head>
-          <meta charSet="utf-8" />
-          <title>Ultra</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="shortcut icon" href={useAsset("/favicon.ico")} />
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mantine/core@7.1.2/esm/index.css" />
-          <link rel="stylesheet" href={useAsset("/style.css")} />
-          <ColorSchemeScript />
-        </head>
-        <body>
+        <HtmlTemplate
+          title="Ultra"
+          addHeaderChildren={(
+            <>
+              <link rel="shortcut icon" href={useAsset("/favicon.ico")} />
+              <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mantine/core@7.1.2/esm/index.css" />
+              <link rel="stylesheet" href={useAsset("/style.css")} />
+              <ColorSchemeScript />
+            </>
+          )}
+        >
           <BodyProviders>
           {/* <QueryClientProvider client={queryClient}>
           <MantineProviderMod> */}
           {/* <MantineProvider withGlobalStyles withNormalizeCSS> */}
           {/* <MantineProvider theme={theme}> */}
-
             <main>
               <h1>
                 <span></span>__<span></span>
@@ -93,8 +93,7 @@ export default function App({ cache }: any) {
             </main>
             {/* </MantineProviderMod>
             </QueryClientProvider> */}
-            </BodyProviders>
-        </body>
-      </html>
+          </BodyProviders>
+      </HtmlTemplate>
   );
 }
