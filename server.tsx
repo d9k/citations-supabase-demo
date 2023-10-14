@@ -15,7 +15,7 @@ import { useDehydrateReactQuery } from "/~/app/react-query/useDehydrateReactQuer
 import { queryClient } from "/~/app/react-query/query-client.ts";
 
 import * as dotenv from "dotenv";
-import { FelaRendererProvider, felaRenderer } from "/~/app/providers/fela.tsx";
+import { FelaRendererProvider, felaRenderer } from "/~/app/providers/individually/fela.tsx";
 import { createHeadInsertionTransformStream } from "ultra/stream.ts";
 // import { FelaRenderer } from "react-fela";
 

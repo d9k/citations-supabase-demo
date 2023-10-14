@@ -12,7 +12,9 @@
     "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns"]
   },
   "fmt": {
-    "files": { "exclude": [".ultra"] }
+    "files": { "exclude": [".ultra"] },
+    "indentWidth": 2,
+    "singleQuote": true
   },
   "lint": {
     "files": { "exclude": [".ultra"] }

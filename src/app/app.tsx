@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 
 import React, { lazy, ReactNode, Suspense } from "react";
-// import { Button, MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
+
 import { Button, ColorSchemeScript } from '@mantine/core';
 
 import useAsset from "ultra/hooks/use-asset.js";
@@ -16,32 +16,15 @@ import { queryClient } from "./react-query/query-client.ts";
 import { ComposeProviders } from "/~/shared/react/ComposeProviders.tsx";
 import { DemoFelaColorBlock } from "/~/shared/ui/demoFelaColorBlock.tsx";
 
-// import { FelaRendererProvider } from "./providers/fela.tsx";
-import { MantineProviderMod } from "./providers/mantine.tsx";
+import { MantineProviderMod } from "./providers/individually/mantine.tsx";
 import { HtmlTemplate } from "/~/widgets/templates/HtmlTemplate.tsx";
-// const theme = createTheme({
-//   /** Put your mantine theme override here */
-// });
+import { BodyProviders } from '/~/app/providers/body.tsx';
 
-type BodyProvidersProps = {
-  children: ReactNode;
+export type AppProps = {
+  cache?: any;
 }
 
-const BodyProviders = ({children}: BodyProvidersProps) => (
-  <ComposeProviders
-    providers={[
-      // уже есть в server.ts, client.ts
-      // [QueryClientProvider, {client: queryClient}],
-      [MantineProviderMod],
-      // [FelaRendererProvider]
-    ]}
-  >
-    {/* @ts-ignore Type 'ReactNode' is not assignable to type 'null | undefined'. */}
-    {children}
-  </ComposeProviders>
-);
-
-export default function App({ cache }: any) {
+export default function App({ cache }: AppProps) {
   console.log("Hello world!");
   return (
         <HtmlTemplate
@@ -56,10 +39,6 @@ export default function App({ cache }: any) {
           )}
         >
           <BodyProviders>
-          {/* <QueryClientProvider client={queryClient}>
-          <MantineProviderMod> */}
-          {/* <MantineProvider withGlobalStyles withNormalizeCSS> */}
-          {/* <MantineProvider theme={theme}> */}
             <main>
               <h1>
                 <span></span>__<span></span>
@@ -91,8 +70,6 @@ export default function App({ cache }: any) {
                 <Comments date={+new Date()} />
               </Suspense>
             </main>
-            {/* </MantineProviderMod>
-            </QueryClientProvider> */}
           </BodyProviders>
       </HtmlTemplate>
   );

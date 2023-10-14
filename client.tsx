@@ -9,7 +9,7 @@ import { HelmetProvider } from "react-helmet-async";
 // React Query
 import { Hydrate, QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "/~/app/react-query/query-client.ts";
-import { FelaRendererProvider } from "/~/app/providers/fela.tsx";
+import { FelaRendererProvider } from "./src/app/providers/individually/fela.tsx";
 declare const __REACT_QUERY_DEHYDRATED_STATE: unknown;
 
 function ClientApp() {
