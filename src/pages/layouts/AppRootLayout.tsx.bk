@@ -4,7 +4,7 @@ import useAsset from 'ultra/hooks/use-asset.js';
 import { BodyProviders } from '/~/pages/providers/body.tsx';
 import { ColorSchemeScript } from '@mantine/core';
 
-export const RootLayout = ({children}: WithChildren) => (
+export const AppRootLayout = ({children}: WithChildren) => (
   <HtmlTemplate
     title="Ultra"
     addHeaderChildren={(
@@ -16,8 +16,6 @@ export const RootLayout = ({children}: WithChildren) => (
       </>
     )}
   >
-    <BodyProviders>
-        {children}
-    </BodyProviders>
+    {children}
   </HtmlTemplate>
 )
