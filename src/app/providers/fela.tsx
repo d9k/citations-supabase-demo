@@ -12,14 +12,13 @@ import enhancerEnforceLonghands from "fela-enforce-longhands";
 
 /** @see https://fela.js.org/docs/latest/advanced/renderer-configuration */
 export const felaRenderer = createRenderer({
-  /**
- * Required plugin order: fela v. 12+: unit, fallback-value, prefixer!
- * @see https://fela.js.org/docs/latest/extra/migration#12.0.0
- */
-
   // selectorPrefix: process.env.NODE_ENV !== 'production' ? 'fela_' : '';
   devMode: true,
   plugins: [
+    /**
+     * Required plugin order: fela v. 12+: unit, fallback-value, prefixer!
+     * @see https://fela.js.org/docs/latest/extra/migration#12.0.0
+     */
     pluginExtend(),
     pluginUnit(),
     pluginValidator(),
