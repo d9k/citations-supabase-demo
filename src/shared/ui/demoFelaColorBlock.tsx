@@ -25,8 +25,11 @@ export const DemoFelaColorBlock = ({children}: WithChildren) => {
             // backgroundColor: '#ff5630',
             background: '#ff5630',
             display: 'flex',
+            padding: 4,
+            paddingBottom: 20,
+            marginBottom: 12,
             flexDirection: 'column',
-            invalidKey: 'invalidValue',
+            // invalidKey: 'invalidValue',
             ':hover': {
                 background: 'green',
                 foo: {

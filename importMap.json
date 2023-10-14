@@ -4,12 +4,15 @@
 
     "dotenv": "https://deno.land/std@0.203.0/dotenv/mod.ts",
 
-    "fela": "https://esm.sh/fela@11.4.0",
-    "fela-dom": "https://esm.sh/fela-dom@11.4.0",
-    "fela-beautifier": "https://esm.sh/fela-beautifier@11.4.0",
-    "fela-tools": "https://esm.sh/fela-tools@11.4.0",
-    "fela-preset-web": "https://esm.sh/fela-preset-web@11.4.0",
-    "fela-plugin-validator": "https://esm.sh/fela-plugin-validator@11.4.0",
+    "fela": "https://esm.sh/fela@12.2.1",
+    "fela-dom": "https://esm.sh/fela-dom@12.2.1",
+    "fela-beautifier": "https://esm.sh/fela-beautifier@12.2.1",
+    "fela-tools": "https://esm.sh/fela-tools@12.2.1",
+    "fela-enforce-longhands": "https://esm.sh/fela-enforce-longhands@12.2.1",
+    "fela-plugin-expand-shorthand": "https://esm.sh/fela-plugin-expand-shorthand@12.2.1",
+    "fela-plugin-extend": "https://esm.sh/fela-plugin-extend@12.2.1",
+    "fela-plugin-unit": "https://esm.sh/fela-plugin-unit@12.2.1",
+    "fela-plugin-validator": "https://esm.sh/fela-plugin-validator@12.2.1",
 
     "@mantine/core": "https://esm.sh/@mantine/core@7.1.2?external=react,@types/react",
     "@mantine/hooks": "https://esm.sh/@mantine/hooks@7.1.2?external=react,@types/react",

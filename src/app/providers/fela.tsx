@@ -1,19 +1,35 @@
 import { createRenderer } from "fela";
-
-// import { RendererProvider, ThemeProvider } from "react-fela"
+// import { ThemeProvider } from "react-fela"
 import { RendererProvider } from "react-fela"
 
-// import { RendererProvider } from "/~/deps/react-fela/index.ts"
 import { WithChildren } from "/~/shared/react/WithChildren.tsx";
-import felaPluginsPresetWeb from "fela-preset-web";
+
 import pluginValidator from "fela-plugin-validator";
+import pluginExpandShorthand from "fela-plugin-expand-shorthand";
+import pluginUnit from "fela-plugin-unit";
+import pluginExtend from "fela-plugin-extend";
+import enhancerEnforceLonghands from "fela-enforce-longhands";
 
 /** @see https://fela.js.org/docs/latest/advanced/renderer-configuration */
 export const felaRenderer = createRenderer({
-  // selectorPrefix: process.env.NODE_ENV !== 'production' ? 'fela_' : '';
+  /**
+ * Required plugin order: fela v. 12+: unit, fallback-value, prefixer!
+ * @see https://fela.js.org/docs/latest/extra/migration#12.0.0
+ */
+
   // selectorPrefix: process.env.NODE_ENV !== 'production' ? 'fela_' : '';
   devMode: true,
-  plugins: [...felaPluginsPresetWeb, pluginValidator()],
+  plugins: [
+    pluginExtend(),
+    pluginUnit(),
+    pluginValidator(),
+    pluginExpandShorthand(true)
+  ],
+  enhancers: [
+    enhancerEnforceLonghands({
+      borderMode: 'directional',
+    }),
+  ],
   selectorPrefix: 'fela_',
 });
 
