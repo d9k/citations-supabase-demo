@@ -9,11 +9,14 @@ import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 //   background-color: #ff5630;
 // `;
 
-// export type ColoredBlockProps = {
-//     children: ReactNode;
-// }
+export type DemoFelaColorBlockProps = WithChildren & {
+  borderColor?: string;
+}
 
-export const DemoFelaColorBlock = ({children}: WithChildren) => {
+export const DemoFelaColorBlock = ({
+  borderColor,
+  children,
+}: DemoFelaColorBlockProps) => {
     const { css } = useFela()
     // const css = (props:any) => '';
 
@@ -23,6 +26,7 @@ export const DemoFelaColorBlock = ({children}: WithChildren) => {
              * Prop `className` did not match (client/server)
              * */
             // backgroundColor: '#ff5630',
+            border: borderColor ? `1 px solid ${borderColor}` : undefined,
             background: '#ff5630',
             display: 'flex',
             padding: 4,
