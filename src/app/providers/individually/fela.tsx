@@ -5,9 +5,11 @@ import { RendererProvider } from "react-fela"
 import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 
 import pluginValidator from "fela-plugin-validator";
-import pluginExpandShorthand from "fela-plugin-expand-shorthand";
+// import pluginExpandShorthand from "fela-plugin-expand-shorthand";
 import pluginUnit from "fela-plugin-unit";
 import pluginExtend from "fela-plugin-extend";
+
+// import pluginTypescript from 'fela-plugin-typescript';
 import enhancerEnforceLonghands from "fela-enforce-longhands";
 
 /** @see https://fela.js.org/docs/latest/advanced/renderer-configuration */
@@ -21,8 +23,10 @@ export const felaRenderer = createRenderer({
      */
     pluginExtend(),
     pluginUnit(),
+    // TODO
+    // pluginTypescript(),
     pluginValidator(),
-    pluginExpandShorthand(true)
+    // pluginExpandShorthand(true),
   ],
   enhancers: [
     enhancerEnforceLonghands({

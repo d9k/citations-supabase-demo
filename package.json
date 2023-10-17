@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "ladle": "ladle serve"
+  },
+  "dependencies": {
+    "@ladle/react": "^3.2.1",
+    "fela": "12.2.1",
+    "fela-beautifier": "12.2.1",
+    "fela-dom": "12.2.1",
+    "fela-enforce-longhands": "12.2.1",
+    "fela-plugin-expand-shorthand": "12.2.1",
+    "fela-plugin-extend": "12.2.1",
+    "fela-plugin-unit": "12.2.1",
+    "fela-plugin-validator": "12.2.1",
+    "fela-tools": "12.2.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  }
+}
