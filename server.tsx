@@ -82,9 +82,9 @@ server.get("*", async (context) => {
   let felaStylesInjectFirstTime = true;
 
   const felaStylesInject = createHeadInsertionTransformStream(() => {
-    // if (!felaStylesInjectFirstTime) {
-    //   return Promise.resolve('');
-    // }
+    if (!felaStylesInjectFirstTime) {
+      return Promise.resolve('');
+    }
     felaStylesInjectFirstTime = false;
 
     console.log("felaStylesInject: start");

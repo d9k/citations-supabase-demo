@@ -1,6 +1,6 @@
 // import { styled } from "@compiled/react";
 
-import { useFela } from "react-fela";
+import { useFela } from "/~/deps/react-fela/index.ts";
 
 import { cssProps } from "/~/shared/react/cssProps.ts";
 

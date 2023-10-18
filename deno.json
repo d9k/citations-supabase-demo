@@ -1,10 +1,10 @@
 {
   "tasks": {
-    "dev": "deno run -A --no-check --watch ./server.tsx",
-    "check": "deno check ./server.tsx; deno lint",
-    "test": "deno test --allow-all",
-    "build": "deno run -A ./build.ts",
-    "start": "ULTRA_MODE=production deno run -A --no-remote ./server.js"
+    "dev": "deno run --no-npm -A --no-check --watch ./server.tsx",
+    "check": "deno check --no-npm ./server.tsx; deno lint",
+    "test": "deno test --no-npm --allow-all",
+    "build": "deno run --no-npm -A ./build.ts",
+    "start": "ULTRA_MODE=production deno run --no-npm -A --no-remote ./server.js"
   },
   "compilerOptions": {
     "jsx": "react-jsxdev",

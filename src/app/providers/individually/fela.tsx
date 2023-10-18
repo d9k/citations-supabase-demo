@@ -1,6 +1,6 @@
 import { createRenderer } from "fela";
 // import { ThemeProvider } from "react-fela"
-import { RendererProvider } from "react-fela";
+import { RendererProvider } from "/~/deps/react-fela/index.ts";
 
 import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 

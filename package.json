@@ -1,9 +1,29 @@
 {
   "scripts": {
-    "ladle": "ladle serve"
+    "storybook": "storybook dev --no-open -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@ladle/react": "^3.2.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^7.5.0",
+    "@storybook/addon-interactions": "^7.5.0",
+    "@storybook/addon-links": "^7.5.0",
+    "@storybook/addon-onboarding": "^1.0.8",
+    "@storybook/blocks": "^7.5.0",
+    "@storybook/builder-vite": "^7.5.0",
+    "@storybook/react": "^7.5.0",
+    "@storybook/react-vite": "^7.5.0",
+    "@storybook/testing-library": "^0.2.2",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "eslint-plugin-storybook": "^0.6.15",
     "fela": "12.2.1",
     "fela-beautifier": "12.2.1",
     "fela-dom": "12.2.1",
@@ -13,7 +33,9 @@
     "fela-plugin-unit": "12.2.1",
     "fela-plugin-validator": "12.2.1",
     "fela-tools": "12.2.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-fela": "12.2.1",
+    "storybook": "^7.5.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
   }
 }
