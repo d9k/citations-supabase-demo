@@ -3,10 +3,10 @@ import React from "react";
 
 export type SpinnerProps = {
   active?: boolean;
-}
+};
 
 export const Spinner = ({ active = true }: SpinnerProps) => {
-  console.log('Spinner log');
+  console.log("Spinner log");
   return (
     <div
       className={["spinner", active && "spinner--active"].join(" ")}
@@ -14,4 +14,4 @@ export const Spinner = ({ active = true }: SpinnerProps) => {
       aria-busy={active ? "true" : "false"}
     />
   );
-}
+};

@@ -1,12 +1,11 @@
-
 {
-    "editor.tabSize": 2,
-    "editor.insertSpaces": true,
-    "editor.detectIndentation": false,
-    "editor.formatOnSave": true,
-    "workbench.colorTheme": "Slime",
-    "deno.enable": true,
-    "deno.lint": true,
-    "deno.unstable": true,
-    "deno.importMap": "./importMap.json"
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  "workbench.colorTheme": "Slime",
+  "deno.enable": true,
+  "deno.lint": true,
+  "deno.unstable": true,
+  "deno.importMap": "./importMap.json"
 }

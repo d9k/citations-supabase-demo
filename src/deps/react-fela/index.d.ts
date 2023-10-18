@@ -1,4 +1,5 @@
 // deno-lint-ignore-file no-explicit-any ban-types
+// deno-fmt-ignore-file
 
 // TODO get rid of hack after https://github.com/esm-dev/esm.sh/issues/740 fixed
 //   (copied from https://esm.sh/v133/react-fela@12.2.1/X-ZS9yZWFjdA/index.d.ts, declare module envelope stripped)

@@ -1,7 +1,7 @@
-import { NavLink } from 'react-router-dom';
-import { WithChildren } from '/~/shared/react/WithChildren.tsx';
+import { NavLink } from "react-router-dom";
+import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 
-export const PageFrameLayout = ({children}: WithChildren) => (
+export const PageFrameLayout = ({ children }: WithChildren) => (
   <>
     <div>
       <NavLink to="/">Home</NavLink>
@@ -11,4 +11,4 @@ export const PageFrameLayout = ({children}: WithChildren) => (
       {children}
     </main>
   </>
-)
+);

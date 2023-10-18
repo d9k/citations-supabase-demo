@@ -14,7 +14,7 @@
   "fmt": {
     "files": { "exclude": [".ultra"] },
     "indentWidth": 2,
-    "singleQuote": true
+    "proseWrap": "preserve"
   },
   "lint": {
     "files": { "exclude": [".ultra"] }

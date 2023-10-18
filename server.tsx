@@ -15,11 +15,14 @@ import { useDehydrateReactQuery } from "/~/app/react-query/useDehydrateReactQuer
 import { queryClient } from "/~/app/react-query/query-client.ts";
 
 import * as dotenv from "dotenv";
-import { FelaRendererProvider, felaRenderer } from "/~/app/providers/individually/fela.tsx";
+import {
+  felaRenderer,
+  FelaRendererProvider,
+} from "/~/app/providers/individually/fela.tsx";
 import { createHeadInsertionTransformStream } from "ultra/stream.ts";
 // import { FelaRenderer } from "react-fela";
 
-import { renderToMarkup } from 'fela-dom'
+import { renderToMarkup } from "fela-dom";
 
 const { load: loadDotEnv } = dotenv;
 
@@ -84,12 +87,12 @@ server.get("*", async (context) => {
     // }
     felaStylesInjectFirstTime = false;
 
-    console.log('felaStylesInject: start');
+    console.log("felaStylesInject: start");
 
     // const felaStylesMarkup = felaRenderer.renderToMarkup();
     const felaStylesMarkup = renderToMarkup(felaRenderer);
 
-    console.log('felaStylesInject: felaStylesMarkup:', felaStylesMarkup);
+    console.log("felaStylesInject: felaStylesMarkup:", felaStylesMarkup);
 
     return Promise.resolve(felaStylesMarkup);
     // return Promise.resolve('__TEST_1__');
@@ -98,7 +101,7 @@ server.get("*", async (context) => {
   const resultWithFelaStyles = result.pipeThrough(felaStylesInject);
 
   return context.body(resultWithFelaStyles, 200, {
-  // return context.body(result, 200, {
+    // return context.body(result, 200, {
     "content-type": "text/html; charset=utf-8",
   });
 });

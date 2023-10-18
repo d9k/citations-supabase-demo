@@ -9,26 +9,28 @@ import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 // ]
 export type ProviderDataItem = [
   JSXElementConstructor<any>,
-  any
-] | [JSXElementConstructor<any>]
+  any,
+] | [JSXElementConstructor<any>];
 
 export type CompositeProvidersProps = WithChildren & {
-    providers: ProviderDataItem[];
+  providers: ProviderDataItem[];
 };
 
-export const ComposeProviders = ({providers, children}: CompositeProvidersProps) => {
-    const C = providers.reduce(
-        (Aggr, [Provider, providerProps = {}]) => ({ children }: WithChildren) => {
-            return (
-                <Aggr>
-                    <Provider {...providerProps}>
-                        {children}
-                    </Provider>
-                </Aggr>
-            );
-        },
-        ({children}: WithChildren) => <>{children}</>
-    );
+export const ComposeProviders = (
+  { providers, children }: CompositeProvidersProps,
+) => {
+  const C = providers.reduce(
+    (Aggr, [Provider, providerProps = {}]) => ({ children }: WithChildren) => {
+      return (
+        <Aggr>
+          <Provider {...providerProps}>
+            {children}
+          </Provider>
+        </Aggr>
+      );
+    },
+    ({ children }: WithChildren) => <>{children}</>,
+  );
 
-    return <C>{children}</C>;
-}
+  return <C>{children}</C>;
+};

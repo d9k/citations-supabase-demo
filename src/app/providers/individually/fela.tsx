@@ -1,6 +1,6 @@
 import { createRenderer } from "fela";
 // import { ThemeProvider } from "react-fela"
-import { RendererProvider } from "react-fela"
+import { RendererProvider } from "react-fela";
 
 import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 
@@ -30,16 +30,16 @@ export const felaRenderer = createRenderer({
   ],
   enhancers: [
     enhancerEnforceLonghands({
-      borderMode: 'directional',
+      borderMode: "directional",
     }),
   ],
-  selectorPrefix: 'fela_',
+  selectorPrefix: "fela_",
 });
 
-console.log('providers/fela.tsx: renderer created');
+console.log("providers/fela.tsx: renderer created");
 
-export const FelaRendererProvider = ({children}: WithChildren) => (
+export const FelaRendererProvider = ({ children }: WithChildren) => (
   <RendererProvider renderer={felaRenderer}>
     {children}
   </RendererProvider>
-)
+);

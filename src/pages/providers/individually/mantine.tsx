@@ -1,4 +1,4 @@
-import { MantineProvider, createTheme } from '@mantine/core';
+import { createTheme, MantineProvider } from "@mantine/core";
 import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 
 // import { Button, MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';

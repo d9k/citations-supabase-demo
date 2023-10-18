@@ -20,7 +20,7 @@ function ClientApp() {
           <Hydrate state={__REACT_QUERY_DEHYDRATED_STATE}>
             {/* @ts-ignore 'Router' cannot be used as a JSX component. */}
             <BrowserRouter>
-                <App />
+              <App />
             </BrowserRouter>
           </Hydrate>
         </FelaRendererProvider>

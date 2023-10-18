@@ -17,13 +17,13 @@ export const fetcher = async () => {
 
 export type CommentsProps = {
   date: any;
-}
+};
 
 export default function Comments({ date }: CommentsProps) {
-  console.log('Comments');
+  console.log("Comments");
 
   const queryResult = useQuery({
-    queryKey: ['comments' + date],
+    queryKey: ["comments" + date],
     queryFn: fetcher,
   });
 
