@@ -2,6 +2,8 @@
 
 import { useFela } from "react-fela";
 
+import { cssProps } from "/~/shared/react/cssProps.ts";
+
 import { ReactNode } from "react";
 // import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 
@@ -44,17 +46,15 @@ export const DemoFelaColorBlock = ({
     <div
       className={`demo-fela-color-block ${
         css({
-          /** @See [Fela shorthand expand with merge SSR · Issue #789 · robinweser/fela](https://github.com/robinweser/fela/issues/789)
-           * Prop `className` did not match (client/server)
-           */
-          // backgroundColor: '#ff5630',
-          border: borderColor ? `1 px solid ${borderColor}` : undefined,
-          background: "#ff5630",
-          display: "flex",
-          padding: 4,
-          paddingBottom: 20,
-          marginBottom: 12,
-          flexDirection: "column",
+          ...cssProps({
+            border: borderColor ? `1 px solid ${borderColor}` : undefined,
+            background: "#ff5630",
+            display: "flex",
+            padding: 4,
+            paddingBottom: 20,
+            marginBottom: 12,
+            flexDirection: "column",
+          }),
           // invalidKey: 'invalidValue',
           ":hover": {
             background: "green",
@@ -72,8 +72,10 @@ export const DemoFelaColorBlock = ({
       {children}
       <div
         className={css({
-          display: "flex",
-          justifyContent: "center",
+          ...cssProps({
+            display: "flex",
+            justifyContent: "center",
+          }),
           "> *:not(:last-child)": {
             marginRight: 24,
           },
