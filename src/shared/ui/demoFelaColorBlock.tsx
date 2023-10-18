@@ -46,8 +46,9 @@ export const DemoFelaColorBlock = ({
     <div
       className={`demo-fela-color-block ${
         css({
+          // border: `1 px solid #00000`,
           ...cssProps({
-            border: borderColor ? `1 px solid ${borderColor}` : undefined,
+            border: borderColor ? `1px solid ${borderColor}` : undefined,
             background: "#ff5630",
             display: "flex",
             padding: 4,

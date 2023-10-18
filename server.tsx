@@ -20,7 +20,6 @@ import {
   FelaRendererProvider,
 } from "/~/app/providers/individually/fela.tsx";
 import { createHeadInsertionTransformStream } from "ultra/stream.ts";
-// import { FelaRenderer } from "react-fela";
 
 import { renderToMarkup } from "fela-dom";
 
