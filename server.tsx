@@ -78,22 +78,22 @@ server.get("*", async (context) => {
    */
   const result = await server.render(<ServerApp context={context} />);
 
-  let felaStylesInjectFirstTime = true;
+  // let felaStylesInjectFirstTime = true;
 
   const felaStylesInject = createHeadInsertionTransformStream(() => {
-    if (!felaStylesInjectFirstTime) {
-      return Promise.resolve('');
-    }
-    felaStylesInjectFirstTime = false;
+    // if (!felaStylesInjectFirstTime) {
+    //   return Promise.resolve('<style></style>');
+    // }
+    // felaStylesInjectFirstTime = false;
 
-    console.log("felaStylesInject: start");
+    // console.log("felaStylesInject: start");
 
     // const felaStylesMarkup = felaRenderer.renderToMarkup();
     const felaStylesMarkup = renderToMarkup(felaRenderer);
 
     console.log("felaStylesInject: felaStylesMarkup:", felaStylesMarkup);
 
-    return Promise.resolve(felaStylesMarkup);
+    return Promise.resolve(felaStylesMarkup || '');
     // return Promise.resolve('__TEST_1__');
   });
 

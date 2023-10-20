@@ -1,5 +1,17 @@
 # citations_supabase_demo
 
+## Techologis used
+
+- [React](https://react.dev)
+- [Deno](https://github.com/denoland/deno) instead of Node.js
+- [Ultra](https://ultrajs.dev) as web framework
+- [FELA](https://fela.js.org) for CSS-in-JS
+- [Mantine](https://mantine.dev) for UI components and hooks.
+
+## Warnings
+
+- Because of simple SSR renderer demo conflicts with Chrome extensions which injects anything to the DOM tree (for example, [Stylus](https://chrome.google.com/webstore/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne)) Please disable these extensions for demo web domain name.
+
 ## Run
 
 `deno task dev`
