@@ -7,5 +7,10 @@
   "deno.enable": true,
   "deno.lint": true,
   "deno.unstable": true,
-  "deno.importMap": "./importMap.json"
+  "deno.importMap": "./importMap.json",
+  "deno.disablePaths": [
+    "./.storybook",
+    "./src/shared/ui",
+    "./src/shared/demoStories"
+  ]
 }

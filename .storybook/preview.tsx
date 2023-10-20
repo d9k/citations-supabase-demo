@@ -1,5 +1,6 @@
 import type { Preview } from "@storybook/react";
 import { FelaRendererProvider } from "/~/app/providers/individually/fela.tsx";
+import { MantineProviderMod } from "/~/pages/providers/individually/mantine.tsx";
 
 import '../public/style.css'
 
@@ -17,11 +18,13 @@ const preview: Preview = {
   },
   decorators: [
     (Story: any) => (
-      <div style={{ padding: '3rem', backgroundColor: 'blue' }}>
+      // <div style={{ padding: '3rem', backgroundColor: 'blue' }}>
         <FelaRendererProvider>
-          <Story />
+          <MantineProviderMod>
+            <Story />
+          </MantineProviderMod>
         </FelaRendererProvider>
-      </div>
+      // </div>
     ),
   ],
 };

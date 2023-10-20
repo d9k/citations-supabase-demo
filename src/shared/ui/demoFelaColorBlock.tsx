@@ -20,7 +20,7 @@ interface WithChildren {
 //   borderColor?: string;
 // }
 
-interface DemoFelaColorBlockProps extends WithChildren {
+export interface DemoFelaColorBlockProps extends WithChildren {
   borderColor?: string;
 }
 
