@@ -34,7 +34,7 @@ export const felaRenderer = createRenderer({
       borderMode: "directional",
     }),
   ],
-  selectorPrefix: "fela_",
+  selectorPrefix: "fe-",
 });
 
 console.log("providers/fela.tsx: renderer created");

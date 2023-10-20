@@ -29,10 +29,13 @@ type Story = StoryObj<typeof meta>;
 //   },
 // };
 
+
+/**
+ * <FelaRendererProvider> defined at
+ * @see .storybook/preview.tsx
+ * */
 const Template = (args: DemoFelaColorBlockProps) => (
-  <FelaRendererProvider>
-    <DemoFelaColorBlock {...args} />
-  </FelaRendererProvider>
+  <DemoFelaColorBlock {...args} />
 );
 
 export const Primary = Template.bind({});
