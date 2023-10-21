@@ -1,6 +1,3 @@
-import { continueFromInitialStream } from "ultra/lib/stream.ts";
-import React from "react";
-
 export type SpinnerProps = {
   active?: boolean;
 };
