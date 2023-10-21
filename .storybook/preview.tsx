@@ -36,7 +36,7 @@ const preview: Preview = {
               <Helmet>
                 {commonHeaderScriptsArray()}
               </Helmet>
-              <ColorSchemeScript />
+              <ColorSchemeScript defaultColorScheme="dark" />
               <MantineProviderMod>
                 <Story />
               </MantineProviderMod>
