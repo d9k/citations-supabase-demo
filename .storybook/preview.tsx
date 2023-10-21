@@ -3,7 +3,7 @@ import { FelaRendererProvider } from "/~/app/providers/individually/fela.tsx";
 import { MantineProviderMod } from "/~/pages/providers/individually/mantine.tsx";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { commonHeaderScriptsArray } from "/~/app/templates/headerScripts";
-import { ColorSchemeScript } from "@mantine/core";
+import { MantineColorSchemeScript } from "/~/pages/providers/helpers/colorSchemeScript";
 
 // import '../public/style.css'
 // import 'https://cdn.jsdelivr.net/npm/@mantine/core@7.1.2/esm/index.css'
@@ -36,7 +36,7 @@ const preview: Preview = {
               <Helmet>
                 {commonHeaderScriptsArray()}
               </Helmet>
-              <ColorSchemeScript defaultColorScheme="dark" />
+              <MantineColorSchemeScript />
               <MantineProviderMod>
                 <Story />
               </MantineProviderMod>
