@@ -50,6 +50,7 @@ export const DemoFelaColorBlock = ({
           ...cssProps({
             border: borderColor ? `1px solid ${borderColor}` : undefined,
             background: "#ff5630",
+            color: '#000',
             display: "flex",
             padding: 4,
             paddingBottom: 20,

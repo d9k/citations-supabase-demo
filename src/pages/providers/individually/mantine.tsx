@@ -15,6 +15,7 @@ const theme = createTheme({
 export function MantineProviderMod({ children }: MantineProviderModProps) {
   return (
     <MantineProvider defaultColorScheme="dark" theme={theme}>
+    {/* <MantineProvider defaultColorScheme="dark"> */}
       {children}
     </MantineProvider>
   );

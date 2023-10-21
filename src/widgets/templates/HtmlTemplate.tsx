@@ -12,10 +12,14 @@ export const HtmlTemplate = ({
   title = "Ultra",
 }: HtmlTemplateProps = {}) => {
   return (
-    <html lang="en">
+    <html lang="en" data-mantine-color-scheme="dark">
       <head>
         <meta charSet="utf-8" />
         <title>{title}</title>
+        <script
+          key="mantine-fix-color-scheme"
+          dangerouslySetInnerHTML={{__html: `window.localStorage.setItem('mantine-color-scheme-value', 'dark');`}}
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         {addHeaderChildren}
       </head>
