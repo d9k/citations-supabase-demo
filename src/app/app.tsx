@@ -9,6 +9,7 @@ import { HtmlTemplate } from "/~/widgets/templates/HtmlTemplate.tsx";
 import { ColorSchemeScript } from "@mantine/core";
 import useAsset from "ultra/hooks/use-asset.js";
 import { BodyProviders } from "/~/pages/providers/body.tsx";
+import { commonHeaderScriptsArray } from "/~/app/templates/headerScripts.tsx";
 
 const Comments = lazy(() => import("/~/entities/ui/comments.tsx"));
 
@@ -24,11 +25,7 @@ export default function App({ cache }: AppProps) {
       addHeaderChildren={
         <>
           <link rel="shortcut icon" href={useAsset("/favicon.ico")} />
-          <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/@mantine/core@7.1.2/esm/index.css"
-          />
-          <link rel="stylesheet" href={useAsset("/style.css")} />
+          {commonHeaderScriptsArray()}
           <ColorSchemeScript />
         </>
       }

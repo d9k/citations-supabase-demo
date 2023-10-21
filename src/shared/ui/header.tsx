@@ -36,7 +36,7 @@ export function Header({menuItems}: HeaderProps) {
 
   return (
     <header className="header">
-      <Container size="md" className="header_inner">
+      <Container size="lg" className="header_inner">
         <div>Your logo</div>
         <Group gap={5} visibleFrom="xs">
           {items}

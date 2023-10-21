@@ -30,7 +30,15 @@ const config: StorybookConfig = {
           '/~': path.resolve(__dirname, '../src'),
         }
       },
-    };
+    }
   },
+  // previewHead: (head: string) => `
+  //   ${head}
+  //   <link
+  //     rel="stylesheet"
+  //     href="https://cdn.jsdelivr.net/npm/@mantine/core@7.1.2/esm/index.css"
+  //   />
+  //   <link rel="stylesheet" href="/style.css" />
+  // `
 };
 export default config;

@@ -3,8 +3,8 @@ body {
   margin: 0;
   padding: 1rem;
   font-family: monospace;
-  background: #ddd;
-  text-align: center;
+  /* background: #ddd; */
+  /* text-align: center; */
 }
 
 h1 {
@@ -71,10 +71,10 @@ p {
 }
 
 .header {
-  height: rem(56px);
-  margin-bottom: rem(120px);
+  height: 56px;
+  margin-bottom: 120px;
   background-color: var(--mantine-color-body);
-  border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
 }
 
 .header_inner {
@@ -87,10 +87,10 @@ p {
 .header_link {
   display: block;
   line-height: 1;
-  padding: rem(8px) rem(12px);
+  padding: 8px 12px;
   border-radius: var(--mantine-radius-sm);
   text-decoration: none;
-  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  color: var(--mantine-color-dark-0);
   font-size: var(--mantine-font-size-sm);
   font-weight: 500;
 
@@ -101,5 +101,5 @@ p {
 }
 
 .header_link:hover {
-  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+  background-color: var(--mantine-color-dark-6);
 }

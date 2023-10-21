@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { DemoFelaColorBlock, DemoFelaColorBlockProps } from './demoFelaColorBlock';
 import { FelaRendererProvider } from "/~/app/providers/individually/fela.tsx";
+import { Button } from '@mantine/core';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
@@ -40,5 +41,5 @@ const Template = (args: DemoFelaColorBlockProps) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  children: 'Test',
+  children: (<Button>test</Button>),
 };
