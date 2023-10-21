@@ -306,6 +306,7 @@
     "https://esm.sh/@mantine/core@6.0.21?external=react,@types/react": "7f1091acb4a7161c1d436aad5dd0461a7b4bcb16b6982e2baa8d790eb03890df",
     "https://esm.sh/@mantine/core@7.1.0": "1a5b4e6d54ecde4259971887c6d2b5901e38f10c7bb2504ecb9b271d7ab46891",
     "https://esm.sh/@mantine/core@7.1.2?external=react,@types/react": "6dfa979ab846bfdad5b183e6ed1185b75db2030168e23d3bf7d978af9cd7a363",
+    "https://esm.sh/@mantine/hooks@7.1.2?external=react,@types/react": "079cf156ec2ab3bcbc24cdabce089ae8ec1b20040027bf8874a50b874a975e84",
     "https://esm.sh/@tanstack/react-query@4.2.3?external=react": "fb242aa2ef7b0d86b59ca1e0c083d94f2be6db4d8fc983613dc43837479ea525",
     "https://esm.sh/fela-beautifier@12.2.1": "f6c2acf962306e0699409a0f4df2c117b2e98b89fb96acf91d8050cb8998a02a",
     "https://esm.sh/fela-dom@11.4.0": "1d7fe59c8ddd080afc7250702b7ae6c167a410a7e4b9210eccc7532418d95243",
