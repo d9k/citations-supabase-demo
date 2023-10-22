@@ -3,7 +3,7 @@ export type SpinnerProps = {
 };
 
 export const Spinner = ({ active = true }: SpinnerProps) => {
-  console.log("Spinner log");
+  // console.log("Spinner log");
   return (
     <div
       className={["spinner", active && "spinner--active"].join(" ")}

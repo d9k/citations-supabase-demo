@@ -26,9 +26,9 @@ import { renderToMarkup } from "fela-dom";
 const { load: loadDotEnv } = dotenv;
 
 const env = await loadDotEnv();
-const { SUPABASE_URL, SUPABASE_ANON_KEY } = env;
+const { ULTRA_PUBLIC_SUPABASE_URL, ULTRA_PUBLIC_SUPABASE_ANON_KEY } = env;
 
-console.log(SUPABASE_URL, SUPABASE_ANON_KEY);
+console.log(ULTRA_PUBLIC_SUPABASE_URL, ULTRA_PUBLIC_SUPABASE_ANON_KEY);
 
 const server = await createServer({
   importMapPath: import.meta.resolve("./importMap.json"),
@@ -91,7 +91,7 @@ server.get("*", async (context) => {
     // const felaStylesMarkup = felaRenderer.renderToMarkup();
     const felaStylesMarkup = renderToMarkup(felaRenderer);
 
-    console.log("felaStylesInject: felaStylesMarkup:", felaStylesMarkup);
+    // console.log("felaStylesInject: felaStylesMarkup:", felaStylesMarkup);
 
     return Promise.resolve(felaStylesMarkup || '');
     // return Promise.resolve('__TEST_1__');

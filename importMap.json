@@ -30,6 +30,8 @@
     "react-router-dom": "https://esm.sh/react-router-dom@6.3.0?external=react",
     "react-router-dom/server": "https://esm.sh/react-router-dom@6.3.0/server?external=react",
 
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.38.2",
+
     "@tanstack/react-query": "https://esm.sh/@tanstack/react-query@4.2.3?external=react",
 
     "ultra/": "https://deno.land/x/ultra@v2.3.8/"

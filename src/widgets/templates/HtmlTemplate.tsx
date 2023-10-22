@@ -12,7 +12,7 @@ export const HtmlTemplate = ({
   title = "Ultra",
 }: HtmlTemplateProps = {}) => {
   return (
-    <html lang="en">
+    <html lang="en" data-mantine-color-scheme="dark">
       <head>
         <meta charSet="utf-8" />
         <title>{title}</title>
