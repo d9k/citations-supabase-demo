@@ -20,6 +20,7 @@
 
     "@mantine/core": "https://esm.sh/@mantine/core@7.1.2?external=react,@types/react",
     "@mantine/hooks": "https://esm.sh/@mantine/hooks@7.1.2?external=react,@types/react",
+    "@mantine/form": "https://esm.sh/@mantine/form@7.1.2?external=react,@types/react",
     "react": "https://esm.sh/react@18.2.0?dev",
     "react/": "https://esm.sh/react@18.2.0/",
     "react-dom": "https://esm.sh/react-dom@18.2.0",

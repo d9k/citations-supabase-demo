@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "@mantine/core": "7.1.2",
+    "@mantine/form": "7.1.2",
     "@mantine/hooks": "7.1.2",
     "fela": "12.2.1",
     "fela-beautifier": "12.2.1",
