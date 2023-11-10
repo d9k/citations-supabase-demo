@@ -17,6 +17,36 @@ const config: StorybookConfig = {
   docs: {
     autodocs: "tag",
   },
+  typescript: {
+    reactDocgenTypescriptOptions: {
+      shouldRemoveUndefinedFromOptional: true,
+      shouldExtractLiteralValuesFromEnum: true,
+
+      /** @see https://github.com/storybookjs/storybook/issues/12185#issuecomment-749531020 */
+      propFilter: (prop) => {
+        // console.log('__TEST__', prop);
+        if (prop.parent) {
+          const fileName = prop.parent.fileName;
+          if (/node_modules/.test(fileName)) {
+            if (/@mantine/.test(fileName)) {
+              /** Some shorthand or service property */
+              if (prop.name.length <= 3 || prop.name.at(0) == '_' || prop.name == 'bgsz') {
+                return false;
+              }
+              return true;
+            }
+            return false;
+          } else {
+            return true;
+          }
+        }
+
+        return true;
+        return prop.parent ? !/node_modules/.test(prop.parent.fileName) : true
+      } ,
+      // propFilter: (prop) => ( prop.parent ? !/node_modules\/(?!ant).*/.test(prop.parent.fileName) : true),
+    }
+  },
   viteFinal: async (config: any) => {
     console.log('viteFinal:', config);
 
