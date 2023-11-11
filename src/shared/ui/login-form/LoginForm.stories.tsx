@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { within, userEvent } from "@storybook/testing-library";
+import { expect } from "@storybook/jest";
+
 import { LoginForm } from './index.tsx';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -28,3 +31,20 @@ export const Primary: Story = {
     projectName: "Secret Project",
   },
 };
+
+export const TestLoginRequired: Story = {
+  args: {
+    ...Primary.args,
+  },
+  async play ( {canvasElement} ) {
+    const canvas = within(canvasElement);
+
+    const inputEmailOrLogin = canvas.getByPlaceholderText("Email or login");
+    const inputPassword = canvas.getByPlaceholderText("Your password");
+
+    expect(inputEmailOrLogin).toHaveAttribute('required');
+    expect(inputPassword).toHaveAttribute('required');
+    await userEvent.type(inputEmailOrLogin, "shrek@is.life");
+    await userEvent.type(inputPassword, "PrFiona");
+  }
+}

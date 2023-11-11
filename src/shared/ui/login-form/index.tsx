@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useToggle, upperFirst } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
+import { FormValidateInput } from '@mantine/form/types.d.ts';
 import {
   TextInput,
   PasswordInput,
@@ -16,7 +17,18 @@ import {
   Space,
 } from '@mantine/core';
 
-export type LoginFormValues = {
+
+export enum LoginFormType {
+  login = 'login',
+  register = 'register',
+}
+
+export type LoginValues = {
+  loginOrEmail: string;
+  password: string;
+}
+
+export type RegisterValues = {
   email: string;
   name: string;
   login: string;
@@ -24,41 +36,98 @@ export type LoginFormValues = {
   terms: boolean;
 }
 
+export type LoginFormValues  = RegisterValues & {};
+
 export type LoginFormProps = PaperProps & {
   demoField?: boolean;
   initialValues?: Partial<LoginFormValues>;
+  isRegisterForm?: boolean;
+  onChangeRegisterForm? : (newRegisterForm: boolean) => void;
+  onLogin: (values: LoginValues) => void;
+  onRegister?: (values: RegisterValues) => void;
   projectName: string;
 }
 
-export const defaultLoginFormValues = (): Partial<LoginFormValues> => ({
+export type UseFormParams = Parameters<typeof useForm<LoginFormValues>>;
+
+/** Error "A component is changing an uncontrolled input to be controlled" if skip any field default value */
+export const defaultLoginFormValues = (): LoginFormValues => ({
+  email: '',
+  login: '',
+  password: '',
+  name: '',
   terms: true,
 })
 
-const fieldsValidateFuncrions = {
+type UseFormParam1 = NonNullable<UseFormParams[0]>;
+type UseFormParamValidate = NonNullable<UseFormParam1['validate']>;
+type UseFormParamValidateObject = Exclude<UseFormParamValidate, Function>;
+type UseFormParamValidateObjectRequired = Required<UseFormParamValidateObject>;
+
+const fieldsValidateFunctions: UseFormParamValidateObjectRequired = {
   email: (val?: string) => (/^\S+@\S+$/.test(val || '') ? null : 'Invalid email'),
   password: (val?: string) => ((val || '').length <= 6 ? 'Password should include at least 6 characters' : null),
+  name: (val?: string) => ((val || '').length <= 6 ? 'Password should include at least 6 characters' : null),
+  login: (val?: string) => (/^[\w]{3,12}$/.test(val || '') ? null : 'Login must consist of 3-12 alphanumeric characters'),
+
+  // TODO
+  terms: (val?: boolean) => null,
 }
+
+type GetValuesType =
+  ((values: LoginFormValues, isRegister: true) => RegisterValues)
+  | ((values: LoginFormValues, isRegister: false) => LoginValues);
 
 
 /**
  * forked from
  * https://github.com/mantinedev/ui.mantine.dev/blob/6f9c568ee161ab3239b826af92dd48415e319cf8/lib/AuthenticationForm/AuthenticationForm.tsx
  */
-export function LoginForm({projectName, initialValues = {}, ...props}: LoginFormProps) {
-  const [type, toggle] = useToggle(['login', 'register']);
-
-  const mergedInitialValues: Partial<LoginFormValues> = useMemo(() => (
+export function LoginForm(
+  {
+    isRegisterForm = false,
+    onChangeRegisterForm,
+    projectName,
+    initialValues = {},
+    ...props
+  }: LoginFormProps
+) {
+  const mergedInitialValues: LoginFormValues = useMemo(() => (
     {...defaultLoginFormValues(), ...initialValues}
   ), [initialValues]);
 
+  const [isRegister, setIsRegister] = useState(isRegisterForm);
+
+  // TODO hook to merge prop and inner current value and provide onUpdate callback
+  useEffect(() => {
+    setIsRegister(isRegisterForm);
+  }, [isRegisterForm]);
+
+  const handleToggleRegister = useCallback(() => {
+    let newValue = false;
+
+    setIsRegister(
+      (v) => {
+        newValue = !v;
+        return newValue;
+      }
+    );
+
+    onChangeRegisterForm?.(newValue);
+  }, [])
+
   const form = useForm({
     initialValues: mergedInitialValues,
-    validate: fieldsValidateFuncrions,
+    validate: fieldsValidateFunctions,
   });
 
-  const isRegister = type === 'register';
-
   const inputSize = "lg";
+
+  const handleSubmit = useCallback(form.onSubmit(
+    (values) => {
+
+    }
+  ), [])
 
   return (
     <Paper radius="md" p="xl" withBorder {...props}>
@@ -75,7 +144,7 @@ export function LoginForm({projectName, initialValues = {}, ...props}: LoginForm
 
       {/* <Divider label="Or continue with email" labelPosition="center" my="lg" /> */}
 
-      <form onSubmit={form.onSubmit(() => {})}>
+      <form onSubmit={handleSubmit}>
         <Stack>
           {isRegister && (
             <TextInput
@@ -102,7 +171,7 @@ export function LoginForm({projectName, initialValues = {}, ...props}: LoginForm
           <TextInput
             required
             size={inputSize}
-            placeholder={isRegister ? "Email" : "Email of login"}
+            placeholder={isRegister ? "Email" : "Email or login"}
             value={form.values.email}
             onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
             error={form.errors.email && 'Invalid email'}
@@ -121,7 +190,7 @@ export function LoginForm({projectName, initialValues = {}, ...props}: LoginForm
 
           <Space h="xs" />
 
-          {type === 'register' && (
+          {isRegister && (
             <Checkbox
               label="I accept terms and conditions"
               checked={form.values.terms}
@@ -136,17 +205,17 @@ export function LoginForm({projectName, initialValues = {}, ...props}: LoginForm
             component="button"
             type="button"
             c="dimmed"
-            onClick={() => toggle()}
+            onClick={() => handleToggleRegister()}
             size="xs"
             underline="always"
           >
-            {type === 'register'
+            {isRegister
               ? 'Already have an account? Login'
               : "Don't have an account? Register"}
           </Anchor>
 
           <Button type="submit" radius="xl">
-            {upperFirst(type)}
+            {isRegister ? 'Register' : 'Login'}
           </Button>
         </Group>
       </form>
