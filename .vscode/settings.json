@@ -11,6 +11,7 @@
   "deno.disablePaths": [
     "./.storybook",
     "./src/shared/ui",
+    "./src/shared/lib/storybook",
     "./src/shared/demoStories",
     "./node_modules"
   ]
