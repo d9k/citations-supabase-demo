@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Header } from './header.tsx';
+import { LayoutHeader } from './layout-header.tsx';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-const meta: Meta<typeof Header> = {
-  title: 'shared/Header',
-  component: Header,
+const meta: Meta<typeof LayoutHeader> = {
+  title: 'shared/LayoutHeader',
+  component: LayoutHeader,
   parameters: {
     layout: 'fullscreen',
   },
@@ -17,7 +17,7 @@ const meta: Meta<typeof Header> = {
 
 export default meta;
 
-type Story = StoryObj<typeof Header>;
+type Story = StoryObj<typeof LayoutHeader>;
 
 
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args

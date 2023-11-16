@@ -1,10 +1,10 @@
 import { NavLink } from "react-router-dom";
 import { WithChildren } from "/~/shared/react/WithChildren.tsx";
-import { Header } from "/~/shared/ui/header.tsx";
+import { LayoutHeader } from "/~/shared/ui/layout-header.tsx";
 
 export const PageFrameLayout = ({ children }: WithChildren) => (
   <>
-    <Header
+    <LayoutHeader
       menuItems={[
         {
           path: '/',

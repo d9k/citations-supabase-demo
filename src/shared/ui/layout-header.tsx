@@ -23,7 +23,7 @@ export type HeaderProps = {
   menuItems: MenuItem[];
 }
 
-export function Header({
+export function LayoutHeader({
   children,
   childrenGap = 5,
   menuItems,
