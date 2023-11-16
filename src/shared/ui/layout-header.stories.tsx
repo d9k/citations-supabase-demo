@@ -1,26 +1,28 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { LayoutHeader } from './layout-header.tsx';
+import { BrowserRouter } from 'react-router-dom';
 
-// More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-const meta: Meta<typeof LayoutHeader> = {
+const meta = {
   title: 'shared/LayoutHeader',
   component: LayoutHeader,
   parameters: {
     layout: 'fullscreen',
   },
   tags: ['autodocs'],
-  // argTypes: {
-  //   backgroundColor: { control: 'color' },
-  // },
-} //satisfies Meta<typeof Header>
+  decorators: [
+    (Story) => (
+      <BrowserRouter>
+        <Story />
+      </BrowserRouter>
+    ),
+  ],
+} satisfies Meta<typeof LayoutHeader>
 
 export default meta;
 
 type Story = StoryObj<typeof LayoutHeader>;
 
-
-// More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary: Story = {
   args: {
     menuItems: [
