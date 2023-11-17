@@ -72,20 +72,6 @@ p {
 
 /** header styles */
 
-.header {
-  /* height: 56px; */
-  margin-bottom: 120px;
-  background-color: var(--mantine-color-body);
-  border-bottom: 1px solid var(--mantine-color-gray-3);
-  font-size: var(--mantine-font-size-md);
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-}
-
-[data-mantine-color-scheme="dark"] .header {
-  border-color: var(--mantine-color-dark-4);
-}
 
 .header_children {
   /* height: rem(56px); */
