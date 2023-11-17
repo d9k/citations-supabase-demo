@@ -1,5 +1,5 @@
-import { createTheme, MantineProvider } from "@mantine/core";
-import { WithChildren } from "/~/shared/react/WithChildren.tsx";
+import { createTheme, MantineProvider } from '@mantine/core';
+import { WithChildren } from '/~/shared/react/WithChildren.tsx';
 
 // import { Button, MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
 // const theme = createTheme({
@@ -14,10 +14,12 @@ const theme = createTheme({
   /** Put your mantine theme override here */
 });
 
-export function MantineProviderMod({ children, defaultColorScheme = 'dark' }: MantineProviderModProps) {
+export function MantineProviderMod(
+  { children, defaultColorScheme = 'dark' }: MantineProviderModProps,
+) {
   return (
     <MantineProvider defaultColorScheme={defaultColorScheme} theme={theme}>
-    {/* <MantineProvider defaultColorScheme="dark"> */}
+      {/* <MantineProvider defaultColorScheme="dark"> */}
       {children}
     </MantineProvider>
   );

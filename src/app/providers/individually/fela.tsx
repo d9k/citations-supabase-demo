@@ -1,17 +1,17 @@
-import { createRenderer } from "fela";
+import { createRenderer } from 'fela';
 // import { ThemeProvider } from "react-fela"
-import { RendererProvider } from "/~/deps/react-fela/index.ts";
+import { RendererProvider } from '/~/deps/react-fela/index.ts';
 // import { RendererProvider } from "react-fela";
 
-import { WithChildren } from "/~/shared/react/WithChildren.tsx";
+import { WithChildren } from '/~/shared/react/WithChildren.tsx';
 
-import pluginValidator from "fela-plugin-validator";
+import pluginValidator from 'fela-plugin-validator';
 // import pluginExpandShorthand from "fela-plugin-expand-shorthand";
-import pluginUnit from "fela-plugin-unit";
-import pluginExtend from "fela-plugin-extend";
+import pluginUnit from 'fela-plugin-unit';
+import pluginExtend from 'fela-plugin-extend';
 
 // import pluginTypescript from 'fela-plugin-typescript';
-import enhancerEnforceLonghands from "fela-enforce-longhands";
+import enhancerEnforceLonghands from 'fela-enforce-longhands';
 
 /** @see https://fela.js.org/docs/latest/advanced/renderer-configuration */
 export const felaRenderer = createRenderer({
@@ -31,13 +31,13 @@ export const felaRenderer = createRenderer({
   ],
   enhancers: [
     enhancerEnforceLonghands({
-      borderMode: "directional",
+      borderMode: 'directional',
     }),
   ],
-  selectorPrefix: "fe-",
+  selectorPrefix: 'fe-',
 });
 
-console.log("providers/fela.tsx: renderer created");
+console.log('providers/fela.tsx: renderer created');
 
 export const FelaRendererProvider = ({ children }: WithChildren) => (
   <RendererProvider renderer={felaRenderer}>

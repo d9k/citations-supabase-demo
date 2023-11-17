@@ -1,10 +1,10 @@
 // import { styled } from "@compiled/react";
 
-import { useFela } from "/~/deps/react-fela/index.ts";
+import { useFela } from '/~/deps/react-fela/index.ts';
 
-import { cssProps } from "/~/shared/react/cssProps.ts";
+import { cssProps } from '/~/shared/react/cssProps.ts';
 
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 // import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 
 // export const ColoredBlockInner = styled.div`
@@ -49,19 +49,19 @@ export const DemoFelaColorBlock = ({
           // border: `1 px solid #00000`,
           ...cssProps({
             border: borderColor ? `1px solid ${borderColor}` : undefined,
-            background: "#ff5630",
+            background: '#ff5630',
             color: '#000',
-            display: "flex",
+            display: 'flex',
             padding: 4,
             paddingBottom: 20,
             marginBottom: 12,
-            flexDirection: "column",
+            flexDirection: 'column',
           }),
           // invalidKey: 'invalidValue',
-          ":hover": {
-            background: "green",
+          ':hover': {
+            background: 'green',
             foo: {
-              background: "blue",
+              background: 'blue',
             },
           },
           // 'nested': {
@@ -75,10 +75,10 @@ export const DemoFelaColorBlock = ({
       <div
         className={css({
           ...cssProps({
-            display: "flex",
-            justifyContent: "center",
+            display: 'flex',
+            justifyContent: 'center',
           }),
-          "> *:not(:last-child)": {
+          '> *:not(:last-child)': {
             marginRight: 24,
           },
         })}

@@ -1,3 +1,3 @@
-import React from "react"
+import React from 'react';
 
-export const cssProps = (props: React.CSSProperties) => props
+export const cssProps = (props: React.CSSProperties) => props;

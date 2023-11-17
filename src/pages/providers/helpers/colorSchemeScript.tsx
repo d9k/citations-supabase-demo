@@ -1,5 +1,5 @@
-import { ColorSchemeScript } from "@mantine/core";
+import { ColorSchemeScript } from '@mantine/core';
 
 export const MantineColorSchemeScript = () => (
-  <ColorSchemeScript defaultColorScheme="dark" />
-)
+  <ColorSchemeScript defaultColorScheme='dark' />
+);

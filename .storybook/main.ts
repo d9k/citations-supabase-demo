@@ -1,21 +1,21 @@
-import type { StorybookConfig } from "@storybook/react-vite";
-import { withoutVitePlugins } from '@storybook/builder-vite'
+import type { StorybookConfig } from '@storybook/react-vite';
+import { withoutVitePlugins } from '@storybook/builder-vite';
 import path from 'path';
 
 const config: StorybookConfig = {
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-onboarding",
-    "@storybook/addon-interactions",
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-onboarding',
+    '@storybook/addon-interactions',
   ],
   framework: {
-    name: "@storybook/react-vite",
+    name: '@storybook/react-vite',
     options: {},
   },
   docs: {
-    autodocs: "tag",
+    autodocs: 'tag',
   },
   typescript: {
     reactDocgenTypescriptOptions: {
@@ -30,7 +30,10 @@ const config: StorybookConfig = {
           if (/node_modules/.test(fileName)) {
             if (/@mantine/.test(fileName)) {
               /** Some shorthand or service property */
-              if (prop.name.length <= 3 || prop.name.at(0) == '_' || prop.name == 'bgsz') {
+              if (
+                prop.name.length <= 3 || prop.name.at(0) == '_' ||
+                prop.name == 'bgsz'
+              ) {
                 return false;
               }
               return true;
@@ -42,8 +45,8 @@ const config: StorybookConfig = {
         }
 
         return true;
-      } ,
-    }
+      },
+    },
   },
   viteFinal: async (config: any) => {
     console.log('viteFinal:', config);
@@ -56,9 +59,9 @@ const config: StorybookConfig = {
         alias: {
           ...config.resolve?.alias,
           '/~': path.resolve(__dirname, '../src'),
-        }
+        },
       },
-    }
+    };
   },
   // previewHead: (head: string) => `
   //   ${head}

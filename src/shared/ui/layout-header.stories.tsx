@@ -1,15 +1,15 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from '@storybook/react';
 
-import { LayoutHeader } from "./layout-header.tsx";
-import { BrowserRouter } from "react-router-dom";
+import { LayoutHeader } from './layout-header.tsx';
+import { BrowserRouter } from 'react-router-dom';
 
 const meta = {
-  title: "shared/LayoutHeader",
+  title: 'shared/LayoutHeader',
   component: LayoutHeader,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [
     (Story) => (
       <BrowserRouter>
@@ -27,17 +27,17 @@ export const Primary: Story = {
   args: {
     menuItems: [
       {
-        path: "/books",
-        caption: "Books",
+        path: '/books',
+        caption: 'Books',
       },
       {
-        path: "/authors",
-        caption: "Authors",
+        path: '/authors',
+        caption: 'Authors',
         active: true,
       },
       {
-        path: "/publlishers",
-        caption: "Publishers",
+        path: '/publlishers',
+        caption: 'Publishers',
       },
     ],
   },

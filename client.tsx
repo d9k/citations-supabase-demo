@@ -1,15 +1,15 @@
-import hydrate from "ultra/hydrate.js";
-import App from "/~/app/app.tsx";
+import hydrate from 'ultra/hydrate.js';
+import App from '/~/app/app.tsx';
 
 // React Router
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from 'react-router-dom';
 
-import { HelmetProvider } from "react-helmet-async";
+import { HelmetProvider } from 'react-helmet-async';
 
 // React Query
-import { Hydrate, QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "/~/app/react-query/query-client.ts";
-import { FelaRendererProvider } from "./src/app/providers/individually/fela.tsx";
+import { Hydrate, QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from '/~/app/react-query/query-client.ts';
+import { FelaRendererProvider } from './src/app/providers/individually/fela.tsx';
 declare const __REACT_QUERY_DEHYDRATED_STATE: unknown;
 
 function ClientApp() {

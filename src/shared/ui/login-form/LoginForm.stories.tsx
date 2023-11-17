@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { waitFor, within, userEvent } from "@storybook/testing-library";
-import { expect } from "@storybook/jest";
+import { userEvent, waitFor, within } from '@storybook/testing-library';
+import { expect } from '@storybook/jest';
 
 import { LoginForm } from './index.tsx';
 import { waitForMantineStylesLoaded } from '/~/shared/lib/storybook/waitForMantineStylesLoaded.ts';
@@ -29,7 +29,7 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
 export const Primary: Story = {
   args: {
-    projectName: "Secret Project",
+    projectName: 'Secret Project',
   },
 };
 
@@ -37,19 +37,19 @@ export const TestLoginRequired: Story = {
   args: {
     ...Primary.args,
   },
-  async play (params) {
-    const {canvasElement} = params;
+  async play(params) {
+    const { canvasElement } = params;
 
     await waitForMantineStylesLoaded(canvasElement);
 
     const canvas = within(canvasElement);
 
-    const inputEmailOrLogin = canvas.getByPlaceholderText("Email or login");
-    const inputPassword = canvas.getByPlaceholderText("Your password");
+    const inputEmailOrLogin = canvas.getByPlaceholderText('Email or login');
+    const inputPassword = canvas.getByPlaceholderText('Your password');
 
     expect(inputEmailOrLogin).toHaveAttribute('required');
     expect(inputPassword).toHaveAttribute('required');
-    await userEvent.type(inputEmailOrLogin, "shrek@is.life");
-    await userEvent.type(inputPassword, "PrFiona");
-  }
-}
+    await userEvent.type(inputEmailOrLogin, 'shrek@is.life');
+    await userEvent.type(inputPassword, 'PrFiona');
+  },
+};

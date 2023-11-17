@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { DemoFelaColorBlock, DemoFelaColorBlockProps } from './demoFelaColorBlock';
-import { FelaRendererProvider } from "/~/app/providers/individually/fela.tsx";
+import {
+  DemoFelaColorBlock,
+  DemoFelaColorBlockProps,
+} from './demoFelaColorBlock';
+import { FelaRendererProvider } from '/~/app/providers/individually/fela.tsx';
 import { Button } from '@mantine/core';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -30,16 +33,15 @@ type Story = StoryObj<typeof meta>;
 //   },
 // };
 
-
 /**
  * <FelaRendererProvider> defined at
  * @see .storybook/preview.tsx
- * */
+ */
 const Template = (args: DemoFelaColorBlockProps) => (
   <DemoFelaColorBlock {...args} />
 );
 
 export const Primary = Template.bind({});
 Primary.args = {
-  children: (<Button>test</Button>),
+  children: <Button>test</Button>,
 };

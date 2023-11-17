@@ -1,7 +1,7 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
 // import react from '@vitejs/plugin-react'
-import path from 'path'
+import path from 'path';
 // import createExternal from 'vite-plugin-external';
 // import { viteSingleFile } from "vite-plugin-singlefile"
 
@@ -24,12 +24,12 @@ export default defineConfig({
       // 'react-dom': 'https://esm.sh/react-dom@18.2.0'
       // 'react': 'https://cdn.jsdelivr.net/npm/react@18.2.0',
       // 'react-dom': 'https://cdn.jsdelivr.net/npm/react-dom@18.2.0'
-    }
+    },
   },
   plugins: [
-      react(),
-      // viteSingleFile({
-      //   removeViteModuleLoader: true,
-      // })
+    react(),
+    // viteSingleFile({
+    //   removeViteModuleLoader: true,
+    // })
   ],
-})
+});

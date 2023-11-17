@@ -1,14 +1,14 @@
 // deno-lint-ignore-file no-explicit-any
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import { useQuery } from '@tanstack/react-query';
+import React from 'react';
 
 export const fetcher = async () => {
   const comments = await new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve([
-        "Wait, it doesn't wait for React to load?",
-        "How does this even work?",
-        "I like marshmallows",
+        'Wait, it doesn\'t wait for React to load?',
+        'How does this even work?',
+        'I like marshmallows',
       ]);
     }, 3000);
   });
@@ -20,10 +20,10 @@ export type CommentsProps = {
 };
 
 export default function Comments({ date }: CommentsProps) {
-  console.log("Comments");
+  console.log('Comments');
 
   const queryResult = useQuery({
-    queryKey: ["comments" + date],
+    queryKey: ['comments' + date],
     queryFn: fetcher,
   });
 
@@ -36,7 +36,7 @@ export default function Comments({ date }: CommentsProps) {
   return (
     <>
       {comments.map((comment: any, i: number) => (
-        <p className="comment" key={i}>
+        <p className='comment' key={i}>
           {comment}
         </p>
       ))}

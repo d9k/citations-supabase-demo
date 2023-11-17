@@ -1,6 +1,6 @@
-import { useMantineColorScheme } from "@mantine/core";
+import { useMantineColorScheme } from '@mantine/core';
 
 export const useMantineDarkMode = () => {
   const { colorScheme } = useMantineColorScheme();
-  return colorScheme === "dark";
-}
+  return colorScheme === 'dark';
+};
