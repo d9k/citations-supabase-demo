@@ -1,0 +1,27 @@
+<script id="storybook-mod-expand-all-folders" type="text/javascript">
+  /*
+   * Expand folders by default
+   *
+   * Forked from https://github.com/storybookjs/storybook/issues/244#issuecomment-519847685, thanks to https://github.com/wbern
+   **/
+  var clickCollapsedItemsUntilNoneLeft = () => {
+    try {
+      var itemsLeftToClick = Array.from(
+        document.querySelectorAll(
+          '#storybook-explorer-tree button.sidebar-item[data-nodetype="group"][aria-expanded="false"]',
+        ),
+      );
+
+      if (itemsLeftToClick.length > 0) {
+        itemsLeftToClick.forEach(item => item.click());
+
+        clickCollapsedItemsUntilNoneLeft();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  window.removeEventListener('load', clickCollapsedItemsUntilNoneLeft);
+  window.addEventListener('load', clickCollapsedItemsUntilNoneLeft);
+</script>
