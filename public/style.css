@@ -107,18 +107,34 @@ p {
   display: block;
   line-height: 1;
   padding: 8px 16px;
-  border-radius: var(--mantine-radius-sm);
+  /* border-radius: var(--mantine-radius-sm); */
+  border-bottom: 2px solid transparent;
   text-decoration: none;
-  color: var(--mantine-color-dark-0);
+  /* color: var(--mantine-color-dark-0); */
+  color: var(--mantine-color-gray-6);
   font-size: var(--mantine-font-size-md);
   font-weight: 500;
 
-  [data-mantine-color-scheme] &[data-active] {
-    background-color: var(--mantine-color-blue-filled);
-    color: var(--mantine-color-white);
+  &:hover {
+    color: var(--mantine-color-black);
+  }
+
+  &[data-active] {
+    color: var(--mantine-color-black);
+    border-bottom-color: var(--mantine-color-blue-6);
   }
 }
 
-.header_link:hover {
-  background-color: var(--mantine-color-dark-6);
+[data-mantine-color-scheme="dark"] .header_link {
+  color: var(--mantine-color-dark-1);
+
+  &:hover {
+    color: var(--mantine-color-white);
+    background-color: var(--mantine-color-dark-6);
+  }
+
+  &[data-active] {
+    color: var(--mantine-color-white);
+    /* background-color: var(--mantine-color-white); */
+  }
 }
