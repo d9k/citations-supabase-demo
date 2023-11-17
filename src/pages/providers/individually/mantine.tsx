@@ -6,15 +6,17 @@ import { WithChildren } from "/~/shared/react/WithChildren.tsx";
 //   /** Put your mantine theme override here */
 // });
 
-export type MantineProviderModProps = Partial<WithChildren>;
+export type MantineProviderModProps = Partial<WithChildren> & {
+  defaultColorScheme?: string;
+};
 
 const theme = createTheme({
   /** Put your mantine theme override here */
 });
 
-export function MantineProviderMod({ children }: MantineProviderModProps) {
+export function MantineProviderMod({ children, defaultColorScheme = 'dark' }: MantineProviderModProps) {
   return (
-    <MantineProvider defaultColorScheme="dark" theme={theme}>
+    <MantineProvider defaultColorScheme={defaultColorScheme} theme={theme}>
     {/* <MantineProvider defaultColorScheme="dark"> */}
       {children}
     </MantineProvider>
