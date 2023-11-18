@@ -6,11 +6,12 @@ import { commonHeaderScriptsArray } from '/~/app/templates/headerScripts';
 import { MantineColorSchemeScript } from '/~/pages/providers/helpers/colorSchemeScript';
 import { useMantineColorScheme } from '@mantine/core';
 import { useEffect } from 'react';
+import { useDarkMode } from 'storybook-dark-mode';
 
 // import '../public/style.css'
 // import 'https://cdn.jsdelivr.net/npm/@mantine/core@7.1.2/esm/index.css'
 
-const THEME_DEFAULT = 'dark';
+// const THEME_DEFAULT = 'dark';
 
 console.log('preview.tsx');
 // <>
@@ -32,16 +33,18 @@ const preview: Preview = {
     },
   },
   decorators: [
-    (Story: any, { globals: { theme = THEME_DEFAULT } }) => {
+    (Story: any) => {
       const { setColorScheme } = useMantineColorScheme();
+      const darkMode = useDarkMode();
+      const mantineTheme = darkMode ? 'dark' : 'light';
 
       useEffect(() => {
-        setColorScheme(theme);
-      }, [theme]);
+        setColorScheme(mantineTheme);
+      }, [darkMode]);
 
       return <Story />;
     },
-    (Story: any, { globals: { theme = THEME_DEFAULT } }) => {
+    (Story: any) => {
       return (
         // <div style={{ padding: '3rem', backgroundColor: 'blue' }}>
         <HelmetProvider>
@@ -51,7 +54,7 @@ const preview: Preview = {
                 {commonHeaderScriptsArray()}
               </Helmet>
               <MantineColorSchemeScript />
-              <MantineProviderMod defaultColorScheme={theme}>
+              <MantineProviderMod defaultColorScheme='dark'>
                 <Story />
               </MantineProviderMod>
             </>
@@ -61,20 +64,6 @@ const preview: Preview = {
       );
     },
   ],
-  globalTypes: {
-    theme: {
-      name: 'Theme',
-      description: 'Theme for the components',
-      defaultValue: THEME_DEFAULT,
-      toolbar: {
-        icon: 'circlehollow',
-        items: [
-          { value: 'light', icon: 'circlehollow', title: 'light' },
-          { value: 'dark', icon: 'circle', title: 'dark (default)' },
-        ],
-      },
-    },
-  },
 };
 
 export default preview;
