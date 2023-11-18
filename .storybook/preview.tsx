@@ -5,23 +5,13 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { commonHeaderScriptsArray } from '/~/app/templates/headerScripts';
 import { MantineColorSchemeScript } from '/~/pages/providers/helpers/colorSchemeScript';
 import { useMantineColorScheme } from '@mantine/core';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDarkMode } from 'storybook-dark-mode';
-
-// import '../public/style.css'
-// import 'https://cdn.jsdelivr.net/npm/@mantine/core@7.1.2/esm/index.css'
-
-// const THEME_DEFAULT = 'dark';
+import { DocsContainer } from '@storybook/addon-docs';
+import { themes } from '@storybook/theming';
 
 console.log('preview.tsx');
-// <>
-//   {/* <CommonHeaderScripts /> */}
-//   <link
-//     rel="stylesheet"
-//     href="https://cdn.jsdelivr.net/npm/@mantine/core@7.1.2/esm/index.css"
-//   />
-//   <link rel="stylesheet" href="/style.css" />
-// </>
+
 const preview: Preview = {
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
@@ -31,11 +21,22 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    darkMode: {
+      current: 'dark',
+    },
+      docs: {
+        container: (props: any) => {
+          const isDark = useDarkMode();
+          const currentProps = { ...props };
+          currentProps.theme = isDark ? themes.dark : themes.light;
+          return React.createElement(DocsContainer, currentProps);
+        },
+      },
   },
   decorators: [
     (Story: any) => {
       const { setColorScheme } = useMantineColorScheme();
-      const darkMode = useDarkMode();
+      const darkMode = useDarkMode() ?? true;
       const mantineTheme = darkMode ? 'dark' : 'light';
 
       useEffect(() => {
@@ -46,7 +47,6 @@ const preview: Preview = {
     },
     (Story: any) => {
       return (
-        // <div style={{ padding: '3rem', backgroundColor: 'blue' }}>
         <HelmetProvider>
           <FelaRendererProvider>
             <>
@@ -60,7 +60,6 @@ const preview: Preview = {
             </>
           </FelaRendererProvider>
         </HelmetProvider>
-        // </div>
       );
     },
   ],
