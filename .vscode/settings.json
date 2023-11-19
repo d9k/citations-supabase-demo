@@ -13,6 +13,9 @@
     "./src/shared/ui",
     "./src/shared/lib/storybook",
     "./src/shared/demoStories",
-    "./node_modules"
+    "./node_modules",
+    "./**/*.stories.tsx",
+    "./src/features/auth/login-form/LoginForm.stories.tsx",
+    "./src/features/auth/login-form/LoginForm.tdd.stories.tsx"
   ]
 }
