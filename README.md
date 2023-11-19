@@ -1,6 +1,6 @@
 # citations_supabase_demo [draft]
 
-Project in the draft stage, only [Storybook](/#Storybook) is meaningful yet.
+Project in the draft stage, only [Storybook section](#Storybook) is meaningful yet.
 
 ## Techologies used
 
