@@ -1,4 +1,4 @@
-# citations_supabase_demo [draft]
+# [draft] citations-supabase-demo
 
 Project in the draft stage, only [Storybook section](#Storybook) is meaningful yet.
 

@@ -15,6 +15,7 @@
     "https://esm.sh/@mantine/core": "https://esm.sh/@mantine/core@7.1.0",
     "https://esm.sh/v128/@types/react@~18.2/index.d.ts": "https://esm.sh/v128/@types/react@18.2.21/index.d.ts",
     "https://esm.sh/v128/@types/react@~18.2/jsx-dev-runtime~.d.ts": "https://esm.sh/v128/@types/react@18.2.21/jsx-dev-runtime~.d.ts",
+    "https://esm.sh/v128/@types/react@~18.2/jsx-runtime~.d.ts": "https://esm.sh/v128/@types/react@18.2.37/jsx-runtime~.d.ts",
     "https://esm.sh/v132/@types/react-dom@~18.2/server~.d.ts": "https://esm.sh/v132/@types/react-dom@18.2.8/server~.d.ts"
   },
   "remote": {
@@ -341,9 +342,11 @@
     "https://esm.sh/react-router-dom@6.3.0/server?external=react": "375bc71255439423504d0ad8f166faec939c3254ecce63f3fa48414a617f7fb9",
     "https://esm.sh/react-router-dom@6.3.0?external=react": "45b71684e954be66cfee0b2d4214136e3f57948451653d0439757206a8198feb",
     "https://esm.sh/react@18.2.0/jsx-dev-runtime": "bbba7059cea5ab290b0878f767f42599637c97431d3234b89b08bfaed22a371b",
+    "https://esm.sh/react@18.2.0/jsx-runtime": "914a55a07c388d345c5a0c11616ee5282242e8b8dfd0d505b83500ea04fd9870",
     "https://esm.sh/react@18.2.0?dev": "1fe185734f3d77826efb78a22779899d143bb1160baaf5bbf01edee9f4eaa9d5",
     "https://esm.sh/stable/react@16.14.0/denonext/react.mjs": "134662a0bc39d52316aa0c7024028cd464a25288746e3d4c2f83439e0c5cb14f",
     "https://esm.sh/stable/react@18.2.0/denonext/jsx-dev-runtime.development.js": "24a5496e62e654f88d17e7d70c43f65086d228410bd3b94874f49d6cf6e595e6",
+    "https://esm.sh/stable/react@18.2.0/denonext/jsx-runtime.js": "54d8a51c6ca025380abd2d5302e4a9b38ff835d9759c4657e52314f587eaf6bf",
     "https://esm.sh/stable/react@18.2.0/denonext/react.development.mjs": "88729b33eccbea2c09894f07459f32911777721a3b50fd32151182e82c4351e2",
     "https://esm.sh/stable/react@18.2.0/denonext/react.mjs": "3c4f23bcfc53b256fcfaf6f834fa9f584c3bb7be667b2682c6cb6ba8ef88f8e6",
     "https://esm.sh/v122/@import-maps/resolve@1.0.1": "8bd6835209f808b6225568978b5b9bc4a4fc2831dba8d013625d19cc6de08b1e",
