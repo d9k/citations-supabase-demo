@@ -10,7 +10,7 @@ import { join } from 'std/path';
 
 import { getTsFilesPaths } from './src/shared/fs/getTsFilesPaths.ts';
 import { pathsSplitByDeno } from './src/shared/fs/pathsSplitByDeno.ts';
-import { pathsFilterByGlobsArray } from '/~/shared/fs/pathsFilterByGlobsArray.ts';
+import { pathsFilterByGlobsArray } from './src/shared/fs/pathsFilterByGlobsArray.ts';
 
 const currentDir = Deno.cwd();
 const vsCodeConfigPath = join(currentDir, '.vscode/settings.json');
