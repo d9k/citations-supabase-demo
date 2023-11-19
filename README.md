@@ -1,6 +1,6 @@
 # citations_supabase_demo [draft]
 
-Project in the draft stage, only Storybook is meaningful.
+Project in the draft stage, only [Storybook](/#Storybook) is meaningful yet.
 
 ## Techologies used
 
@@ -11,6 +11,7 @@ Project in the draft stage, only Storybook is meaningful.
 - [Mantine](https://mantine.dev) for UI components and hooks.
 - [FSD](https://feature-sliced.design/)
 - [Storybook](https://storybook.js.org/)
+- [VS Code](https://code.visualstudio.com/Download) with [Deno plugin](https://github.com/denoland/vscode_deno).
 
 ### Techologies used: TODO
 
@@ -19,6 +20,7 @@ Project in the draft stage, only Storybook is meaningful.
 ## Warnings
 
 - Because of simple SSR renderer demo conflicts with Chrome extensions which injects anything to the DOM tree (for example, [Stylus](https://chrome.google.com/webstore/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne)) Please disable these extensions for demo web domain name.
+- On VS Code `deno task config` is required to run when you add new Storybook story because Storybook runs in different env and need to be excluded from [VSCode Deno plugin](https://github.com/denoland/vscode_deno).
 
 ## Run
 
@@ -44,7 +46,7 @@ deno 1.37+ required
 
 ### Storybook
 
-Storybook isn't compatible wuth Deno yet so [Node](https://nodejs.org/en) + [pnpm](https://pnpm.io/) are requirements for it.
+Storybook isn't compatible wuth Deno yet so [Node](https://nodejs.org/en) + [pnpm](https://pnpm.io/) are requirements for it:
 
 ```
 pnpm install
