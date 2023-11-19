@@ -19,5 +19,20 @@
     "./src/shared/ui/spinner.stories.tsx",
     "./src/shared/ui/demoFelaColorBlock.stories.tsx",
     "./src/shared/ui/layout-header.stories.tsx"
-  ]
+  ],
+  "emeraldwalk.runonsave": {
+    "shell": "/usr/bin/bash",
+    "commands": [
+      {
+        "match": ".*",
+        "isAsync": false,
+        "cmd": "echo 'I run for all files.'"
+      },
+      {
+        "match": ".*",
+        "isAsync": false,
+        "cmd": "deno fmt ${relativeFile}"
+      }
+    ]
+  }
 }

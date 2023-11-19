@@ -5,4 +5,4 @@ export const getTsFilesAbsPaths = (path: string) =>
     exts: ['ts', 'tsx'],
   })].filter((entry) => {
     return entry.isFile;
-  }).map((entry) => entry.path)
+  }).map((entry) => entry.path);

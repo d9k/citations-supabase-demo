@@ -1,9 +1,8 @@
-import {
-  globToRegExp as globToRegExpOrig,
-} from 'std/path';
+import { globToRegExp as globToRegExpOrig } from 'std/path';
 
-export const globToRegExp = (pattern: string) => globToRegExpOrig(pattern, {
-  extended: true,
-  globstar: true,
-  caseInsensitive: false,
-})
+export const globToRegExp = (pattern: string) =>
+  globToRegExpOrig(pattern, {
+    extended: true,
+    globstar: true,
+    caseInsensitive: false,
+  });

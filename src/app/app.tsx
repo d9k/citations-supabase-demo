@@ -28,7 +28,6 @@ export default function App({ cache }: AppProps) {
     useEnv('ULTRA_PUBLIC_SUPABASE_ANON_KEY'),
   );
   // console.log('SUPABASE_URL', useEnv("SUPABASE_URL"));
-
   return (
     <HtmlTemplate
       title='Ultra'

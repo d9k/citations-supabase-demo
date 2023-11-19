@@ -20,7 +20,6 @@ Project in the draft stage, only [Storybook section](#Storybook) is meaningful y
 ## Warnings
 
 - Because of simple SSR renderer demo conflicts with Chrome extensions which injects anything to the DOM tree (for example, [Stylus](https://chrome.google.com/webstore/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne)) Please disable these extensions for demo web domain name.
-- On VS Code `deno task config` is required to run when you add new Storybook story because Storybook runs in different env and need to be excluded from [VSCode Deno plugin](https://github.com/denoland/vscode_deno).
 
 ## Run
 
@@ -52,3 +51,15 @@ Storybook isn't compatible wuth Deno yet so [Node](https://nodejs.org/en) + [pnp
 pnpm install
 pnpm run serve
 ```
+
+## VSCode configuration
+
+- :jigsaw: Extensions
+  - [VSCode Deno plugin](https://github.com/denoland/vscode_deno)
+    - Hightlight & autocompletion for Deno TypeScript
+  - [Run on Save](https://marketplace.visualstudio.com/items?itemName=emeraldwalk.RunOnSave)
+    - Run `deno fmt` on file save
+    - settings: `.vscode/settings.json: "emeraldwalk.runonsave"`
+    - extension logs: `cmd-shift-p` -> Search `Developer: Show Logs` -> `Extension Host`, then select `Run on Save` in drop-down list on upper-right :arrow_upper_right: corner
+
+- `deno task config` is required to run when you add new Storybook story because Storybook runs in different env and need to be excluded from [VSCode Deno plugin](https://github.com/denoland/vscode_deno).
