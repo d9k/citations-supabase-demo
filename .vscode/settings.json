@@ -10,12 +10,14 @@
   "deno.importMap": "./importMap.json",
   "deno.disablePaths": [
     "./.storybook",
-    "./src/shared/ui",
-    "./src/shared/lib/storybook",
-    "./src/shared/demoStories",
     "./node_modules",
     "./**/*.stories.tsx",
+    "./src/shared/lib/storybook",
+    "./src/shared/demoStories",
+    "./src/features/auth/login-form/LoginForm.tdd.stories.tsx",
     "./src/features/auth/login-form/LoginForm.stories.tsx",
-    "./src/features/auth/login-form/LoginForm.tdd.stories.tsx"
+    "./src/shared/ui/spinner.stories.tsx",
+    "./src/shared/ui/demoFelaColorBlock.stories.tsx",
+    "./src/shared/ui/layout-header.stories.tsx"
   ]
 }

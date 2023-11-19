@@ -24,14 +24,14 @@ const preview: Preview = {
     darkMode: {
       current: 'dark',
     },
-      docs: {
-        container: (props: any) => {
-          const isDark = useDarkMode();
-          const currentProps = { ...props };
-          currentProps.theme = isDark ? themes.dark : themes.light;
-          return React.createElement(DocsContainer, currentProps);
-        },
+    docs: {
+      container: (props: any) => {
+        const isDark = useDarkMode();
+        const currentProps = { ...props };
+        currentProps.theme = isDark ? themes.dark : themes.light;
+        return React.createElement(DocsContainer, currentProps);
       },
+    },
   },
   decorators: [
     (Story: any) => {

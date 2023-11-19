@@ -1,12 +1,16 @@
 # citations_supabase_demo
 
-## Techologis used
+## Techologies used
 
 - [React](https://react.dev)
 - [Deno](https://github.com/denoland/deno) instead of Node.js
 - [Ultra](https://ultrajs.dev) as web framework
 - [FELA](https://fela.js.org) for CSS-in-JS
 - [Mantine](https://mantine.dev) for UI components and hooks.
+
+### Techologies used: TODO
+
+- [Supabase](https://supabase.com/)
 
 ## Warnings
 
