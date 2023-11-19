@@ -1,4 +1,6 @@
-# citations_supabase_demo
+# citations_supabase_demo [draft]
+
+Project in the draft stage, only Storybook is meaningful.
 
 ## Techologies used
 
@@ -7,6 +9,8 @@
 - [Ultra](https://ultrajs.dev) as web framework
 - [FELA](https://fela.js.org) for CSS-in-JS
 - [Mantine](https://mantine.dev) for UI components and hooks.
+- [FSD](https://feature-sliced.design/)
+- [Storybook](https://storybook.js.org/)
 
 ### Techologies used: TODO
 
@@ -39,6 +43,8 @@ deno 1.37+ required
   [there are no styles on the saved pages on newer versions](https://github.com/robinweser/fela/issues/915).
 
 ### Storybook
+
+Storybook isn't compatible wuth Deno yet so [Node](https://nodejs.org/en) + [pnpm](https://pnpm.io/) are requirements for it.
 
 ```
 pnpm install
