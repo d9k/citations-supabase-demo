@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { DemoMantineForm } from './DemoMantineForm.tsx';
 
 const meta = {
-  title: 'Example/DemoMantineForm',
+  title: 'Demo/DemoMantineForm',
   component: DemoMantineForm,
   parameters: {
     layout: 'centered',
