@@ -7,7 +7,7 @@ import { LoginForm } from './index.tsx';
 
 const tddMeta = {
   ...meta,
-  title: 'features/Auth/LoginForm',
+  title: 'Features/Auth/LoginForm',
   tags: [],
 } satisfies Meta<typeof LoginForm>;
 

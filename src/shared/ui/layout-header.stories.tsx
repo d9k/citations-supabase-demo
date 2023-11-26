@@ -4,7 +4,7 @@ import { LayoutHeader } from './layout-header.tsx';
 import { BrowserRouter } from 'react-router-dom';
 
 const meta = {
-  title: 'shared/LayoutHeader',
+  title: 'Shared/LayoutHeader',
   component: LayoutHeader,
   parameters: {
     layout: 'fullscreen',

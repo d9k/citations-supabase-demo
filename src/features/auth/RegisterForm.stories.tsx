@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { RegisterForm } from './RegisterForm.tsx';
 
 const meta = {
-  title: 'features/Auth/RegisterForm',
+  title: 'Features/Auth/RegisterForm',
   component: RegisterForm,
   parameters: {
     layout: 'centered',

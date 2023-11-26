@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { LoginForm } from './index.tsx';
 
 const meta = {
-  title: 'features/Auth/LoginForm',
+  title: 'Features/Auth/LoginForm',
   component: LoginForm,
   parameters: {
     layout: 'centered',

@@ -32,6 +32,11 @@ const preview: Preview = {
         return React.createElement(DocsContainer, currentProps);
       },
     },
+    options: {
+      storySort: {
+        order: ['Features', 'Shared', 'Demo', '*'],
+      },
+    },
   },
   decorators: [
     (Story: any) => {
