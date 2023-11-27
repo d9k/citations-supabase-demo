@@ -16,7 +16,6 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { EventInputChange } from '/~/shared/react/event-types.tsx';
 
 export type RegisterFormValues = {
   email: string;

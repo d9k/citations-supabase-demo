@@ -15,7 +15,6 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { EventInputChange } from '/~/shared/react/event-types.tsx';
 
 export enum LoginFormType {
   login = 'login',

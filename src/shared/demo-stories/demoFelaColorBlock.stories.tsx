@@ -26,22 +26,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// More on writing stories with args: https://storybook.js.org/docs/react/writing-stories/args
-// export const Primary: Story = {
-//   args: {
-//     children: "Fela storybook test"
-//   },
-// };
-
-/**
- * <FelaRendererProvider> defined at
- * @see .storybook/preview.tsx
- */
-const Template = (args: DemoFelaColorBlockProps) => (
-  <DemoFelaColorBlock {...args} />
-);
-
-export const Primary = Template.bind({});
-Primary.args = {
-  children: <Button>test</Button>,
+export const Primary: Story = {
+  args: {
+    children: <Button>test</Button>,
+    someBaseProp: '4етыре',
+  },
 };

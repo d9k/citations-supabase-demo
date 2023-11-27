@@ -9,7 +9,7 @@ import { matchPath } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useMantineDarkMode } from '/~/shared/lib/mantine/useMantineDarkMode.ts';
 import { useFela } from 'react-fela';
-import { cssProps } from '/~/shared/react/cssProps.ts';
+import { cssProps } from '/~/shared/lib/react/cssProps.ts';
 
 export type MenuItem = {
   active?: boolean;

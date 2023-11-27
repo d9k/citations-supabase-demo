@@ -17,8 +17,8 @@
     "./src/features/auth/LoginForm.tdd.stories.tsx",
     "./src/features/auth/RegisterForm.stories.tsx",
     "./src/features/auth/LoginForm.stories.tsx",
-    "./src/shared/demoStories/demoFelaColorBlock.stories.tsx",
-    "./src/shared/demoStories/DemoMantineForm.stories.tsx",
+    "./src/shared/demo-stories/demoFelaColorBlock.stories.tsx",
+    "./src/shared/demo-stories/DemoMantineForm.stories.tsx",
     "./src/shared/ui/spinner.stories.tsx",
     "./src/shared/ui/layout-header.stories.tsx"
   ],

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { WithChildren } from '/~/shared/react/WithChildren.tsx';
+import { WithChildren } from '/~/shared/lib/react/WithChildren.tsx';
 import { LayoutHeader } from '/~/shared/ui/layout-header.tsx';
 
 export const PageFrameLayout = ({ children }: WithChildren) => (

@@ -1,12 +1,8 @@
 // deno-lint-ignore-file no-explicit-any
 
 import React, { lazy, Suspense } from 'react';
-import { Button } from '@mantine/core';
-import { Spinner } from '/~/shared/ui/spinner.tsx';
-import { DemoFelaColorBlock } from '/~/shared/ui/demoFelaColorBlock.tsx';
 import { AppRoutes } from '/~/app/routes/index.tsx';
 import { HtmlTemplate } from '/~/widgets/templates/HtmlTemplate.tsx';
-import { ColorSchemeScript } from '@mantine/core';
 import useAsset from 'ultra/hooks/use-asset.js';
 import useEnv from 'ultra/hooks/use-env.js';
 import { BodyProviders } from '/~/pages/providers/body.tsx';

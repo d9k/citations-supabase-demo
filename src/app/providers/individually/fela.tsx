@@ -3,7 +3,7 @@ import { createRenderer } from 'fela';
 import { RendererProvider } from '/~/deps/react-fela/index.ts';
 // import { RendererProvider } from "react-fela";
 
-import { WithChildren } from '/~/shared/react/WithChildren.tsx';
+import { WithChildren } from '/~/shared/lib/react/WithChildren.tsx';
 
 import pluginValidator from 'fela-plugin-validator';
 // import pluginExpandShorthand from "fela-plugin-expand-shorthand";

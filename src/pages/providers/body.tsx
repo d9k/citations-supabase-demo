@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { MantineProviderMod } from './individually/mantine.tsx';
-import { ComposeProviders } from '/~/shared/react/ComposeProviders.tsx';
+import { ComposeProviders } from '/~/shared/lib/react/ComposeProviders.tsx';
 
 export type BodyProvidersProps = {
   children: ReactNode;

@@ -1,5 +1,5 @@
 import { createTheme, MantineProvider } from '@mantine/core';
-import { WithChildren } from '/~/shared/react/WithChildren.tsx';
+import { WithChildren } from '/~/shared/lib/react/WithChildren.tsx';
 
 // import { Button, MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
 // const theme = createTheme({

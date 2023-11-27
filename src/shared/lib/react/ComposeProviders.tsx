@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 import React, { JSXElementConstructor, ReactNode } from 'react';
-import { WithChildren } from '/~/shared/react/WithChildren.tsx';
+import { WithChildren } from './WithChildren.tsx';
 
 // TODO array of generic parameters
 // export type ProviderDataItem<P> = [

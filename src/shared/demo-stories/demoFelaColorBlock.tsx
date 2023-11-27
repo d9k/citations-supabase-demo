@@ -2,7 +2,7 @@
 
 import { useFela } from '/~/deps/react-fela/index.ts';
 
-import { cssProps } from '/~/shared/react/cssProps.ts';
+import { cssProps } from '/~/shared/lib/react/cssProps.ts';
 
 import { ReactNode } from 'react';
 // import { WithChildren } from "/~/shared/react/WithChildren.tsx";

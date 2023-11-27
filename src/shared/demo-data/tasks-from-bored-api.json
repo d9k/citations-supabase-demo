@@ -1,0 +1,272 @@
+[
+  {
+    "activity": "Learn about the Golden Ratio",
+    "type": "education",
+    "participants": 1,
+    "price": 0.1,
+    "link": "https://en.wikipedia.org/wiki/Golden_ratio",
+    "key": "2095681",
+    "accessibility": 0.2
+  },
+  {
+    "activity": "Go to a music festival with some friends",
+    "type": "social",
+    "participants": 4,
+    "price": 0.4,
+    "link": "",
+    "key": "6482790",
+    "accessibility": 0.2
+  },
+  {
+    "activity": "Take a spontaneous road trip with some friends",
+    "type": "social",
+    "participants": 4,
+    "price": 0.2,
+    "link": "",
+    "key": "2085321",
+    "accessibility": 0.3
+  },
+  {
+    "activity": "Cook something together with someone",
+    "type": "cooking",
+    "participants": 2,
+    "price": 0.3,
+    "link": "",
+    "key": "1799120",
+    "accessibility": 0.8
+  },
+  {
+    "activity": "Learn how to play a new sport",
+    "type": "recreational",
+    "participants": 1,
+    "price": 0.1,
+    "link": "",
+    "key": "5808228",
+    "accessibility": 0.2
+  },
+  {
+    "activity": "Bake a pie with some friends",
+    "type": "cooking",
+    "participants": 3,
+    "price": 0.3,
+    "link": "",
+    "key": "3141592",
+    "accessibility": 0.3
+  },
+  {
+    "activity": "Learn how to use an Arduino",
+    "type": "education",
+    "participants": 1,
+    "price": 0.1,
+    "link": "https://en.wikipedia.org/wiki/Arduino",
+    "key": "8264223",
+    "accessibility": 0.7
+  },
+  {
+    "activity": "Buy a new house decoration",
+    "type": "recreational",
+    "participants": 1,
+    "price": 0.4,
+    "link": "",
+    "key": "3456114",
+    "accessibility": 0.3
+  },
+  {
+    "activity": "Start a blog for something you're passionate about",
+    "type": "recreational",
+    "participants": 1,
+    "price": 0.05,
+    "link": "",
+    "key": "8364626",
+    "accessibility": 0.1
+  },
+  {
+    "activity": "Configure two-factor authentication on your accounts",
+    "type": "busywork",
+    "participants": 1,
+    "price": 0,
+    "link": "https://en.wikipedia.org/wiki/Multi-factor_authentication",
+    "key": "1572120",
+    "accessibility": 0
+  },
+  {
+    "activity": "Think of a new business idea",
+    "type": "recreational",
+    "participants": 1,
+    "price": 0,
+    "link": "",
+    "key": "6808057",
+    "accessibility": 0.05
+  },
+  {
+    "activity": "Plan a trip to another country",
+    "type": "recreational",
+    "participants": 1,
+    "price": 0,
+    "link": "",
+    "key": "5554727",
+    "accessibility": 0
+  },
+  {
+    "activity": "Do something nice for someone you care about",
+    "type": "social",
+    "participants": 1,
+    "price": 0,
+    "link": "",
+    "key": "8321894",
+    "accessibility": 0.1
+  },
+  {
+    "activity": "Have a picnic with some friends",
+    "type": "social",
+    "participants": 3,
+    "price": 0.1,
+    "link": "",
+    "key": "6813070",
+    "accessibility": 0.1
+  },
+  {
+    "activity": "Configure two-factor authentication on your accounts",
+    "type": "busywork",
+    "participants": 1,
+    "price": 0,
+    "link": "https://en.wikipedia.org/wiki/Multi-factor_authentication",
+    "key": "1572120",
+    "accessibility": 0
+  },
+  {
+    "activity": "Match your storage containers with their lids",
+    "type": "busywork",
+    "participants": 1,
+    "price": 0,
+    "link": "",
+    "key": "4940907",
+    "accessibility": 1
+  },
+  {
+    "activity": "Organize your dresser",
+    "type": "busywork",
+    "participants": 1,
+    "price": 0,
+    "link": "",
+    "key": "7556665",
+    "accessibility": 1
+  },
+  {
+    "activity": "Teach your dog a new trick",
+    "type": "relaxation",
+    "participants": 1,
+    "price": 0.05,
+    "link": "",
+    "key": "1668223",
+    "accessibility": 0.15
+  },
+  {
+    "activity": "Catch up with a friend over a lunch date",
+    "type": "social",
+    "participants": 2,
+    "price": 0.2,
+    "link": "",
+    "key": "5590133",
+    "accessibility": 0.15
+  },
+  {
+    "activity": "Go to a concert with some friends",
+    "type": "social",
+    "participants": 4,
+    "price": 0.6,
+    "link": "",
+    "key": "4558850",
+    "accessibility": 0.4
+  },
+  {
+    "activity": "Go see a Broadway production",
+    "type": "recreational",
+    "participants": 4,
+    "price": 0.8,
+    "link": "",
+    "key": "4448913",
+    "accessibility": 0.3
+  },
+  {
+    "activity": "Volunteer at your local food pantry",
+    "type": "charity",
+    "participants": 1,
+    "price": 0,
+    "link": "",
+    "key": "1878070",
+    "accessibility": 0.1
+  },
+  {
+    "activity": "Go see a movie in theaters with a few friends",
+    "type": "social",
+    "participants": 4,
+    "price": 0.2,
+    "link": "",
+    "key": "5262759",
+    "accessibility": 0.3
+  },
+  {
+    "activity": "Learn how to play a new sport",
+    "type": "recreational",
+    "participants": 1,
+    "price": 0.1,
+    "link": "",
+    "key": "5808228",
+    "accessibility": 0.2
+  },
+  {
+    "activity": "Look at pictures and videos of cute animals",
+    "type": "relaxation",
+    "participants": 1,
+    "price": 0,
+    "link": "",
+    "key": "2565076",
+    "accessibility": 1
+  },
+  {
+    "activity": "Contribute code or a monetary donation to an open-source software project",
+    "type": "charity",
+    "participants": 1,
+    "price": 0.1,
+    "link": "https://github.com/explore",
+    "key": "7687030",
+    "accessibility": 0
+  },
+  {
+    "activity": "Clean out your garage",
+    "type": "busywork",
+    "participants": 1,
+    "price": 0,
+    "link": "",
+    "key": "7023703",
+    "accessibility": 0.1
+  },
+  {
+    "activity": "Organize your movie collection",
+    "type": "busywork",
+    "participants": 1,
+    "price": 0,
+    "link": "",
+    "key": "6378359",
+    "accessibility": 0
+  },
+  {
+    "activity": "Cook something together with someone",
+    "type": "cooking",
+    "participants": 2,
+    "price": 0.3,
+    "link": "",
+    "key": "1799120",
+    "accessibility": 0.8
+  },
+  {
+    "activity": "Host a movie marathon with some friends",
+    "type": "social",
+    "participants": 3,
+    "price": 0.1,
+    "link": "",
+    "key": "5914292",
+    "accessibility": 0
+  }
+]

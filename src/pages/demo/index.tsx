@@ -1,5 +1,5 @@
 import { Button } from '@mantine/core';
-import { DemoFelaColorBlock } from '/~/shared/ui/demoFelaColorBlock.tsx';
+import { DemoFelaColorBlock } from '/~/shared/demo-stories/demoFelaColorBlock.tsx';
 import { Suspense } from 'react';
 import Comments from '/~/entities/ui/comments.tsx';
 import { Spinner } from '/~/shared/ui/spinner.tsx';

@@ -1,5 +1,0 @@
-import { CSSProperties } from 'https://esm.sh/fela@12.2.1';
-import React from 'react'
-
-// TODO
-export const csst = (p: CSSProperties) =>
