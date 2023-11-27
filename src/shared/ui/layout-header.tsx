@@ -8,7 +8,7 @@ import { ReactNode } from 'react';
 import { matchPath } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useMantineDarkMode } from '/~/shared/lib/mantine/useMantineDarkMode.ts';
-import { useFela } from 'react-fela';
+import { useFela } from '/~/deps/react-fela/index.ts';
 import { cssProps } from '/~/shared/lib/react/cssProps.ts';
 
 export type MenuItem = {

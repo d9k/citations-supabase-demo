@@ -12,4 +12,9 @@ export const commonHeaderScriptsArray = () => [
     rel='stylesheet'
     href='/style.css'
   />,
+  <link
+    key='react-data-grid-styles'
+    rel='stylesheet'
+    href='https://esm.sh/react-data-grid@7.0.0-beta.41/lib/styles.css'
+  />,
 ];

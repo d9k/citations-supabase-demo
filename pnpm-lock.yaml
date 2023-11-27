@@ -58,6 +58,9 @@ dependencies:
     version: 12.2.1(fela@12.2.1)(react@18.2.0)
 
 devDependencies:
+  '@storybook/addon-docs':
+    specifier: ^7.5.0
+    version: 7.5.0(@types/react-dom@18.2.0)(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)
   '@storybook/addon-essentials':
     specifier: ^7.5.0
     version: 7.5.0(@types/react-dom@18.2.0)(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)
@@ -91,6 +94,9 @@ devDependencies:
   '@storybook/testing-library':
     specifier: ^0.2.2
     version: 0.2.2
+  '@storybook/theming':
+    specifier: ^7.5.0
+    version: 7.5.3(react-dom@18.2.0)(react@18.2.0)
   '@types/react':
     specifier: 18.2.0
     version: 18.2.0
@@ -121,6 +127,9 @@ devDependencies:
   jest:
     specifier: '27'
     version: 27.5.1
+  react-data-grid:
+    specifier: 7.0.0-beta.41
+    version: 7.0.0-beta.41(react-dom@18.2.0)(react@18.2.0)
   react-helmet-async:
     specifier: 1.3.0
     version: 1.3.0(react-dom@18.2.0)(react@18.2.0)
@@ -5583,7 +5592,6 @@ packages:
   /clsx@2.0.0:
     resolution: {integrity: sha512-rQ1+kcj+ttHG0MKVGBUXwayCCF1oh39BF5COIpRzuCEv8Mwjv0XucrI2ExNTOn9IlLifGClWQcU9BrZORvtw6Q==}
     engines: {node: '>=6'}
-    dev: false
 
   /co@4.6.0:
     resolution: {integrity: sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==}
@@ -9847,6 +9855,17 @@ packages:
       tween-functions: 1.2.0
     dev: true
 
+  /react-data-grid@7.0.0-beta.41(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-WmTP/PV+vtVjIaGVLgyG6WAhqvuPBM8I54bsR7oJZl6w43+mIasZM9rEBWjQ52XHJEy41/tjcMBIMNiWqoEbrQ==}
+    peerDependencies:
+      react: 18.2.0
+      react-dom: 18.2.0
+    dependencies:
+      clsx: 2.0.0
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: true
+
   /react-docgen-typescript@2.2.2(typescript@5.2.2):
     resolution: {integrity: sha512-tvg2ZtOpOi6QDwsb3GZhOjDkkX0h8Z2gipvTg6OVMUyoYoURhEiRNePT8NZItTVCDh39JJHnLdfCOkzoLbFnTg==}
     peerDependencies:
@@ -10621,7 +10640,7 @@ packages:
       '@storybook/components': 7.5.0(@types/react-dom@18.2.0)(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)
       '@storybook/core-events': 7.5.0
       '@storybook/global': 5.0.0
-      '@storybook/theming': 7.5.0(react-dom@18.2.0)(react@18.2.0)
+      '@storybook/theming': 7.5.3(react-dom@18.2.0)(react@18.2.0)
       fast-deep-equal: 3.1.3
       memoizerific: 1.11.3
       react: 18.2.0

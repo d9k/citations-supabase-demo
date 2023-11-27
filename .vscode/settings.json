@@ -20,7 +20,8 @@
     "./src/shared/demo-stories/demoFelaColorBlock.stories.tsx",
     "./src/shared/demo-stories/DemoMantineForm.stories.tsx",
     "./src/shared/ui/spinner.stories.tsx",
-    "./src/shared/ui/layout-header.stories.tsx"
+    "./src/shared/ui/layout-header.stories.tsx",
+    "./src/shared/ui/data-grid/data-grid.stories.tsx"
   ],
   "emeraldwalk.runonsave": {
     "shell": "/usr/bin/bash",
