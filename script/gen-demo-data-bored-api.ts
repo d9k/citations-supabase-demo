@@ -12,8 +12,8 @@ const demoDataBoredPath = join(
 );
 
 const REQUESTS_COUNT = 10;
-const PAUSE_MS_MIN = 200;
-const PAUSE_MS_MAX = 1000;
+const PAUSE_MS_MIN = 20;
+const PAUSE_MS_MAX = 500;
 
 let fileData: object[] = [];
 
