@@ -2,7 +2,7 @@
   "tasks": {
     "dev": "deno run --no-npm -A --no-check --watch ./server.tsx",
     "check": "deno check --no-npm ./server.tsx; deno lint",
-    "config": "deno run --allow-read --allow-write ./config-update.ts",
+    "config": "deno run --allow-read --allow-write ./script/config-update.ts",
     "test": "deno test --no-npm --allow-all",
     "build": "deno run --no-npm -A ./build.ts",
     "start": "ULTRA_MODE=production deno run --no-npm -A --no-remote ./server.js"
