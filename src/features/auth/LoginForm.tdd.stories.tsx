@@ -26,7 +26,7 @@ export const TestLoginRequired: Story = {
 
     const canvas = within(canvasElement);
 
-    const inputEmailOrLogin = canvas.getByPlaceholderText('Email or login');
+    const inputEmailOrLogin = canvas.getByPlaceholderText('Login or email');
     const inputPassword = canvas.getByPlaceholderText('Your password');
 
     expect(inputEmailOrLogin).toHaveAttribute('required');

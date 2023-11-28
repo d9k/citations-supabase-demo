@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import demoDataBoredApiTasks from '/~/shared/demo-data/tasks-from-bored-api.json';
+import demoDataBoredApiTasks from '/~/shared/demo-data/tasks-from-bored-api.generated.json';
 
 import { BoredApiTask } from '/~/shared/demo-data/bored-api-task.ts';
 

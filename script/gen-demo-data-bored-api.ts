@@ -8,7 +8,7 @@ import { sleepRandomMs } from '/~/shared/lib/sys/sleep.ts';
 const currentDir = Deno.cwd();
 const demoDataBoredPath = join(
   currentDir,
-  'src/shared/demo-data/tasks-from-bored-api.json',
+  'src/shared/demo-data/tasks-from-bored-api.generated.json',
 );
 
 const REQUESTS_COUNT = 10;

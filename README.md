@@ -63,3 +63,7 @@ pnpm run serve
     - extension logs: `cmd-shift-p` -> Search `Developer: Show Logs` -> `Extension Host`, then select `Run on Save` in drop-down list on upper-right :arrow_upper_right: corner
 
 - `deno task config` is required to run when you add new Storybook story because Storybook runs in different env and need to be excluded from [VSCode Deno plugin](https://github.com/denoland/vscode_deno).
+
+## Database
+
+See [README-supabase](./README-supabase.md)
