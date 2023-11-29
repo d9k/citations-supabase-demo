@@ -10,6 +10,7 @@
     "storybook": "pnpm run storybook",
     "storybook:build": "pnpm run storybook:build",
     "db:gen:json-schema": "pnpm run db:gen:json-schema",
+    "db:dump": "pnpm run db:dump",
     "db:dump:schema": "pnpm run db:dump:schema",
     "db:dump:data": "pnpm run db:dump:data",
     "db:gen:typescript": "pnpm run db:gen:typescript",
