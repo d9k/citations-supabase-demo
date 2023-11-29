@@ -36,7 +36,7 @@ If error `cannot read config in ...: open supabase/config.toml` run `pnpm exec s
 
 ### Data dump
 
-```
+```bash
 pnpm run db:dump:data
 pnpm run db:dump:schema
 ```
@@ -57,6 +57,28 @@ Execute `pnpm run gen-json-schema`.
 
 - ~~[without relations :(](https://github.com/SpringTree/pg-tables-to-jsonschema/issues/27)~~
   - implemented foreign keys save to `src/foreign-keys.json` with [postgres.js library](https://github.com/porsager/postgres#connection-details).
+
+## Migrations
+
+After schema change on remote database:
+
+```bash
+pnpm exec supabase db pull
+```
+
+Then list migations with new one:
+
+```bash
+pnpm exec supabase migration list
+```
+
+If migration not marked remote as applied, then
+
+```bash
+pnpm exec supabase migration repair 202XXXXXXXXXX --status applied
+```
+
+when `202XXXXXXXXXX` is local migration timestamp
 
 ## See also
 
