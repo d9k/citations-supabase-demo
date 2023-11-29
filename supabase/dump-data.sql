@@ -107,23 +107,23 @@ SET row_security = off;
 
 
 --
--- Data for Name: authors; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
--- Data for Name: citations; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-
-
---
 -- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 INSERT INTO "public"."country" ("id", "name", "created_at", "updated_at", "found_year", "next_rename_year") VALUES
 	(1, 'Greece', '2023-11-28 06:50:37.146622+00', '2023-11-28 06:50:37.146622+00', NULL, NULL);
+
+
+--
+-- Data for Name: town; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- Data for Name: authors; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
 
 
 --
@@ -133,13 +133,13 @@ INSERT INTO "public"."country" ("id", "name", "created_at", "updated_at", "found
 
 
 --
--- Data for Name: province; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: event; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 
 
 --
--- Data for Name: town; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: citations; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 
@@ -198,17 +198,17 @@ SELECT pg_catalog.setval('"public"."country_id_seq"', 1, true);
 
 
 --
+-- Name: event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('"public"."event_id_seq"', 1, false);
+
+
+--
 -- Name: place_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('"public"."place_id_seq"', 1, false);
-
-
---
--- Name: province_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('"public"."province_id_seq"', 1, false);
 
 
 --

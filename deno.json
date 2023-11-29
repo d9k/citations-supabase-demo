@@ -14,6 +14,8 @@
     "db:dump:schema": "pnpm run db:dump:schema",
     "db:dump:data": "pnpm run db:dump:data",
     "db:gen:typescript": "pnpm run db:gen:typescript",
+    "db:migration:list": "pnpm db:migration:list",
+    "db:migration:create:from-remote": "pnpm run db:migration:create:from-remote",
     "supabase": "pnpm exec supabase"
   },
   "compilerOptions": {

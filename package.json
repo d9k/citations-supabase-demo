@@ -6,7 +6,9 @@
     "db:dump:schema": "pnpm exec supabase db dump > ./supabase/dump-schema.sql",
     "db:dump:data": "pnpm exec supabase db dump --data-only > ./supabase/dump-data.sql",
     "db:gen:json-schema": "ts-node node-script/db-gen-json-schema.ts",
-    "db:gen:typescript": "pnpm exec supabase gen types typescript --linked > src/shared/api/supabase/types.generated.ts"
+    "db:gen:typescript": "pnpm exec supabase gen types typescript --linked > src/shared/api/supabase/types.generated.ts",
+    "db:migration:list": "pnpm exec supabase migration list",
+    "db:migration:create:from-remote": "pnpm exec supabase db pull && pnpm run db:migration:list"
   },
   "dependencies": {
     "@mantine/core": "7.1.2",
