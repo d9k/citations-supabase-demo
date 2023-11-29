@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import meta, { Primary } from './LoginForm.stories.tsx';
-import { userEvent, waitFor, within } from '@storybook/testing-library';
+import { userEvent, within } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 import { waitForMantineStylesLoaded } from '/~/shared/lib/storybook/waitForMantineStylesLoaded.ts';
 import { LoginForm } from './index.tsx';
@@ -33,6 +33,9 @@ export const TestLoginRequired: Story = {
     expect(inputPassword).toHaveAttribute('required');
     await userEvent.type(inputEmailOrLogin, 'shrek@is.life');
     await userEvent.type(inputPassword, 'PrFiona');
+
+    const loginButton = await canvas.findByRole('button', { name: 'Login' });
+
+    userEvent.click(loginButton);
   },
-  // docs
 };
