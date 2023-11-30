@@ -1,8 +1,10 @@
 import { Button } from '@mantine/core';
 import { DemoFelaColorBlock } from '/~/shared/demo-stories/demoFelaColorBlock.tsx';
 import { Suspense } from 'react';
-import Comments from '/~/entities/ui/comments.tsx';
 import { Spinner } from '/~/shared/ui/spinner.tsx';
+import { lazy } from 'react';
+
+const Comments = lazy(() => import('/~/entities/ui/comments.tsx'));
 
 const DemoPage = () => (
   <main>
@@ -10,13 +12,17 @@ const DemoPage = () => (
       Demo
     </h1>
 
+    <h2>Fela component demo:</h2>
+
     <DemoFelaColorBlock someBaseProp='some value'>
       Fela colored block content
     </DemoFelaColorBlock>
 
+    <h2>Mantine component demo:</h2>
+
     <Button>__TEST__</Button>
 
-    <h2>Comments:</h2>
+    <h2>Comments (SSR render delay demo):</h2>
 
     <Suspense fallback={<Spinner />}>
       <Comments date={+new Date()} />

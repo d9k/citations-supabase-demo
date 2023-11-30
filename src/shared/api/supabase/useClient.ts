@@ -9,7 +9,7 @@ export type UseSupabaseClientArgs = {
   supabaseUrl?: string;
 };
 
-export const createClientMomoized: typeof createClient = memoize(createClient);
+export const createClientMemoized: typeof createClient = memoize(createClient);
 
 // TODO env variables must not be at /shared FSD layer?
 export const useSupabaseClient = (
@@ -26,5 +26,5 @@ export const useSupabaseClient = (
   //   anonKeyCurrent,
   // });
 
-  return createClientMomoized(supabaseUrlCurrent, anonKeyCurrent);
+  return createClientMemoized(supabaseUrlCurrent, anonKeyCurrent);
 };

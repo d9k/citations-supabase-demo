@@ -1,6 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
 
-import React, { lazy, Suspense } from 'react';
 import { AppRoutes } from '/~/app/routes/index.tsx';
 import { HtmlTemplate } from '/~/widgets/templates/HtmlTemplate.tsx';
 import useAsset from 'ultra/hooks/use-asset.js';
@@ -8,14 +7,17 @@ import useAsset from 'ultra/hooks/use-asset.js';
 import { BodyProvidersConstructor } from '/~/pages/providers-constructors/composite/body.tsx';
 import { commonHeaderScriptsArray } from '/~/app/templates/headerScripts.tsx';
 import { MantineColorSchemeScript } from '/~/pages/providers-constructors/helpers/colorSchemeScript.tsx';
-
-const Comments = lazy(() => import('/~/entities/ui/comments.tsx'));
+import { useSupabase } from '/~/shared/providers/supabase/client.ts';
 
 export type AppProps = {
   cache?: any;
 };
 
 export default function App({ cache }: AppProps) {
+  const supabaseClient = useSupabase();
+
+  console.log('__TEST__: App: supabaseClient:', supabaseClient);
+
   // console.log('ULTRA_MODE:', useEnv("ULTRA_MODE"));
   // console.log('ULTRA_PUBLIC_SUPABASE_URL', useEnv('ULTRA_PUBLIC_SUPABASE_URL'));
   // console.log(

@@ -1,5 +1,7 @@
 import hydrate from 'ultra/hydrate.js';
 import App from '/~/app/app.tsx';
+import { SupabaseBrowserroviderConstructor } from '/~/app/providers-constructors/supabase-browser.tsx';
+import useEnv from 'ultra/hooks/use-env.js';
 
 // React Router
 import { BrowserRouter } from 'react-router-dom';
@@ -18,10 +20,15 @@ function ClientApp() {
       <QueryClientProvider client={queryClient}>
         <FelaRendererProviderConstructor>
           <Hydrate state={__REACT_QUERY_DEHYDRATED_STATE}>
-            {/* @ts-ignore 'Router' cannot be used as a JSX component. */}
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
+            <SupabaseBrowserroviderConstructor
+              anonKey={useEnv('ULTRA_PUBLIC_SUPABASE_ANON_KEY')!}
+              supabaseUrl={useEnv('ULTRA_PUBLIC_SUPABASE_URL')!}
+            >
+              {/* @ts-ignore 'Router' cannot be used as a JSX component. */}
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </SupabaseBrowserroviderConstructor>
           </Hydrate>
         </FelaRendererProviderConstructor>
       </QueryClientProvider>

@@ -16,6 +16,7 @@ import { useDehydrateReactQuery } from '/~/app/react-query/useDehydrateReactQuer
 import { queryClient } from '/~/app/react-query/query-client.ts';
 
 import * as dotenv from 'dotenv';
+
 import {
   felaRenderer,
   FelaRendererProviderConstructor,
@@ -23,6 +24,9 @@ import {
 import { createHeadInsertionTransformStream } from 'ultra/stream.ts';
 
 import { renderToMarkup } from 'fela-dom';
+import { SupabaseProvider } from '/~/shared/providers/supabase/index.ts';
+import { SupabaseServerProviderConstructor } from '/~/app/providers-constructors/supabase-server.tsx';
+import { useCallback } from 'react';
 
 const { load: loadDotEnv } = dotenv;
 
@@ -65,14 +69,25 @@ function ServerApp({ context }: { context: Context }) {
     honoGetCookie(context, 'example-cookie'),
   );
 
+  const getCookie = useCallback(
+    (cookieName: string) => honoGetCookie(context, cookieName),
+    [context],
+  );
+
   return (
     <HelmetProvider context={helmetContext}>
       <QueryClientProvider client={queryClient}>
-        <StaticRouter location={new URL(context.req.url).pathname}>
-          <FelaRendererProviderConstructor>
-            <App />
-          </FelaRendererProviderConstructor>
-        </StaticRouter>
+        <FelaRendererProviderConstructor>
+          <StaticRouter location={new URL(context.req.url).pathname}>
+            <SupabaseServerProviderConstructor
+              anonKey={ULTRA_PUBLIC_SUPABASE_ANON_KEY}
+              supabaseUrl={ULTRA_PUBLIC_SUPABASE_URL}
+              getCookie={getCookie}
+            >
+              <App />
+            </SupabaseServerProviderConstructor>
+          </StaticRouter>
+        </FelaRendererProviderConstructor>
       </QueryClientProvider>
     </HelmetProvider>
   );
