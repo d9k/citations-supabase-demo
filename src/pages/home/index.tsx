@@ -1,9 +1,3 @@
-import { Button } from '@mantine/core';
-import { DemoFelaColorBlock } from '/~/shared/ui/demoFelaColorBlock.tsx';
-import { Suspense } from 'react';
-import Comments from '/~/entities/ui/comments.tsx';
-import { Spinner } from '/~/shared/ui/spinner.tsx';
-
 const HomePage = () => (
   <main>
     <h1>

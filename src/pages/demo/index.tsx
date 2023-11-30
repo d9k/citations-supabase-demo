@@ -10,7 +10,9 @@ const DemoPage = () => (
       Demo
     </h1>
 
-    <DemoFelaColorBlock>Fela colored block content</DemoFelaColorBlock>
+    <DemoFelaColorBlock someBaseProp='some value'>
+      Fela colored block content
+    </DemoFelaColorBlock>
 
     <Button>__TEST__</Button>
 

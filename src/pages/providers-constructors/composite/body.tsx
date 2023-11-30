@@ -1,17 +1,17 @@
 import { ReactNode } from 'react';
-import { MantineProviderMod } from './individually/mantine.tsx';
+import { MantineProviderConstructor } from '../mantine.tsx';
 import { ComposeProviders } from '/~/shared/lib/react/ComposeProviders.tsx';
 
 export type BodyProvidersProps = {
   children: ReactNode;
 };
 
-export const BodyProviders = ({ children }: BodyProvidersProps) => (
+export const BodyProvidersConstructor = ({ children }: BodyProvidersProps) => (
   <ComposeProviders
     providers={[
       // уже есть в server.ts, client.ts
       // [QueryClientProvider, {client: queryClient}],
-      [MantineProviderMod],
+      [MantineProviderConstructor],
       // [FelaRendererProvider]
     ]}
   >

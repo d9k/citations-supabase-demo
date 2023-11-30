@@ -40,7 +40,7 @@ export function LayoutHeader({
   // const [active, setActive] = useState(menuItems[0].link);
 
   const menuNodes = menuItems.map((item) => {
-    let location = useLocation();
+    const location = useLocation();
 
     const active = item.active ||
       matchPath(item.pathMatchPattern || item.path, location.pathname);

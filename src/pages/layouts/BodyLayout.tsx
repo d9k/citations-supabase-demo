@@ -1,8 +1,8 @@
-import { BodyProviders } from '/~/pages/providers/body.tsx';
+import { BodyProvidersConstructor } from '/~/pages/providers-constructors/composite/body.tsx';
 import { WithChildren } from '/~/shared/lib/react/WithChildren.tsx';
 
 export const BodyLayout = ({ children }: WithChildren) => (
-  <BodyProviders>
+  <BodyProvidersConstructor>
     {children}
-  </BodyProviders>
+  </BodyProvidersConstructor>
 );

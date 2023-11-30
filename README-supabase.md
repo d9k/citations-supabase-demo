@@ -51,7 +51,7 @@ See
 
 ## Generate schema
 
-Copy `.env.template` to `.env`. Fill envirorment variables values from `https://supabase.com/dashboard/project/XXXXX/settings/database`.
+Copy `.env.template` to `.env`. Fill environment variables values from https://supabase.com/dashboard/project/_/settings/database.
 
 Execute `pnpm run gen-json-schema`.
 
@@ -79,6 +79,12 @@ pnpm exec supabase migration repair 202XXXXXXXXXX --status applied
 ```
 
 when `202XXXXXXXXXX` is local migration timestamp
+
+## .env configuration
+
+Supabase URL & anon key for `.env` configuration:
+
+https://supabase.com/dashboard/project/_/settings/api
 
 ## See also
 

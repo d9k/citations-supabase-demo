@@ -44,7 +44,11 @@ export const defaultLoginFormValues = (): LoginValues => ({
 
 type UseFormParam1 = NonNullable<UseFormParams[0]>;
 type UseFormParamValidate = NonNullable<UseFormParam1['validate']>;
+
+// (Function: This provides no type safety because it represents all functions and classes)
+// deno-lint-ignore ban-types
 type UseFormParamValidateObject = Exclude<UseFormParamValidate, Function>;
+
 type UseFormParamValidateObjectRequired = Required<UseFormParamValidateObject>;
 
 /**

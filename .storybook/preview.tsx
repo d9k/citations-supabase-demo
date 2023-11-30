@@ -1,9 +1,9 @@
 import type { Preview } from '@storybook/react';
-import { FelaRendererProvider } from '/~/app/providers/individually/fela.tsx';
-import { MantineProviderMod } from '/~/pages/providers/individually/mantine.tsx';
+import { FelaRendererProviderConstructor } from '../src/app/providers-constructors/fela.tsx';
+import { MantineProviderConstructor } from '../src/pages/providers-constructors/mantine.tsx';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { commonHeaderScriptsArray } from '/~/app/templates/headerScripts';
-import { MantineColorSchemeScript } from '/~/pages/providers/helpers/colorSchemeScript';
+import { MantineColorSchemeScript } from '/~/pages/providers-constructors/helpers/colorSchemeScript.tsx';
 import { useMantineColorScheme } from '@mantine/core';
 import React, { useEffect } from 'react';
 import { useDarkMode } from 'storybook-dark-mode';
@@ -11,6 +11,8 @@ import { DocsContainer } from '@storybook/addon-docs';
 import { themes } from '@storybook/theming';
 
 console.log('preview.tsx');
+
+type DocsContainerProps = Parameters<typeof DocsContainer>[0];
 
 const preview: Preview = {
   parameters: {
@@ -25,7 +27,7 @@ const preview: Preview = {
       current: 'dark',
     },
     docs: {
-      container: (props: any) => {
+      container: (props: DocsContainerProps) => {
         const isDark = useDarkMode();
         const currentProps = { ...props };
         currentProps.theme = isDark ? themes.dark : themes.light;
@@ -39,7 +41,7 @@ const preview: Preview = {
     },
   },
   decorators: [
-    (Story: any) => {
+    (Story) => {
       const { setColorScheme } = useMantineColorScheme();
       const darkMode = useDarkMode() ?? true;
       const mantineTheme = darkMode ? 'dark' : 'light';
@@ -50,20 +52,20 @@ const preview: Preview = {
 
       return <Story />;
     },
-    (Story: any) => {
+    (Story) => {
       return (
         <HelmetProvider>
-          <FelaRendererProvider>
+          <FelaRendererProviderConstructor>
             <>
               <Helmet>
                 {commonHeaderScriptsArray()}
               </Helmet>
               <MantineColorSchemeScript />
-              <MantineProviderMod defaultColorScheme='dark'>
+              <MantineProviderConstructor defaultColorScheme='dark'>
                 <Story />
-              </MantineProviderMod>
+              </MantineProviderConstructor>
             </>
-          </FelaRendererProvider>
+          </FelaRendererProviderConstructor>
         </HelmetProvider>
       );
     },

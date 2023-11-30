@@ -77,8 +77,8 @@ const sql = postgres({
 
 async function genSchema() {
   const result = await converter.convert();
-  return true;
   console.debug(result);
+  return true;
 }
 
 async function genForeignKeys() {

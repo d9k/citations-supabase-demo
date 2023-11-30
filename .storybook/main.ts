@@ -1,6 +1,7 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 import { withoutVitePlugins } from '@storybook/builder-vite';
 import path from 'path';
+import { InlineConfig as ViteInlineConfig } from 'vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
@@ -49,7 +50,7 @@ const config: StorybookConfig = {
       },
     },
   },
-  viteFinal: async (config: any) => {
+  viteFinal: async (config: ViteInlineConfig): Promise<ViteInlineConfig> => {
     console.log('viteFinal:', config);
 
     return {

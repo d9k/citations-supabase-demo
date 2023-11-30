@@ -19,7 +19,7 @@ export const TestLoginRequired: Story = {
   args: {
     ...Primary.args,
   },
-  async play(params: any) {
+  async play(params) {
     const { canvasElement } = params;
 
     await waitForMantineStylesLoaded(canvasElement);

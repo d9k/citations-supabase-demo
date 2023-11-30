@@ -1,6 +1,7 @@
 import { serve } from 'https://deno.land/std@0.176.0/http/server.ts';
 import { type Context, createServer } from 'ultra/server.ts';
 import App from '/~/app/app.tsx';
+import { getCookie as honoGetCookie } from 'hono/cookie';
 
 // React Router
 import { StaticRouter } from 'react-router-dom/server';
@@ -17,8 +18,8 @@ import { queryClient } from '/~/app/react-query/query-client.ts';
 import * as dotenv from 'dotenv';
 import {
   felaRenderer,
-  FelaRendererProvider,
-} from '/~/app/providers/individually/fela.tsx';
+  FelaRendererProviderConstructor,
+} from '/~/app/providers-constructors/fela.tsx';
 import { createHeadInsertionTransformStream } from 'ultra/stream.ts';
 
 import { renderToMarkup } from 'fela-dom';
@@ -56,13 +57,21 @@ function ServerApp({ context }: { context: Context }) {
 
   const requestUrl = new URL(context.req.url);
 
+  // context.req.cookie('example-cookie');
+  const cookies = honoGetCookie(context);
+  console.log('__TEST__ cookies:', cookies);
+  console.log(
+    '__TEST__ example-coookie:',
+    honoGetCookie(context, 'example-cookie'),
+  );
+
   return (
     <HelmetProvider context={helmetContext}>
       <QueryClientProvider client={queryClient}>
         <StaticRouter location={new URL(context.req.url).pathname}>
-          <FelaRendererProvider>
+          <FelaRendererProviderConstructor>
             <App />
-          </FelaRendererProvider>
+          </FelaRendererProviderConstructor>
         </StaticRouter>
       </QueryClientProvider>
     </HelmetProvider>

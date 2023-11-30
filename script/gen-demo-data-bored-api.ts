@@ -23,7 +23,7 @@ try {
   console.error(e);
 }
 
-let result: object[] = [];
+const result: object[] = [];
 
 for (let reqNum = 1; reqNum <= REQUESTS_COUNT; reqNum++) {
   const response = await fetch('http://www.boredapi.com/api/activity');
