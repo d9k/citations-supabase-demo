@@ -63,11 +63,11 @@ function ServerApp({ context }: { context: Context }) {
 
   // context.req.cookie('example-cookie');
   const cookies = honoGetCookie(context);
-  console.log('__TEST__ cookies:', cookies);
-  console.log(
-    '__TEST__ example-coookie:',
-    honoGetCookie(context, 'example-cookie'),
-  );
+  console.log('__TEST__ cookies:', JSON.stringify(cookies));
+  // console.log(
+  //   '__TEST__ example-coookie:',
+  //   honoGetCookie(context, 'example-cookie'),
+  // );
 
   const getCookie = useCallback(
     (cookieName: string) => honoGetCookie(context, cookieName),

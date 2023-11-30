@@ -20,7 +20,7 @@ export type AppProps = {
 export default function App({ cache }: AppProps) {
   const supabase = useSupabase();
 
-  console.log('__TEST__: App: supabaseClient:', supabase);
+  // console.log('__TEST__: App: supabaseClient:', supabase);
 
   const [session, setSession] = useState<Session | null>(null);
 

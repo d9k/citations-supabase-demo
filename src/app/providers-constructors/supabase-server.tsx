@@ -25,5 +25,7 @@ export const SupabaseServerProviderConstructor = (
       },
     ), [anonKey, getCookie, supabaseUrl]);
 
+  // const result = await supabaseClient.auth.getSession();
+
   return <SupabaseProvider value={supabaseClient}>{children}</SupabaseProvider>;
 };
