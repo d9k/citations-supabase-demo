@@ -8,6 +8,7 @@ import { Spinner } from '/~/shared/ui/spinner.tsx';
 
 const HomePage = React.lazy(() => import('/~/pages/home/index.tsx'));
 const DemoPage = React.lazy(() => import('/~/pages/demo/index.tsx'));
+const LoginPage = React.lazy(() => import('/~/pages/login/index.tsx'));
 
 export const AppRoutes = () => (
   <Suspense fallback={<Spinner />}>
@@ -23,6 +24,7 @@ export const AppRoutes = () => (
         <Route element={<HomePage />} path='/' />
         <Route element={<HomePage />} path='home' />
         <Route element={<DemoPage />} path='demo' />
+        <Route element={<LoginPage />} path='login' />
       </Route>
     </Routes>
   </Suspense>

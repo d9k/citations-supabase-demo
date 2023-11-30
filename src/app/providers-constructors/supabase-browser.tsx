@@ -1,4 +1,5 @@
 import { createBrowserClient } from '@supabase/ssr';
+import { createClient } from '@supabase/supabase-js';
 import { WithChildren } from '/~/shared/lib/react/WithChildren.tsx';
 import { SupabaseProvider } from '/~/shared/providers/supabase/client.ts';
 import { Database } from '/~/shared/api/supabase/types.generated.ts';
@@ -13,7 +14,8 @@ export const SupabaseBrowserroviderConstructor = (
   { anonKey, children, supabaseUrl }: SupabaseBrowserProviderConstructorArgs,
 ) => {
   const supabaseClient = useMemo(() =>
-    createBrowserClient<Database>(
+    // createBrowserClient<Database>(
+    createClient<Database>(
       supabaseUrl,
       anonKey,
     ), [anonKey, children]);

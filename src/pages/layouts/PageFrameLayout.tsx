@@ -14,6 +14,10 @@ export const PageFrameLayout = ({ children }: WithChildren) => (
           path: '/demo',
           caption: 'Demo',
         },
+        {
+          path: '/login',
+          caption: 'Login',
+        },
       ]}
     />
     <main>

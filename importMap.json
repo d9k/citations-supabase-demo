@@ -26,9 +26,9 @@
 
     "react-fela": "https://esm.sh/react-fela@12.2.1?external=react",
 
-    "@mantine/core": "https://esm.sh/@mantine/core@7.1.2?external=react,@types/react",
-    "@mantine/hooks": "https://esm.sh/@mantine/hooks@7.1.2?external=react,@types/react",
-    "@mantine/form": "https://esm.sh/@mantine/form@7.1.2?external=react,@types/react",
+    "@mantine/core": "https://esm.sh/@mantine/core@7.1.2?external=react",
+    "@mantine/hooks": "https://esm.sh/@mantine/hooks@7.1.2?external=react",
+    "@mantine/form": "https://esm.sh/@mantine/form@7.1.2?external=react",
 
     "react-data-grid": "https://esm.sh/react-data-grid@7.0.0-beta.41?external=react,@types/react",
 
@@ -42,7 +42,7 @@
     "react-router-dom": "https://esm.sh/react-router-dom@6.3.0?external=react,@types/react",
     "react-router-dom/server": "https://esm.sh/react-router-dom@6.3.0/server?external=react,@types/react",
 
-    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.0",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.38.5",
     "@supabase/ssr": "https://esm.sh/@supabase/ssr@0.0.10",
 
     "@tanstack/react-query": "https://esm.sh/@tanstack/react-query@4.2.3?external=react",

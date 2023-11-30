@@ -16,25 +16,23 @@ import {
   TextInput,
 } from '@mantine/core';
 
-export type LoginValues = {
-  loginOrEmail: string;
-  password: string;
+export type OtpFormValues = {
+  email: string;
 };
 
-export type LoginFormProps = PaperProps & {
+export type OtpFormProps = PaperProps & {
   demoField?: boolean;
-  initialValues?: Partial<LoginValues>;
-  onSwitchToRegister?: (newRegisterForm: boolean) => void;
-  onLogin: (values: LoginValues) => void;
+  initialValues?: Partial<OtpFormValues>;
+  loading?: boolean;
+  onOtpLogin: (values: OtpFormValues) => void;
   title?: string;
 };
 
-type UseFormParams = Parameters<typeof useForm<LoginValues>>;
+type UseFormParams = Parameters<typeof useForm<OtpFormValues>>;
 
 /** Error "A component is changing an uncontrolled input to be controlled" if skip any field default value */
-export const defaultLoginFormValues = (): LoginValues => ({
-  loginOrEmail: '',
-  password: '',
+export const defaultLoginFormValues = (): OtpFormValues => ({
+  email: '',
 });
 
 type UseFormParam1 = NonNullable<UseFormParams[0]>;
@@ -50,16 +48,16 @@ type UseFormParamValidateObjectRequired = Required<UseFormParamValidateObject>;
  * forked from
  * https://github.com/mantinedev/ui.mantine.dev/blob/6f9c568ee161ab3239b826af92dd48415e319cf8/lib/AuthenticationForm/AuthenticationForm.tsx
  */
-export function LoginForm(
+export function OtpForm(
   {
-    onLogin,
-    onSwitchToRegister,
+    onOtpLogin,
     initialValues = {},
-    title = 'Login',
+    loading,
+    title = 'OTP Login',
     ...props
-  }: LoginFormProps,
+  }: OtpFormProps,
 ) {
-  const mergedInitialValues: LoginValues = useMemo(() => (
+  const mergedInitialValues: OtpFormValues = useMemo(() => (
     { ...defaultLoginFormValues(), ...initialValues }
   ), [initialValues]);
 
@@ -68,16 +66,6 @@ export function LoginForm(
   });
 
   const inputSize = 'lg';
-
-  // TODO почему, если запомнить, значения не меняются?!
-  // const handleSubmit = useCallback(
-  //   form.onSubmit(
-  //     (values) => {
-  //       console.log('__TEST__ LoginForm: submit', values);
-  //     },
-  //   ),
-  //   [],
-  // );
 
   return (
     <Paper radius='md' p='xl' withBorder {...props}>
@@ -98,48 +86,28 @@ export function LoginForm(
 
       {/* <form onSubmit={handleSubmit}> */}
       <form
-        onSubmit={form.onSubmit((values) => {
+        onSubmit={form.onSubmit((values: OtpFormValues) => {
           console.log('__TEST__ LoginForm: submit', values);
-          onLogin?.(values);
+          onOtpLogin?.(values);
         })}
       >
         <Stack>
           <TextInput
             required
             size={inputSize}
-            placeholder='Login or email'
+            placeholder='email'
             radius='md'
-            {...form.getInputProps('loginOrEmail')}
-          />
-
-          <PasswordInput
-            required
-            size={inputSize}
-            placeholder='Your password'
-            radius='md'
-            {...form.getInputProps('password')}
+            {...form.getInputProps('email')}
           />
         </Stack>
 
-        <Group align='flex-end' justify='space-between' mt='xl'>
-          {onSwitchToRegister &&
-            (
-              <Anchor
-                component='button'
-                type='button'
-                c='dimmed'
-                onClick={onSwitchToRegister}
-                size='xs'
-                underline='always'
-              >
-                Don't have an account? Register
-              </Anchor>
-            )}
-
-          <Button type='submit' radius='xl'>
-            Login
-          </Button>
-        </Group>
+        {
+          <Group align='flex-end' justify='space-between' mt='xl'>
+            <Button type='submit' radius='xl' loading={loading}>
+              Send one-time password
+            </Button>
+          </Group>
+        }
       </form>
     </Paper>
   );
