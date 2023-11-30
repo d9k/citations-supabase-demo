@@ -37,7 +37,7 @@
     "react-dom": "https://esm.sh/react-dom@18.2.0",
     "react-dom/server": "https://esm.sh/react-dom@18.2.0/server?dev",
     "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?dev",
-    "react-helmet-async": "https://esm.sh/react-helmet-async@1.3.0?external=react,@types/react",
+    "react-helmet-async": "https://esm.sh/react-helmet-async@1.3.0?external=react",
 
     "react-router-dom": "https://esm.sh/react-router-dom@6.3.0?external=react,@types/react",
     "react-router-dom/server": "https://esm.sh/react-router-dom@6.3.0/server?external=react,@types/react",
@@ -45,7 +45,7 @@
     "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.39.0",
     "@supabase/ssr": "https://esm.sh/@supabase/ssr@0.0.10",
 
-    "@tanstack/react-query": "https://esm.sh/@tanstack/react-query@4.2.3?external=react,@types/react",
+    "@tanstack/react-query": "https://esm.sh/@tanstack/react-query@4.2.3?external=react",
 
     "ultra/": "https://deno.land/x/ultra@v2.3.8/"
   }
