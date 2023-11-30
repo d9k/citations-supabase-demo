@@ -1,5 +1,8 @@
 {
   "tasks": {
+    "cache:client": "deno cache --no-npm ./client.tsx",
+    "cache:server": "deno cache --no-npm ./server.tsx",
+    "cache": "deno task cache:server && deno task cache:client",
     "dev": "deno run --no-npm -A --no-check --watch ./server.tsx",
     "check:server": "deno check --no-npm ./server.tsx; deno lint",
     "check:client": "deno check --no-npm ./client.tsx; deno lint",
@@ -26,13 +29,13 @@
     "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns"]
   },
   "fmt": {
-    "files": { "exclude": [".ultra"] },
+    "exclude": [".ultra"],
     "indentWidth": 2,
     "proseWrap": "preserve",
     "singleQuote": true
   },
   "lint": {
-    "files": { "exclude": [".ultra"] }
+    "exclude": [".ultra"]
   },
   "importMap": "./importMap.json"
 }
