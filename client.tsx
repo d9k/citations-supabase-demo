@@ -12,6 +12,8 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Hydrate, QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '/~/app/react-query/query-client.ts';
 import { FelaRendererProviderConstructor } from '/~/app/providers-constructors/fela.tsx';
+import { Suspense } from 'react';
+import { Spinner } from '/~/shared/ui/spinner.tsx';
 declare const __REACT_QUERY_DEHYDRATED_STATE: unknown;
 
 function ClientApp() {
@@ -20,15 +22,17 @@ function ClientApp() {
       <QueryClientProvider client={queryClient}>
         <FelaRendererProviderConstructor>
           <Hydrate state={__REACT_QUERY_DEHYDRATED_STATE}>
-            <SupabaseBrowserProviderConstructor
-              anonKey={useEnv('ULTRA_PUBLIC_SUPABASE_ANON_KEY')!}
-              supabaseUrl={useEnv('ULTRA_PUBLIC_SUPABASE_URL')!}
-            >
-              {/* @ts-ignore 'Router' cannot be used as a JSX component. */}
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
-            </SupabaseBrowserProviderConstructor>
+            <Suspense fallback={<Spinner />}>
+              <SupabaseBrowserProviderConstructor
+                anonKey={useEnv('ULTRA_PUBLIC_SUPABASE_ANON_KEY')!}
+                supabaseUrl={useEnv('ULTRA_PUBLIC_SUPABASE_URL')!}
+              >
+                {/* @ts-ignore 'Router' cannot be used as a JSX component. */}
+                <BrowserRouter>
+                  <App />
+                </BrowserRouter>
+              </SupabaseBrowserProviderConstructor>
+            </Suspense>
           </Hydrate>
         </FelaRendererProviderConstructor>
       </QueryClientProvider>

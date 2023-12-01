@@ -41,6 +41,8 @@ import {
 } from '/~/shared/api/supabase/const.ts';
 
 import { ssrSupabaseConstructorHelper } from '/~/app/providers-constructors/supabase-ssr.tsx';
+import { Suspense } from 'react';
+import { Spinner } from '/~/shared/ui/spinner.tsx';
 
 const { load: loadDotEnv } = dotenv;
 
@@ -88,13 +90,15 @@ function ServerApp({ context, supabaseClient, supabaseUser }: ServerAppProps) {
     <HelmetProvider context={helmetContext}>
       <QueryClientProvider client={queryClient}>
         <FelaRendererProviderConstructor>
-          <StaticRouter location={new URL(context.req.url).pathname}>
-            <SupabaseProvider value={supabaseClient}>
-              <SupabaseUserProvider value={supabaseUser}>
-                <App />
-              </SupabaseUserProvider>
-            </SupabaseProvider>
-          </StaticRouter>
+          <Suspense fallback={<Spinner />}>
+            <StaticRouter location={new URL(context.req.url).pathname}>
+              <SupabaseProvider value={supabaseClient}>
+                <SupabaseUserProvider value={supabaseUser}>
+                  <App />
+                </SupabaseUserProvider>
+              </SupabaseProvider>
+            </StaticRouter>
+          </Suspense>
         </FelaRendererProviderConstructor>
       </QueryClientProvider>
     </HelmetProvider>
