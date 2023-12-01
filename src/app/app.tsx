@@ -12,6 +12,10 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 
 import { Session } from '@supabase/supabase-js';
+import {
+  browserCookiesDeleteOnSupabaseSignOut,
+  browserCookiesSetOnSupabaseAuth,
+} from '/~/shared/api/supabase/browser-cookies.ts';
 
 export type AppProps = {
   cache?: any;
@@ -24,6 +28,7 @@ export default function App({ cache }: AppProps) {
 
   const [session, setSession] = useState<Session | null>(null);
 
+  // useEffect runs on client only
   useEffect(() => {
     if (!supabase) {
       throw Error('Supabase not defined');
@@ -31,10 +36,22 @@ export default function App({ cache }: AppProps) {
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      if (session) {
+        browserCookiesSetOnSupabaseAuth(session);
+      }
     });
 
-    supabase.auth.onAuthStateChange((_event, session) => {
+    supabase.auth.onAuthStateChange((event, session) => {
       setSession(session);
+
+      /** @see https://supabase.com/docs/guides/auth/server-side-rendering#bringing-it-together */
+      if (event === 'SIGNED_OUT' || (event as string) === 'USER_DELETED') {
+        browserCookiesDeleteOnSupabaseSignOut();
+      } else if (
+        (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session
+      ) {
+        browserCookiesSetOnSupabaseAuth(session);
+      }
     });
   }, []);
 
