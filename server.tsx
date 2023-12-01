@@ -3,7 +3,7 @@ import { type Context, createServer } from 'ultra/server.ts';
 import App from '/~/app/app.tsx';
 import { getCookie as honoGetCookie } from 'hono/cookie';
 // import { createServerClient } from '@supabase/ssr';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, User } from '@supabase/supabase-js';
 import { Database } from '/~/shared/api/supabase/types.generated.ts';
 
 // React Router
@@ -21,7 +21,8 @@ import { queryClient } from '/~/app/react-query/query-client.ts';
 import {
   SupabaseCreateClientResult,
   SupabaseProvider,
-} from '/~/shared/providers/supabase/client.ts';
+  SupabaseUserProvider,
+} from '/~/shared/providers/supabase/index.ts';
 
 import * as dotenv from 'dotenv';
 
@@ -38,6 +39,8 @@ import {
   COOKIE_NAME_SUPABASE_ACCESS_TOKEN,
   COOKIE_NAME_SUPABASE_REFRESH_TOKEN,
 } from '/~/shared/api/supabase/const.ts';
+
+import { ssrSupabaseConstructorHelper } from '/~/app/providers-constructors/supabase-ssr.tsx';
 
 const { load: loadDotEnv } = dotenv;
 
@@ -56,10 +59,11 @@ const helmetContext: Record<string, any> = {};
 
 type ServerAppProps = {
   context: Context;
-  supabase: SupabaseCreateClientResult;
+  supabaseClient: SupabaseCreateClientResult;
+  supabaseUser: User | null;
 };
 
-function ServerApp({ context }: ServerAppProps) {
+function ServerApp({ context, supabaseClient, supabaseUser }: ServerAppProps) {
   useServerInsertedHTML(() => {
     const { helmet } = helmetContext;
     return (
@@ -77,33 +81,19 @@ function ServerApp({ context }: ServerAppProps) {
 
   const requestUrl = new URL(context.req.url);
 
-  // context.req.cookie('example-cookie');
   const cookies = honoGetCookie(context);
   console.log('__TEST__ cookies:', JSON.stringify(cookies));
-  // console.log(
-  //   '__TEST__ example-coookie:',
-  //   honoGetCookie(context, 'example-cookie'),
-  // );
-
-  // const getCookie = useCallback(
-  //   (cookieName: string) => honoGetCookie(context, cookieName),
-  //   [context],
-  // );
 
   return (
     <HelmetProvider context={helmetContext}>
       <QueryClientProvider client={queryClient}>
         <FelaRendererProviderConstructor>
           <StaticRouter location={new URL(context.req.url).pathname}>
-            {
-              /* <SupabaseServerProviderConstructor
-              anonKey={ULTRA_PUBLIC_SUPABASE_ANON_KEY}
-              supabaseUrl={ULTRA_PUBLIC_SUPABASE_URL}
-              getCookie={getCookie}
-            > */
-            }
-            <App />
-            {/* </SupabaseServerProviderConstructor> */}
+            <SupabaseProvider value={supabaseClient}>
+              <SupabaseUserProvider value={supabaseUser}>
+                <App />
+              </SupabaseUserProvider>
+            </SupabaseProvider>
           </StaticRouter>
         </FelaRendererProviderConstructor>
       </QueryClientProvider>
@@ -117,48 +107,29 @@ server.get('*', async (context) => {
 
   const getCookie = (cookieName: string) => honoGetCookie(context, cookieName);
 
-  // const supabaseClient = createServerClient<Database>(
-  // const supabaseClient = createServerClient<Database>(
-  const supabaseClient = createClient<Database>(
-    ULTRA_PUBLIC_SUPABASE_URL,
-    ULTRA_PUBLIC_SUPABASE_ANON_KEY,
-    // {
-    //   auth: {
-    //     flowType: 'implicit',
-    //   },
-    //   cookies: {
-    //     get: getCookie,
-    //   },
-    // },
-  );
-
   const supabaseAccessToken = getCookie(COOKIE_NAME_SUPABASE_ACCESS_TOKEN);
   const supabaseRefreshToken = getCookie(COOKIE_NAME_SUPABASE_REFRESH_TOKEN);
 
-  /** @see https://supabase.com/docs/guides/auth/server-side-rendering#bringing-it-together */
-  // const supabaseSession = await supabaseClient.auth.getSession();
-
-  if (supabaseAccessToken && supabaseRefreshToken) {
-    const supabaseSession = await supabaseClient.auth.setSession({
-      refresh_token: supabaseRefreshToken,
-      access_token: supabaseAccessToken,
-      // {
-      //   auth: { persistSession: false },
-      // }
-    });
-
-    console.log('__TEST__: server: supabaseSession:', supabaseSession);
-
-    const supabaseUser = await supabaseClient.auth.getUser();
-
-    console.log('__TEST__: server: supabaseUser:', supabaseUser);
-  }
+  const {
+    supabaseClient,
+    supabaseUser,
+  } = await ssrSupabaseConstructorHelper({
+    anonKey: ULTRA_PUBLIC_SUPABASE_ANON_KEY,
+    getCookie,
+    supabaseUrl: ULTRA_PUBLIC_SUPABASE_URL,
+    supabaseAccessToken,
+    supabaseRefreshToken,
+  });
 
   /**
    * Render the request
    */
   const result = await server.render(
-    <ServerApp context={context} supabase={supabaseClient} />,
+    <ServerApp
+      context={context}
+      supabaseClient={supabaseClient}
+      supabaseUser={supabaseUser}
+    />,
   );
 
   // let felaStylesInjectFirstTime = true;

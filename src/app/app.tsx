@@ -16,12 +16,18 @@ import {
   browserCookiesDeleteOnSupabaseSignOut,
   browserCookiesSetOnSupabaseAuth,
 } from '/~/shared/api/supabase/browser-cookies.ts';
+import {
+  SupabaseUserProvider,
+  useSupabaseUser,
+} from '/~/shared/providers/supabase/user.ts';
 
 export type AppProps = {
   cache?: any;
 };
 
 export default function App({ cache }: AppProps) {
+  const ssrSupabaseUser = useSupabaseUser();
+
   const supabase = useSupabase();
 
   // console.log('__TEST__: App: supabaseClient:', supabase);
@@ -35,6 +41,8 @@ export default function App({ cache }: AppProps) {
     }
 
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('__TEST__: App: getSession: session:', session);
+
       setSession(session);
       if (session) {
         browserCookiesSetOnSupabaseAuth(session);
@@ -42,6 +50,8 @@ export default function App({ cache }: AppProps) {
     });
 
     supabase.auth.onAuthStateChange((event, session) => {
+      console.log('__TEST__: App: onAuthStateChange: session:', session, event);
+
       setSession(session);
 
       /** @see https://supabase.com/docs/guides/auth/server-side-rendering#bringing-it-together */
@@ -55,8 +65,6 @@ export default function App({ cache }: AppProps) {
     });
   }, []);
 
-  console.log('__TEST__: App: session:', session);
-
   // console.log('ULTRA_MODE:', useEnv("ULTRA_MODE"));
   // console.log('ULTRA_PUBLIC_SUPABASE_URL', useEnv('ULTRA_PUBLIC_SUPABASE_URL'));
   // console.log(
@@ -64,19 +72,21 @@ export default function App({ cache }: AppProps) {
   //   useEnv('ULTRA_PUBLIC_SUPABASE_ANON_KEY'),
   // );
   return (
-    <HtmlTemplate
-      title='Ultra'
-      addHeaderChildren={
-        <>
-          <link rel='shortcut icon' href={useAsset('/favicon.ico')} />
-          <MantineColorSchemeScript />
-          {commonHeaderScriptsArray()}
-        </>
-      }
-    >
-      <BodyProvidersConstructor>
-        <AppRoutes />
-      </BodyProvidersConstructor>
-    </HtmlTemplate>
+    <SupabaseUserProvider value={ssrSupabaseUser || session?.user || null}>
+      <HtmlTemplate
+        title='Ultra'
+        addHeaderChildren={
+          <>
+            <link rel='shortcut icon' href={useAsset('/favicon.ico')} />
+            <MantineColorSchemeScript />
+            {commonHeaderScriptsArray()}
+          </>
+        }
+      >
+        <BodyProvidersConstructor>
+          <AppRoutes />
+        </BodyProvidersConstructor>
+      </HtmlTemplate>
+    </SupabaseUserProvider>
   );
 }
