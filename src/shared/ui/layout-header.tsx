@@ -24,6 +24,7 @@ export type HeaderProps = {
   childrenGap?: number;
   menuGap?: number;
   menuItems: MenuItem[];
+  renderBelowHeader?: () => ReactNode;
 };
 
 export function LayoutHeader({
@@ -31,6 +32,7 @@ export function LayoutHeader({
   childrenGap = 5,
   menuItems,
   menuGap = 0,
+  renderBelowHeader,
 }: HeaderProps) {
   const { css } = useFela();
   const dark = useMantineDarkMode();
@@ -89,48 +91,57 @@ export function LayoutHeader({
         css(cssProps({
           marginBottom: 120,
           backgroundColor: 'var(--mantine-color-body)',
-          borderBottom: `1px solid var(${
-            dark ? '--mantine-color-dark-4' : '--mantine-color-gray-3'
-          })`,
           fontSize: '--mantine-font-size-md',
-          display: 'flex',
-          flexDirection: 'row-reverse',
-          justifyContent: 'space-between',
         }))
       }`}
     >
-      <Group
-        gap={0}
-        className={`header_menu ${
+      <div
+        className={`header_inner ${
           css(cssProps({
+            borderBottom: `1px solid var(${
+              dark ? '--mantine-color-dark-4' : '--mantine-color-gray-3'
+            })`,
             display: 'flex',
-            alignItems: 'center',
-            alignSelf: 'flex-end',
-          }))
-        }`}
-      >
-        {menuNodes}
-      </Group>
-
-      <Container
-        className={`header_children ${
-          css(cssProps({
-            alignItems: 'center',
-            display: 'flex',
+            flexDirection: 'row-reverse',
             justifyContent: 'space-between',
-            margin: 0,
           }))
         }`}
       >
-        {children
-          ? (
-            <Group gap={childrenGap}>
-              {children}
-            </Group>
-          )
-          : undefined}
-        {/* <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" /> */}
-      </Container>
+        <Group
+          gap={0}
+          className={`header_menu ${
+            css(cssProps({
+              display: 'flex',
+              alignItems: 'center',
+              alignSelf: 'flex-end',
+            }))
+          }`}
+        >
+          {menuNodes}
+        </Group>
+
+        <Container
+          className={`header_children ${
+            css(cssProps({
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'space-between',
+              margin: 0,
+            }))
+          }`}
+        >
+          {children
+            ? (
+              <Group gap={childrenGap}>
+                {children}
+              </Group>
+            )
+            : undefined}
+          {/* <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" /> */}
+        </Container>
+      </div>
+
+      {renderBelowHeader ? renderBelowHeader() : null}
     </header>
   );
 }
