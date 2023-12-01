@@ -12,6 +12,12 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Hydrate, QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '/~/app/react-query/query-client.ts';
 import { FelaRendererProviderConstructor } from '/~/app/providers-constructors/fela.tsx';
+import { Suspense } from 'react';
+import { Spinner } from '/~/shared/ui/spinner.tsx';
+import { SsrSupabaseConstructor } from '/~/app/providers-constructors/supabase-ssr.tsx';
+import { randomRange } from '/~/shared/lib/math/random.ts';
+import AppHtmlWrapper from '/~/app/app-html-wrapper.tsx';
+import { SupabaseBrowserAuthManager } from '/~/app/providers-constructors/browser-auth-manager.tsx';
 declare const __REACT_QUERY_DEHYDRATED_STATE: unknown;
 
 function ClientApp() {
@@ -20,15 +26,38 @@ function ClientApp() {
       <QueryClientProvider client={queryClient}>
         <FelaRendererProviderConstructor>
           <Hydrate state={__REACT_QUERY_DEHYDRATED_STATE}>
-            <SupabaseBrowserProviderConstructor
-              anonKey={useEnv('ULTRA_PUBLIC_SUPABASE_ANON_KEY')!}
-              supabaseUrl={useEnv('ULTRA_PUBLIC_SUPABASE_URL')!}
-            >
-              {/* @ts-ignore 'Router' cannot be used as a JSX component. */}
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
-            </SupabaseBrowserProviderConstructor>
+            {/* @ts-ignore 'Router' cannot be used as a JSX component. */}
+            <AppHtmlWrapper>
+              <Suspense fallback={<Spinner />}>
+                <SupabaseBrowserProviderConstructor
+                  anonKey={useEnv('ULTRA_PUBLIC_SUPABASE_ANON_KEY')!}
+                  supabaseUrl={useEnv('ULTRA_PUBLIC_SUPABASE_URL')!}
+                >
+                  <SupabaseBrowserAuthManager
+                    queryKeyUniqueSuffix={`${+new Date()}_${
+                      randomRange(0, 100000)
+                    }`}
+                  >
+                    {
+                      /* <SsrSupabaseConstructor
+                      anonKey={''}
+                      getCookie={(a) => ''}
+                      supabaseUrl={''}
+                      queryKeyUniqueSuffix={`${+new Date()}_${
+                        randomRange(0, 100000)
+                      }`}
+                      supabaseAccessToken={''}
+                      supabaseRefreshToken={''}
+                    > */
+                    }
+                    <BrowserRouter>
+                      <App />
+                    </BrowserRouter>
+                  </SupabaseBrowserAuthManager>
+                </SupabaseBrowserProviderConstructor>
+              </Suspense>
+            </AppHtmlWrapper>
+            {/* </SsrSupabaseConstructor> */}
           </Hydrate>
         </FelaRendererProviderConstructor>
       </QueryClientProvider>

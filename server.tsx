@@ -40,7 +40,14 @@ import {
   COOKIE_NAME_SUPABASE_REFRESH_TOKEN,
 } from '/~/shared/api/supabase/const.ts';
 
-import { ssrSupabaseConstructorHelper } from '/~/app/providers-constructors/supabase-ssr.tsx';
+import {
+  SsrSupabaseConstructor,
+  ssrSupabaseConstructorHelper,
+} from '/~/app/providers-constructors/supabase-ssr.tsx';
+import { Suspense } from 'react';
+import { Spinner } from '/~/shared/ui/spinner.tsx';
+import { randomRange } from '/~/shared/lib/math/random.ts';
+import AppHtmlWrapper from '/~/app/app-html-wrapper.tsx';
 
 const { load: loadDotEnv } = dotenv;
 
@@ -59,11 +66,13 @@ const helmetContext: Record<string, any> = {};
 
 type ServerAppProps = {
   context: Context;
-  supabaseClient: SupabaseCreateClientResult;
-  supabaseUser: User | null;
+  // supabaseClient: SupabaseCreateClientResult;
+  // supabaseUser: User | null;
 };
 
-function ServerApp({ context, supabaseClient, supabaseUser }: ServerAppProps) {
+function ServerApp(
+  { context /*, supabaseClient, supabaseUser*/ }: ServerAppProps,
+) {
   useServerInsertedHTML(() => {
     const { helmet } = helmetContext;
     return (
@@ -84,17 +93,41 @@ function ServerApp({ context, supabaseClient, supabaseUser }: ServerAppProps) {
   const cookies = honoGetCookie(context);
   console.log('__TEST__ cookies:', JSON.stringify(cookies));
 
+  const getCookie = (cookieName: string) => honoGetCookie(context, cookieName);
+
+  const supabaseAccessToken = getCookie(COOKIE_NAME_SUPABASE_ACCESS_TOKEN);
+  const supabaseRefreshToken = getCookie(COOKIE_NAME_SUPABASE_REFRESH_TOKEN);
+
   return (
     <HelmetProvider context={helmetContext}>
       <QueryClientProvider client={queryClient}>
         <FelaRendererProviderConstructor>
-          <StaticRouter location={new URL(context.req.url).pathname}>
-            <SupabaseProvider value={supabaseClient}>
-              <SupabaseUserProvider value={supabaseUser}>
-                <App />
-              </SupabaseUserProvider>
-            </SupabaseProvider>
-          </StaticRouter>
+          {
+            /* <SupabaseProvider value={supabaseClient}>
+              <SupabaseUserProvider value={supabaseUser}> */
+          }
+          <AppHtmlWrapper>
+            <Suspense fallback={<Spinner />}>
+              <SsrSupabaseConstructor
+                anonKey={ULTRA_PUBLIC_SUPABASE_ANON_KEY}
+                getCookie={getCookie}
+                supabaseUrl={ULTRA_PUBLIC_SUPABASE_URL}
+                queryKeyUniqueSuffix={`${+new Date()}_${
+                  randomRange(0, 100000)
+                }`}
+                supabaseAccessToken={supabaseAccessToken}
+                supabaseRefreshToken={supabaseRefreshToken}
+              >
+                <StaticRouter location={new URL(context.req.url).pathname}>
+                  <App />
+                </StaticRouter>
+              </SsrSupabaseConstructor>
+            </Suspense>
+          </AppHtmlWrapper>
+          {
+            /* </SupabaseUserProvider>
+              </SupabaseProvider> */
+          }
         </FelaRendererProviderConstructor>
       </QueryClientProvider>
     </HelmetProvider>
@@ -105,21 +138,18 @@ server.get('*', async (context) => {
   // clear query cache
   queryClient.clear();
 
-  const getCookie = (cookieName: string) => honoGetCookie(context, cookieName);
+  await new Promise((resolve) => setTimeout(resolve, 300));
 
-  const supabaseAccessToken = getCookie(COOKIE_NAME_SUPABASE_ACCESS_TOKEN);
-  const supabaseRefreshToken = getCookie(COOKIE_NAME_SUPABASE_REFRESH_TOKEN);
-
-  const {
-    supabaseClient,
-    supabaseUser,
-  } = await ssrSupabaseConstructorHelper({
-    anonKey: ULTRA_PUBLIC_SUPABASE_ANON_KEY,
-    getCookie,
-    supabaseUrl: ULTRA_PUBLIC_SUPABASE_URL,
-    supabaseAccessToken,
-    supabaseRefreshToken,
-  });
+  // const {
+  //   supabaseClient,
+  //   supabaseUser,
+  // } = await ssrSupabaseConstructorHelper({
+  //   anonKey: ULTRA_PUBLIC_SUPABASE_ANON_KEY,
+  //   getCookie,
+  //   supabaseUrl: ULTRA_PUBLIC_SUPABASE_URL,
+  //   supabaseAccessToken,
+  //   supabaseRefreshToken,
+  // });
 
   /**
    * Render the request
@@ -127,8 +157,8 @@ server.get('*', async (context) => {
   const result = await server.render(
     <ServerApp
       context={context}
-      supabaseClient={supabaseClient}
-      supabaseUser={supabaseUser}
+      // supabaseClient={supabaseClient}
+      // supabaseUser={supabaseUser}
     />,
   );
 
