@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { WithChildren } from '/~/shared/lib/react/WithChildren.tsx';
+import { WithChildren } from '/~/shared/lib/react/WithChildren.ts';
 
 export type HtmlTemplateProps = Partial<WithChildren> & {
   addHeaderChildren?: ReactNode;

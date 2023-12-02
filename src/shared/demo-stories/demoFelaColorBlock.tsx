@@ -5,7 +5,7 @@ import { useFela } from '/~/deps/react-fela/index.ts';
 import { cssProps } from '/~/shared/lib/react/cssProps.ts';
 
 import { ReactNode } from 'react';
-// import { WithChildren } from "/~/shared/react/WithChildren.tsx";
+// import { WithChildren } from "/~/shared/react/WithChildren.ts";
 
 // export const ColoredBlockInner = styled.div`
 //   background-color: #ff5630;

@@ -1,4 +1,4 @@
-import { WithChildren } from '/~/shared/lib/react/WithChildren.tsx';
+import { WithChildren } from '/~/shared/lib/react/WithChildren.ts';
 import { createBrowserClient } from '@supabase/ssr';
 import { createClient } from '@supabase/supabase-js';
 import {

@@ -6,10 +6,8 @@ export type RedirectWithRetPathProps = {
   to: string;
 };
 
-const RedirectWithRetPath = ({ to }: RedirectWithRetPathProps) => {
+export const RedirectWithRetPath = ({ to }: RedirectWithRetPathProps) => {
   const currentPath = useCurrentUrlPath();
 
   return <Navigate to={toUrlWithRetPath(to, currentPath)} />;
 };
-
-export default RedirectWithRetPath;

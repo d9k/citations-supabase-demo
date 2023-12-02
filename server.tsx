@@ -3,8 +3,6 @@ import { type Context, createServer } from 'ultra/server.ts';
 import App from '/~/app/app.tsx';
 import { getCookie as honoGetCookie } from 'hono/cookie';
 // import { createServerClient } from '@supabase/ssr';
-import { createClient, User } from '@supabase/supabase-js';
-import { Database } from '/~/shared/api/supabase/types.generated.ts';
 
 // React Router
 import { StaticRouter } from 'react-router-dom/server';
@@ -18,12 +16,6 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { useDehydrateReactQuery } from '/~/app/react-query/useDehydrateReactQuery.tsx';
 import { queryClient } from '/~/app/react-query/query-client.ts';
 
-import {
-  SupabaseCreateClientResult,
-  SupabaseProvider,
-  SupabaseUserProvider,
-} from '/~/shared/providers/supabase/index.ts';
-
 import * as dotenv from 'dotenv';
 
 import {
@@ -34,7 +26,6 @@ import { createHeadInsertionTransformStream } from 'ultra/stream.ts';
 
 import { renderToMarkup } from 'fela-dom';
 // import { SupabaseServerProviderConstructor } from './src/app/providers-constructors/supabase-server.tsx.bk';
-import { useCallback } from 'react';
 import {
   COOKIE_NAME_SUPABASE_ACCESS_TOKEN,
   COOKIE_NAME_SUPABASE_REFRESH_TOKEN,
@@ -42,12 +33,15 @@ import {
 
 import {
   SsrSupabaseConstructor,
-  ssrSupabaseConstructorHelper,
 } from '/~/app/providers-constructors/supabase-ssr.tsx';
 import { Suspense } from 'react';
 import { Spinner } from '/~/shared/ui/spinner.tsx';
 import { randomRange } from '/~/shared/lib/math/random.ts';
 import AppHtmlWrapper from '/~/app/app-html-wrapper.tsx';
+import { QueryParamProvider } from 'use-query-params';
+import RouteAdapter from '/~/shared/lib/react/routing/RouteAdapter.tsx';
+import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
+import { makeMockQueryParamAdapter } from '/~/shared/lib/react/routing/makeMockQueryParamAdapter.tsx';
 
 const { load: loadDotEnv } = dotenv;
 
@@ -90,6 +84,8 @@ function ServerApp(
 
   const requestUrl = new URL(context.req.url);
 
+  console.log('__TEST__', { location, requestUrl });
+
   const cookies = honoGetCookie(context);
   console.log('__TEST__ cookies:', JSON.stringify(cookies));
 
@@ -97,6 +93,8 @@ function ServerApp(
 
   const supabaseAccessToken = getCookie(COOKIE_NAME_SUPABASE_ACCESS_TOKEN);
   const supabaseRefreshToken = getCookie(COOKIE_NAME_SUPABASE_REFRESH_TOKEN);
+
+  const SsrMockAdapter = makeMockQueryParamAdapter(requestUrl);
 
   return (
     <HelmetProvider context={helmetContext}>
@@ -119,7 +117,15 @@ function ServerApp(
                 supabaseRefreshToken={supabaseRefreshToken}
               >
                 <StaticRouter location={new URL(context.req.url).pathname}>
-                  <App />
+                  <QueryParamProvider
+                    // @ts-ignore The expected type comes from property 'adapter' which is declared here on type 'IntrinsicAttributes & QueryParamProviderProps'
+                    // adapter={RouteAdapter}
+                    // adapter={ReactRouter6Adapter}
+                    adapter={SsrMockAdapter}
+                    // location={requestUrl}
+                  >
+                    <App />
+                  </QueryParamProvider>
                 </StaticRouter>
               </SsrSupabaseConstructor>
             </Suspense>

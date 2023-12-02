@@ -1,5 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
-import { WithChildren } from '/~/shared/lib/react/WithChildren.tsx';
+import { WithChildren } from '/~/shared/lib/react/WithChildren.ts';
 // import { SupabaseProvider } from '/~/shared/providers/supabase/client.ts';
 import { Database } from '/~/shared/api/supabase/types.generated.ts';
 // import { useMemo } from 'react';

@@ -8,6 +8,9 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { HelmetProvider } from 'react-helmet-async';
 
+import { QueryParamProvider } from 'use-query-params';
+// import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
+
 // React Query
 import { Hydrate, QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '/~/app/react-query/query-client.ts';
@@ -18,6 +21,7 @@ import { SsrSupabaseConstructor } from '/~/app/providers-constructors/supabase-s
 import { randomRange } from '/~/shared/lib/math/random.ts';
 import AppHtmlWrapper from '/~/app/app-html-wrapper.tsx';
 import { SupabaseBrowserAuthManager } from '/~/app/providers-constructors/browser-auth-manager.tsx';
+import RouteAdapter from '/~/shared/lib/react/routing/RouteAdapter.tsx';
 declare const __REACT_QUERY_DEHYDRATED_STATE: unknown;
 
 function ClientApp() {
@@ -51,7 +55,13 @@ function ClientApp() {
                     > */
                     }
                     <BrowserRouter>
-                      <App />
+                      <QueryParamProvider
+                        // @ts-ignore The expected type comes from property 'adapter' which is declared here on type 'IntrinsicAttributes & QueryParamProviderProps'
+                        adapter={RouteAdapter}
+                        // adapter={ReactRouter6Adapter}
+                      >
+                        <App />
+                      </QueryParamProvider>
                     </BrowserRouter>
                   </SupabaseBrowserAuthManager>
                 </SupabaseBrowserProviderConstructor>

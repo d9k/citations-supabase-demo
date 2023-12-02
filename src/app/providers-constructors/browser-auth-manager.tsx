@@ -18,6 +18,7 @@ import { Session } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { WithChildren } from '/~/shared/lib/react/WithChildren.ts';
 
 // let singularSupabaseSession: Session | null = null;
 
@@ -42,8 +43,7 @@ const createSupabaseSession = async (
   return await getSessionPromise;
 };
 
-export type SupabaseBrowserAuthManagerProps = {
-  children: ReactNode;
+export type SupabaseBrowserAuthManagerProps = WithChildren & {
   queryKeyUniqueSuffix: string;
 };
 

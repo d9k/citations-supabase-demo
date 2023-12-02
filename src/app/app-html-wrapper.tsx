@@ -7,7 +7,7 @@ import useAsset from 'ultra/hooks/use-asset.js';
 import { BodyProvidersConstructor } from '/~/pages/providers-constructors/composite/body.tsx';
 import { commonHeaderScriptsArray } from '/~/app/templates/headerScripts.tsx';
 import { MantineColorSchemeScript } from '/~/pages/providers-constructors/helpers/colorSchemeScript.tsx';
-import { WithChildren } from '/~/shared/lib/react/WithChildren.tsx';
+import { WithChildren } from '/~/shared/lib/react/WithChildren.ts';
 
 export default function AppHtmlWrapper({ children }: WithChildren) {
   // console.log('ULTRA_MODE:', useEnv("ULTRA_MODE"));

@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import { WithChildren } from '/~/shared/lib/react/WithChildren.tsx';
+import { WithChildren } from '/~/shared/lib/react/WithChildren.ts';
 import { LayoutHeader } from '/~/shared/ui/layout-header.tsx';
 import { useSupabaseUser } from '/~/shared/providers/supabase/user.ts';
 
 export const PageFrameLayout = ({ children }: WithChildren) => {
   const supabaseUser = useSupabaseUser();
   const email = supabaseUser?.email;
+  const userName = email?.split('@')[0];
 
   return (
     <>
@@ -21,6 +22,9 @@ export const PageFrameLayout = ({ children }: WithChildren) => {
           },
           ...(supabaseUser
             ? [{
+              path: '/profile',
+              caption: `${userName} profile`,
+            }, {
               path: '/logout',
               caption: 'Log out',
             }]
@@ -31,14 +35,6 @@ export const PageFrameLayout = ({ children }: WithChildren) => {
               },
             ]),
         ]}
-        renderBelowHeader={() =>
-          email
-            ? (
-              <div style={{ textAlign: 'right' }}>
-                {email}
-              </div>
-            )
-            : undefined}
       />
 
       <main>
