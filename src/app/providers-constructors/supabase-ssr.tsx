@@ -129,11 +129,11 @@ export const SsrSupabaseConstructor = (
   const { data, error } = useQuery({
     // const { data, error } = useSuspenseQuery({
     queryKey: ['SsrSupabaseConstructor_' + queryKeyUniqueSuffix],
-    // queryFn: () => ssrSupabaseConstructorHelper({ ...restProps }),
-    queryFn: async () => {
-      await sleepMs(300);
-      return { supabaseClient: null, supabaseUser: null };
-    },
+    queryFn: () => ssrSupabaseConstructorHelper({ ...restProps }),
+    // queryFn: async () => {
+    //   await sleepMs(300);
+    //   return { supabaseClient: null, supabaseUser: null };
+    // },
   });
 
   // const result = wrappedPromise.read();
