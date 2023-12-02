@@ -19,10 +19,17 @@ export const PageFrameLayout = ({ children }: WithChildren) => {
             path: '/demo',
             caption: 'Demo',
           },
-          {
-            path: '/login',
-            caption: 'Login',
-          },
+          ...(supabaseUser
+            ? [{
+              path: '/logout',
+              caption: 'Log out',
+            }]
+            : [
+              {
+                path: '/login',
+                caption: 'Login',
+              },
+            ]),
         ]}
         renderBelowHeader={() =>
           email

@@ -9,7 +9,8 @@ import { useSupabaseUser } from '/~/shared/providers/supabase/user.ts';
 
 const HomePage = React.lazy(() => import('/~/pages/home/index.tsx'));
 const DemoPage = React.lazy(() => import('/~/pages/demo/index.tsx'));
-const LoginPage = React.lazy(() => import('/~/pages/login/index.tsx'));
+import LoginPage from '/~/pages/login/index.tsx';
+import LogoutPage from '/~/pages/logout/index.tsx';
 
 export const AppRoutes = () => {
   const supabaseUser = useSupabaseUser();
@@ -30,6 +31,7 @@ export const AppRoutes = () => {
           <Route element={<HomePage />} path='home' />
           <Route element={<DemoPage />} path='demo' />
           <Route element={<LoginPage />} path='login' />
+          <Route element={<LogoutPage />} path='logout' />
         </Route>
       </Routes>
     </Suspense>

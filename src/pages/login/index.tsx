@@ -26,7 +26,7 @@ const LoginPage = () => {
     setLoading(false);
   }, []);
 
-  return <OtpForm onOtpLogin={handleLogin} />;
+  return <OtpForm onOtpLogin={handleLogin} loading={loading} />;
 };
 
 export default LoginPage;
