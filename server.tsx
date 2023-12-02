@@ -47,6 +47,7 @@ import {
 import { Suspense } from 'react';
 import { Spinner } from '/~/shared/ui/spinner.tsx';
 import { randomRange } from '/~/shared/lib/math/random.ts';
+import AppHtmlWrapper from '/~/app/app-html-wrapper.tsx';
 
 const { load: loadDotEnv } = dotenv;
 
@@ -105,20 +106,24 @@ function ServerApp(
             /* <SupabaseProvider value={supabaseClient}>
               <SupabaseUserProvider value={supabaseUser}> */
           }
-          <Suspense fallback={<Spinner />}>
-            <SsrSupabaseConstructor
-              anonKey={ULTRA_PUBLIC_SUPABASE_ANON_KEY}
-              getCookie={getCookie}
-              supabaseUrl={ULTRA_PUBLIC_SUPABASE_URL}
-              queryKeyUniqueSuffix={`${+new Date()}_${randomRange(0, 100000)}`}
-              supabaseAccessToken={supabaseAccessToken}
-              supabaseRefreshToken={supabaseRefreshToken}
-            >
-              <StaticRouter location={new URL(context.req.url).pathname}>
-                <App />
-              </StaticRouter>
-            </SsrSupabaseConstructor>
-          </Suspense>
+          <AppHtmlWrapper>
+            <Suspense fallback={<Spinner />}>
+              <SsrSupabaseConstructor
+                anonKey={ULTRA_PUBLIC_SUPABASE_ANON_KEY}
+                getCookie={getCookie}
+                supabaseUrl={ULTRA_PUBLIC_SUPABASE_URL}
+                queryKeyUniqueSuffix={`${+new Date()}_${
+                  randomRange(0, 100000)
+                }`}
+                supabaseAccessToken={supabaseAccessToken}
+                supabaseRefreshToken={supabaseRefreshToken}
+              >
+                <StaticRouter location={new URL(context.req.url).pathname}>
+                  <App />
+                </StaticRouter>
+              </SsrSupabaseConstructor>
+            </Suspense>
+          </AppHtmlWrapper>
           {
             /* </SupabaseUserProvider>
               </SupabaseProvider> */

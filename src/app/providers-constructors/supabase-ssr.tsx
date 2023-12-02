@@ -126,23 +126,23 @@ const wrappedPromise = wrapPromiseForSuspend(promise);
 export const SsrSupabaseConstructor = (
   { children, queryKeyUniqueSuffix, ...restProps }: SsrSupabaseConstructorProps,
 ) => {
-  // const { data, error } = useQuery({
-  // const { data, error } = useSuspenseQuery({
-  //   queryKey: ['SsrSupabaseConstructor_' + queryKeyUniqueSuffix],
-  //   // queryFn: () => ssrSupabaseConstructorHelper({ ...restProps }),
-  //   queryFn: async () => {
-  //     await sleepMs(300);
-  //     return { supabaseClient: null, supabaseUser: null };
-  //   },
-  // });
+  const { data, error } = useQuery({
+    // const { data, error } = useSuspenseQuery({
+    queryKey: ['SsrSupabaseConstructor_' + queryKeyUniqueSuffix],
+    // queryFn: () => ssrSupabaseConstructorHelper({ ...restProps }),
+    queryFn: async () => {
+      await sleepMs(300);
+      return { supabaseClient: null, supabaseUser: null };
+    },
+  });
 
-  const result = wrappedPromise.read();
+  // const result = wrappedPromise.read();
 
-  console.log(result);
+  // console.log(result);
 
   // const { supabaseClient, supabaseUser } = data as unknown as ReturnType<typeof ssrSupabaseConstructorHelper>;
-  // const { supabaseClient = null, supabaseUser = null } = data || {};
-  const { supabaseClient = null, supabaseUser = null } = {};
+  const { supabaseClient = null, supabaseUser = null } = data || {};
+  // const { supabaseClient = null, supabaseUser = null } = {};
 
   return (
     <SupabaseProvider value={supabaseClient}>

@@ -8,13 +8,9 @@ import { BodyProvidersConstructor } from '/~/pages/providers-constructors/compos
 import { commonHeaderScriptsArray } from '/~/app/templates/headerScripts.tsx';
 import { MantineColorSchemeScript } from '/~/pages/providers-constructors/helpers/colorSchemeScript.tsx';
 import { SupabaseBrowserAuthManager } from '/~/app/providers-constructors/browser-auth-manager.tsx';
-import AppHtmlWrapper from '/~/app/app-html-wrapper.tsx';
+import { WithChildren } from '/~/shared/lib/react/WithChildren.tsx';
 
-export type AppProps = {
-  cache?: any;
-};
-
-export default function App({ cache }: AppProps) {
+export default function AppHtmlWrapper({ children }: WithChildren) {
   // console.log('ULTRA_MODE:', useEnv("ULTRA_MODE"));
   // console.log('ULTRA_PUBLIC_SUPABASE_URL', useEnv('ULTRA_PUBLIC_SUPABASE_URL'));
   // console.log(
@@ -22,8 +18,19 @@ export default function App({ cache }: AppProps) {
   //   useEnv('ULTRA_PUBLIC_SUPABASE_ANON_KEY'),
   // );
   return (
-    <SupabaseBrowserAuthManager>
-      <AppRoutes />
-    </SupabaseBrowserAuthManager>
+    <HtmlTemplate
+      title='Ultra'
+      addHeaderChildren={
+        <>
+          <link rel='shortcut icon' href={useAsset('/favicon.ico')} />
+          <MantineColorSchemeScript />
+          {commonHeaderScriptsArray()}
+        </>
+      }
+    >
+      <BodyProvidersConstructor>
+        {children}
+      </BodyProvidersConstructor>
+    </HtmlTemplate>
   );
 }
