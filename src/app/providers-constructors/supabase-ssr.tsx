@@ -4,7 +4,8 @@ import { WithChildren } from '/~/shared/lib/react/WithChildren.tsx';
 import { Database } from '/~/shared/api/supabase/types.generated.ts';
 // import { useMemo } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+// , useSuspenseQuery
+import { useQuery } from '@tanstack/react-query';
 
 import {
   SupabaseCreateClientResult,

@@ -1,14 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 
 import { AppRoutes } from '/~/app/routes/index.tsx';
-import { HtmlTemplate } from '/~/widgets/templates/HtmlTemplate.tsx';
-import useAsset from 'ultra/hooks/use-asset.js';
-// import useEnv from 'ultra/hooks/use-env.js';
-import { BodyProvidersConstructor } from '/~/pages/providers-constructors/composite/body.tsx';
-import { commonHeaderScriptsArray } from '/~/app/templates/headerScripts.tsx';
-import { MantineColorSchemeScript } from '/~/pages/providers-constructors/helpers/colorSchemeScript.tsx';
-import { SupabaseBrowserAuthManager } from '/~/app/providers-constructors/browser-auth-manager.tsx';
-import AppHtmlWrapper from '/~/app/app-html-wrapper.tsx';
 
 export type AppProps = {
   cache?: any;
@@ -21,9 +13,5 @@ export default function App({ cache }: AppProps) {
   //   'ULTRA_PUBLIC_SUPABASE_ANON_KEY',
   //   useEnv('ULTRA_PUBLIC_SUPABASE_ANON_KEY'),
   // );
-  return (
-    <SupabaseBrowserAuthManager>
-      <AppRoutes />
-    </SupabaseBrowserAuthManager>
-  );
+  return <AppRoutes />;
 }

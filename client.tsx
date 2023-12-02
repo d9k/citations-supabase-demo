@@ -17,6 +17,7 @@ import { Spinner } from '/~/shared/ui/spinner.tsx';
 import { SsrSupabaseConstructor } from '/~/app/providers-constructors/supabase-ssr.tsx';
 import { randomRange } from '/~/shared/lib/math/random.ts';
 import AppHtmlWrapper from '/~/app/app-html-wrapper.tsx';
+import { SupabaseBrowserAuthManager } from '/~/app/providers-constructors/browser-auth-manager.tsx';
 declare const __REACT_QUERY_DEHYDRATED_STATE: unknown;
 
 function ClientApp() {
@@ -32,21 +33,27 @@ function ClientApp() {
                   anonKey={useEnv('ULTRA_PUBLIC_SUPABASE_ANON_KEY')!}
                   supabaseUrl={useEnv('ULTRA_PUBLIC_SUPABASE_URL')!}
                 >
-                  {
-                    /* <SsrSupabaseConstructor
-                    anonKey={''}
-                    getCookie={(a) => ''}
-                    supabaseUrl={''}
+                  <SupabaseBrowserAuthManager
                     queryKeyUniqueSuffix={`${+new Date()}_${
                       randomRange(0, 100000)
                     }`}
-                    supabaseAccessToken={''}
-                    supabaseRefreshToken={''}
-                  > */
-                  }
-                  <BrowserRouter>
-                    <App />
-                  </BrowserRouter>
+                  >
+                    {
+                      /* <SsrSupabaseConstructor
+                      anonKey={''}
+                      getCookie={(a) => ''}
+                      supabaseUrl={''}
+                      queryKeyUniqueSuffix={`${+new Date()}_${
+                        randomRange(0, 100000)
+                      }`}
+                      supabaseAccessToken={''}
+                      supabaseRefreshToken={''}
+                    > */
+                    }
+                    <BrowserRouter>
+                      <App />
+                    </BrowserRouter>
+                  </SupabaseBrowserAuthManager>
                 </SupabaseBrowserProviderConstructor>
               </Suspense>
             </AppHtmlWrapper>

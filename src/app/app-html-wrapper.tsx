@@ -7,7 +7,6 @@ import useAsset from 'ultra/hooks/use-asset.js';
 import { BodyProvidersConstructor } from '/~/pages/providers-constructors/composite/body.tsx';
 import { commonHeaderScriptsArray } from '/~/app/templates/headerScripts.tsx';
 import { MantineColorSchemeScript } from '/~/pages/providers-constructors/helpers/colorSchemeScript.tsx';
-import { SupabaseBrowserAuthManager } from '/~/app/providers-constructors/browser-auth-manager.tsx';
 import { WithChildren } from '/~/shared/lib/react/WithChildren.tsx';
 
 export default function AppHtmlWrapper({ children }: WithChildren) {
