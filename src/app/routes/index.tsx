@@ -10,6 +10,7 @@ import { useSupabaseUser } from '/~/shared/providers/supabase/user.ts';
 const HomePage = React.lazy(() => import('/~/pages/home/index.tsx'));
 const DemoPage = React.lazy(() => import('/~/pages/demo/index.tsx'));
 const ProfilePage = React.lazy(() => import('/~/pages/profile/index.tsx'));
+const TablePage = React.lazy(() => import('/~/pages/table/index.tsx'));
 import LoginPage from '/~/pages/login/index.tsx';
 import LogoutPage from '/~/pages/logout/index.tsx';
 import { useUrlParamRetPath } from '/~/shared/lib/react/routing/useUrlParamRetPath.ts';
@@ -45,6 +46,7 @@ export const AppRoutes = () => {
           <Route element={<DemoPage />} path='demo' />
           <Route element={<LoginPage />} path='login' />
           <Route element={<LogoutPage />} path='logout' />
+          <Route element={<TablePage />} path='table/:name' />
           <Route
             element={
               <RedirectIfNoLogin>
