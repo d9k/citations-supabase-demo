@@ -14,6 +14,7 @@
     "start": "ULTRA_MODE=production deno run --no-npm -A --no-remote ./server.js",
     "storybook": "pnpm run storybook",
     "storybook:build": "pnpm run storybook:build",
+    "db:gen:descriptions": "pnpm run db:gen:descriptions",
     "db:gen:json-schema": "pnpm run db:gen:json-schema",
     "db:dump": "pnpm run db:dump",
     "db:dump:schema": "pnpm run db:dump:schema",

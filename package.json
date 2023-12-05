@@ -5,6 +5,8 @@
     "db:dump": "pnpm run db:dump:data && pnpm run db:dump:schema",
     "db:dump:schema": "pnpm exec supabase db dump > ./supabase/dump-schema.sql",
     "db:dump:data": "pnpm exec supabase db dump --data-only > ./supabase/dump-data.sql",
+    "db:dump:migrations": "pnpm exec supabase db dump --data-only --schema supabase_migrations > ./supabase/dump-migrations.sql",
+    "db:gen:descriptions": "ts-node node-script/db-gen-descriptions.ts",
     "db:gen:json-schema": "ts-node node-script/db-gen-json-schema.ts",
     "db:gen:typescript": "pnpm exec supabase gen types typescript --linked > src/shared/api/supabase/types.generated.ts",
     "db:migration:list": "pnpm exec supabase migration list",

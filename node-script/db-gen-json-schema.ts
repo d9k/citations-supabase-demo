@@ -8,6 +8,8 @@ const outSchemaDir = 'src/shared/api/supabase/schema.generated';
 const outForeignKeysPath =
   'src/shared/api/supabase/foreign-keys.generated.json';
 
+import pgStructure from 'pg-structure';
+
 config();
 
 const {
@@ -44,28 +46,29 @@ if (!DB_NAME) {
 
 const DB_PORT_INT = parseInt(DB_PORT, 10);
 
-const converter = new SchemaConverter({
-  pg: {
-    host: DB_HOST,
-    port: DB_PORT_INT,
-    user: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_NAME,
-  },
-  input: {
-    schemas: ['public'],
-    exclude: ['not_this_table'],
-    include: [],
-  },
-  output: {
-    additionalProperties: false,
-    baseUrl: 'http://api.localhost.com/schema/',
-    defaultDescription: 'Missing description',
-    indentSpaces: 2,
-    outDir: outSchemaDir,
-    unwrap: false,
-  },
-});
+// const converter = new SchemaConverter({
+//   pg: {
+//     host: DB_HOST,
+//     port: DB_PORT_INT,
+//     user: DB_USER,
+//     password: DB_PASSWORD,
+//     database: DB_NAME,
+//   },
+//   input: {
+//     schemas: ['public'],
+//     exclude: ['not_this_table'],
+//     include: [],
+//   },
+//   output: {
+//     additionalProperties: false,
+//     // baseUrl: 'http://api.localhost.com/schema/',
+//     // defaultDescription: 'Missing description',
+//     defaultDescription: '',
+//     indentSpaces: 2,
+//     outDir: outSchemaDir,
+//     unwrap: false,
+//   },
+// });
 
 const sql = postgres({
   host: DB_HOST,
@@ -76,7 +79,13 @@ const sql = postgres({
 });
 
 async function genSchema() {
-  const result = await converter.convert();
+  // const result = await converter.convert();
+  const result = await pgStructure({
+    host: DB_HOST,
+    database: DB_NAME,
+    user: DB_USER,
+    password: DB_PASSWORD,
+  }, { includeSchemas: ['public'] });
   console.debug(result);
   return true;
 }
