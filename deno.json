@@ -4,9 +4,9 @@
     "cache:server": "deno cache --no-npm ./server.tsx",
     "cache": "deno task cache:server && deno task cache:client",
     "dev": "deno run --no-npm -A --no-check --watch ./server.tsx",
-    "check:server": "deno check --no-npm ./server.tsx; deno lint",
-    "check:client": "deno check --no-npm ./client.tsx; deno lint",
-    "check": "deno task check:server && deno task check:client",
+    "check:server": "deno check --no-npm ./server.tsx",
+    "check:client": "deno check --no-npm ./client.tsx",
+    "check": "deno task check:server && deno task check:client && deno lint",
     "config": "deno run --no-npm --allow-read --allow-write ./script/config-update.ts",
     "gen:demo-data:bored-api": "deno run --no-npm -A ./script/gen-demo-data-bored-api.ts",
     "test": "deno test --no-npm --allow-all",
@@ -14,15 +14,18 @@
     "start": "ULTRA_MODE=production deno run --no-npm -A --no-remote ./server.js",
     "storybook": "pnpm run storybook",
     "storybook:build": "pnpm run storybook:build",
+    "db:gen:db-json-schema-add-descriptions": "pnpm run db:gen:db-json-schema-add-descriptions",
     "db:gen:descriptions": "pnpm run db:gen:descriptions",
-    "db:gen:json-schema": "pnpm run db:gen:json-schema",
+    "db:gen:parse-type-to-json-schema": "pnpm run db:gen:parse-type-to-json-schema",
     "db:dump": "pnpm run db:dump",
     "db:dump:schema": "pnpm run db:dump:schema",
     "db:dump:data": "pnpm run db:dump:data",
     "db:gen:typescript": "pnpm run db:gen:typescript",
     "db:migration:list": "pnpm db:migration:list",
     "db:migration:create:from-remote": "pnpm run db:migration:create:from-remote",
-    "supabase": "pnpm exec supabase"
+    "supabase": "pnpm exec supabase",
+    "example": "pnpm run example",
+    "example2": "pnpm run example2"
   },
   "compilerOptions": {
     "jsx": "react-jsxdev",
@@ -36,7 +39,8 @@
     "singleQuote": true
   },
   "lint": {
-    "exclude": [".ultra"]
+    "exclude": [".ultra", "script-node"]
   },
-  "importMap": "./importMap.json"
+  "importMap": "./importMap.json",
+  "nodeModulesDir": false
 }

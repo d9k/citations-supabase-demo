@@ -19,7 +19,8 @@ const LoginPage = () => {
     const { error } = await supabase.auth.signInWithOtp({ email });
 
     if (error) {
-      alert(error.message || error.cause || (error as any).error_description);
+      alert(error.message || error.cause);
+      // || (error as any).error_description
     } else {
       alert('Check your email for the login link!');
     }

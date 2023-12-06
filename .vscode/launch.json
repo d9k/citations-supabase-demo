@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "db-json-schema-add-descriptions: debug",
+      "type": "node",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**"
+      ],
+      "cwd": "${workspaceRoot}",
+      "internalConsoleOptions": "openOnSessionStart",
+      "env": {
+        "LOCAL_MODE": "true"
+      },
+      "args": [
+        "node_modules/tsx/dist/cli.mjs",
+        "--inspect",
+        "script-node/db-json-schema-add-descriptions.ts"
+      ],
+      "runtimeArgs": [
+        "--unhandled-rejections=strict",
+        "--nolazy"
+      ]
+    }
+  ]
+}

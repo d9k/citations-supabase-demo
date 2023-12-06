@@ -46,6 +46,8 @@ export function makeMockQueryParamAdapter(
     },
   };
 
+  // TODO
+  // deno-lint-ignore no-explicit-any
   const Adapter = ({ children }: any) => children(adapter);
   Adapter.adapter = adapter;
 

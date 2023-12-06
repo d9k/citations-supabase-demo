@@ -1,10 +1,10 @@
 import postgres from 'postgres';
-import { SchemaConverter } from 'pg-tables-to-jsonschema';
+// import { SchemaConverter } from 'pg-tables-to-jsonschema';
 import { config } from 'dotenv';
 import set from 'lodash/set';
 import * as fs from 'fs';
 
-const outSchemaDir = 'src/shared/api/supabase/schema.generated';
+// const outSchemaDir = 'src/shared/api/supabase/schema.generated';
 const outForeignKeysPath =
   'src/shared/api/supabase/foreign-keys.generated.json';
 

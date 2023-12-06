@@ -53,18 +53,19 @@ See
 
 Copy `.env.template` to `.env`. Fill environment variables values from https://supabase.com/dashboard/project/_/settings/database.
 
-Execute `pnpm run gen-json-schema`.
+Execute `pnpm run db:gen:json-schema`.
 
-- ~~[without relations :(](https://github.com/SpringTree/pg-tables-to-jsonschema/issues/27)~~
-  - implemented foreign keys save to `src/foreign-keys.json` with [postgres.js library](https://github.com/porsager/postgres#connection-details).
-
-## Migrations
+## Migrations: after remote change
 
 After schema change on remote database:
 
 ```bash
 pnpm exec supabase db pull
 ```
+
+If scipt asks `Update remote migration history table? [Y/n]` choose `n` to not rename
+
+New migration `supabase/migrations/NNNNNNNNNNNNNN_remote_schema.sql` will be created. Rename `remote_schema` to more meaningful name.
 
 Then list migations with new one:
 
@@ -80,7 +81,7 @@ pnpm exec supabase migration repair 202XXXXXXXXXX --status applied
 
 when `202XXXXXXXXXX` is local migration timestamp
 
-## .env configuration
+## .env configuration for runtime
 
 Supabase URL & anon key for `.env` configuration:
 

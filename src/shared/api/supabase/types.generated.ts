@@ -37,6 +37,7 @@ export interface Database {
       authors: {
         Row: {
           approximate_years: boolean
+          birth_town: number | null
           birth_year: number | null
           created_at: string
           death_year: number | null
@@ -46,6 +47,7 @@ export interface Database {
         }
         Insert: {
           approximate_years?: boolean
+          birth_town?: number | null
           birth_year?: number | null
           created_at?: string
           death_year?: number | null
@@ -55,6 +57,7 @@ export interface Database {
         }
         Update: {
           approximate_years?: boolean
+          birth_town?: number | null
           birth_year?: number | null
           created_at?: string
           death_year?: number | null
@@ -62,15 +65,25 @@ export interface Database {
           lastname_name_patronymic?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "authors_birth_town_fkey"
+            columns: ["birth_town"]
+            isOneToOne: false
+            referencedRelation: "town"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       citations: {
         Row: {
           author_id: number
           created_at: string
           english_text: string | null
+          event_id: number | null
           id: number
           original_language_text: string | null
+          place_id: number | null
           updated_at: string
           year: number | null
         }
@@ -78,8 +91,10 @@ export interface Database {
           author_id: number
           created_at?: string
           english_text?: string | null
+          event_id?: number | null
           id?: number
           original_language_text?: string | null
+          place_id?: number | null
           updated_at?: string
           year?: number | null
         }
@@ -87,8 +102,10 @@ export interface Database {
           author_id?: number
           created_at?: string
           english_text?: string | null
+          event_id?: number | null
           id?: number
           original_language_text?: string | null
+          place_id?: number | null
           updated_at?: string
           year?: number | null
         }
@@ -99,10 +116,24 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "authors"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "citations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "event"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "citations_place_id_fkey"
+            columns: ["place_id"]
+            isOneToOne: false
+            referencedRelation: "place"
+            referencedColumns: ["id"]
           }
         ]
       }
-      country: {
+      countries: {
         Row: {
           created_at: string
           found_year: number | null
@@ -129,28 +160,118 @@ export interface Database {
         }
         Relationships: []
       }
+      event: {
+        Row: {
+          created_at: string
+          end_month: number | null
+          end_year: number | null
+          id: number
+          name: string
+          place_id: number | null
+          start_month: number
+          start_year: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          end_month?: number | null
+          end_year?: number | null
+          id?: number
+          name: string
+          place_id?: number | null
+          start_month: number
+          start_year: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          end_month?: number | null
+          end_year?: number | null
+          id?: number
+          name?: string
+          place_id?: number | null
+          start_month?: number
+          start_year?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_place_id_fkey"
+            columns: ["place_id"]
+            isOneToOne: false
+            referencedRelation: "place"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       place: {
         Row: {
           created_at: string
           id: number
           name: string
+          town_id: number
           updated_at: string
         }
         Insert: {
           created_at?: string
           id?: number
           name?: string
+          town_id: number
           updated_at?: string
         }
         Update: {
           created_at?: string
           id?: number
           name?: string
+          town_id?: number
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "place_town_id_fkey"
+            columns: ["town_id"]
+            isOneToOne: false
+            referencedRelation: "town"
+            referencedColumns: ["id"]
+          }
+        ]
       }
-      province: {
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          full_name: string | null
+          id: string
+          updated_at: string | null
+          username: string | null
+          website: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string | null
+          username?: string | null
+          website?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string | null
+          username?: string | null
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      town: {
         Row: {
           country_id: number
           created_at: string
@@ -174,42 +295,10 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "province_country_id_fkey"
+            foreignKeyName: "town_country_id_fkey"
             columns: ["country_id"]
             isOneToOne: false
-            referencedRelation: "country"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      town: {
-        Row: {
-          created_at: string
-          id: number
-          name: string
-          province_id: number
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          name: string
-          province_id: number
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          name?: string
-          province_id?: number
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "town_province_id_fkey"
-            columns: ["province_id"]
-            isOneToOne: false
-            referencedRelation: "province"
+            referencedRelation: "countries"
             referencedColumns: ["id"]
           }
         ]
@@ -408,3 +497,83 @@ export interface Database {
     }
   }
 }
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : never
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : never
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : never
+
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : never

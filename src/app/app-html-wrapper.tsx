@@ -1,5 +1,3 @@
-// deno-lint-ignore-file no-explicit-any
-
 import { AppRoutes } from '/~/app/routes/index.tsx';
 import { HtmlTemplate } from '/~/widgets/templates/HtmlTemplate.tsx';
 import useAsset from 'ultra/hooks/use-asset.js';

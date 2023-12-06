@@ -11,8 +11,8 @@
   "deno.disablePaths": [
     "./.storybook",
     "./node_modules",
-    "./node-script",
-    "./**/*.stories.tsx",
+    "./script-node",
+    "./src/shared/lib/node",
     "./src/shared/lib/storybook",
     "./src/shared/demoStories",
     "./src/features/auth/LoginForm.tdd.stories.tsx",

@@ -1,44 +1,17 @@
 import postgres from 'postgres';
-import { config } from 'dotenv';
+import { config as dotEnvConfig } from 'dotenv';
 import set from 'lodash/set';
 import * as fs from 'fs';
+import { envNameRequire, envValueRequire } from '/~/shared/lib/node/env';
 
-const outDescriptionsPath =
-  'src/shared/api/supabase/descriptions.generated.json';
+dotEnvConfig();
 
-config();
-
-const {
-  DB_HOST,
-  DB_NAME,
-  DB_PORT,
-  DB_USER,
-  DB_PASSWORD,
-} = process.env;
-
-console.log({
-  DB_HOST,
-  DB_NAME,
-  DB_PORT,
-  DB_USER,
-  DB_PASSWORD,
-});
-
-if (!DB_HOST) {
-  throw Error('DB_HOST not set');
-}
-
-if (!DB_PORT) {
-  throw Error('DB_PORT not set');
-}
-
-if (!DB_USER) {
-  throw Error('DB_USER not set');
-}
-
-if (!DB_NAME) {
-  throw Error('DB_NAME not set');
-}
+const outDescriptionsPath = envValueRequire('SUPABASE_DESCRIPTION_PATH');
+const DB_HOST = envValueRequire('DB_HOST');
+const DB_NAME = envValueRequire('DB_NAME');
+const DB_PORT = envValueRequire('DB_PORT');
+const DB_USER = envValueRequire('DB_USER');
+const DB_PASSWORD = envNameRequire('DB_PASSWORD');
 
 const DB_PORT_INT = parseInt(DB_PORT, 10);
 
@@ -78,7 +51,7 @@ async function genDescription() {
 
   const resultJSON = JSON.stringify(result, null, '  ');
 
-  console.log(`Saving to ${outDescriptionsPath}`);
+  console.log(`Saving to "${outDescriptionsPath}"`);
   fs.writeFileSync(outDescriptionsPath, resultJSON);
 
   return true;

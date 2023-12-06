@@ -1,0 +1,34 @@
+{
+  "public": {
+    "authors": {
+      "lastname_name_patronymic": "separated by spaces",
+      "birth_town": "town of birth (test description)"
+    },
+    "countries": {
+      "found_year": "minimum found year",
+      "next_rename_year": "maximum next rename year"
+    }
+  },
+  "auth": {
+    "sessions": {
+      "not_after": "Auth: Not after is a nullable column that contains a timestamp after which the session should be regarded as expired."
+    },
+    "users": {
+      "is_sso_user": "Auth: Set this column to true when the account comes from SSO. These accounts can have duplicate emails."
+    },
+    "sso_providers": {
+      "resource_id": "Auth: Uniquely identifies a SSO provider according to a user-chosen resource ID (case insensitive), useful in infrastructure as code."
+    },
+    "identities": {
+      "email": "Auth: Email is a generated column that references the optional email property in the identity_data"
+    }
+  },
+  "storage": {
+    "objects": {
+      "owner": "Field is deprecated, use owner_id instead"
+    },
+    "buckets": {
+      "owner": "Field is deprecated, use owner_id instead"
+    }
+  }
+}
