@@ -4,6 +4,7 @@ Project in the draft stage, only [Storybook section](#Storybook) is meaningful y
 
 ## Techologies used
 
+- [Supabase](https://supabase.com)
 - [React](https://react.dev)
 - [Deno](https://github.com/denoland/deno) instead of Node.js
 - [Ultra](https://ultrajs.dev) as web framework
@@ -12,10 +13,6 @@ Project in the draft stage, only [Storybook section](#Storybook) is meaningful y
 - [FSD](https://feature-sliced.design/)
 - [Storybook](https://storybook.js.org/)
 - [VS Code](https://code.visualstudio.com/Download) (see [IDE configuration section](#vscode-configuration) below)
-
-### Techologies used: TODO
-
-- [Supabase](https://supabase.com/)
 
 ## Warnings
 
