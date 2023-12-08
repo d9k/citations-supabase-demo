@@ -1,16 +1,20 @@
 # Supabase demo
 
-## Init schema
+## .env configuration for direct PostgreSQL connection
 
-At first go to your project page at Supabase, choose "SQL editor" on left menu and init schema with schema you want to test, for example `demo.sql`.
+Copy `.env.template` to `.env`.
 
-## Installation
+Fill environment variables `ULTRA_PUBLIC_SUPABASE_URL`, `ULTRA_PUBLIC_SUPABASE_ANON_KEY` at `.env` values from https://supabase.com/dashboard/project/_/settings/database.
 
-```bash
-pnpm install
-```
+`ULTRA_` prefix means variables will be available at `ultra` frontend.
 
-## Connecting to Supabase
+## .env configuration for runtime
+
+Supabase URL & anon key for `.env` configuration:
+
+https://supabase.com/dashboard/project/_/settings/api
+
+## Connecting (linking) to Supabase
 
 ### Login to Supabase
 
@@ -34,11 +38,36 @@ pnpm exec supabase link --project-ref=<Reference_ID>
 
 If error `cannot read config in ...: open supabase/config.toml` run `pnpm exec supabase init` first.
 
-### Data dump
+## Installation
+
+```bash
+pnpm install
+```
+
+## Init schema
+
+At first go to your project page at Supabase, choose "SQL editor" on left menu and init schema with schema you want to test, for example `demo.sql`.
+
+### Data dump (via `supabase db dump ...`)
 
 ```bash
 pnpm run db:dump:data
 pnpm run db:dump:schema
+pnpm run db:dump:migration
+```
+
+or just
+
+```bash
+pnpm run db:dump
+```
+
+### Data dump (via `pg_dump`)
+
+[\`supabase db dump\` doesn't dump triggers | issue #1726 | cli](https://github.com/supabase/cli/issues/1726)
+
+```bash
+deno task run db-pg-dump
 ```
 
 ### Generate typescript types
@@ -50,8 +79,6 @@ pnpm exec supabase gen types typescript --linked > src/db/supabase-types-generat
 See
 
 ## Generate schema
-
-Copy `.env.template` to `.env`. Fill environment variables values from https://supabase.com/dashboard/project/_/settings/database.
 
 Execute `pnpm run db:gen:json-schema`.
 
@@ -80,12 +107,6 @@ pnpm exec supabase migration repair 202XXXXXXXXXX --status applied
 ```
 
 when `202XXXXXXXXXX` is local migration timestamp
-
-## .env configuration for runtime
-
-Supabase URL & anon key for `.env` configuration:
-
-https://supabase.com/dashboard/project/_/settings/api
 
 ## See also
 

@@ -176,8 +176,8 @@ devDependencies:
     specifier: ^3.0.1
     version: 3.0.1(@types/react-dom@18.2.0)(@types/react@18.2.0)(react-dom@18.2.0)(react@18.2.0)
   supabase:
-    specifier: ^1.113.3
-    version: 1.113.3
+    specifier: ^1.115.5
+    version: 1.115.5
   tsx:
     specifier: ^4.6.2
     version: 4.6.2
@@ -11101,8 +11101,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /supabase@1.113.3:
-    resolution: {integrity: sha512-P0HElkYYkeMhCADc+yCPnb4rj0mxGl7dYJ9wK54O5yf2W+Y0HmvEosGv8A7TVO49NTpNeREjWFVVzhW9FtfyZg==}
+  /supabase@1.115.5:
+    resolution: {integrity: sha512-jAJ/d3Dge1/mV284RHBp6dkGLJCmdMO3FE6hnyn1S1Si3Bx4/EUD3zXtkkSNs4lAx6jcyibwh3iULm6n4yFzZA==}
     engines: {npm: '>=8'}
     hasBin: true
     requiresBuild: true
