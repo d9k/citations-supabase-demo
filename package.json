@@ -4,7 +4,7 @@
     "example2": "env-cmd --use-shell \"echo test > \\$EXAMPLE_FILE_PATH\"",
     "storybook": "storybook dev --no-open -p 6006",
     "storybook:build": "storybook build",
-    "db:dump": "pnpm run db:dump:data && pnpm run db:dump:schema && db:dump:migrations",
+    "db:dump": "pnpm run db:dump:data && pnpm run db:dump:schema && pnpm run db:dump:migrations",
     "db:dump:schema": "env-cmd --use-shell \"supabase db dump > \\$SUPABASE_DUMP_SCHEMA_PATH\"",
     "db:dump:data": "env-cmd --use-shell \"supabase db dump --data-only > \\$SUPABASE_DUMP_DATA_PATH\"",
     "db:dump:migrations": "env-cmd --use-shell \"supabase db dump --data-only --schema supabase_migrations > \\$SUPABASE_DUMP_MIGRATIONS_PATH\"",
@@ -13,8 +13,8 @@
     "db:gen:parse-types-to-json-schema": "tsx script-node/db-parse-types-to-json-schema.ts",
     "db:gen:json-schema-add-descriptions": "tsx script-node/db-json-schema-add-descriptions.ts",
     "db:gen:typescript": "env-cmd --use-shell \"supabase gen types typescript --linked > \\$SUPABASE_GENERATED_TYPES_PATH\"",
-    "db:migration:list": "env-cmd -x supabase migration list",
-    "db:migration:create:from-remote": "env-cmd -x supabase db pull && pnpm run db:migration:list"
+    "db:migrations": "env-cmd -x supabase migration list",
+    "db:migration:create:from-remote": "env-cmd -x supabase db pull --schema auth,public,extensions && pnpm run db:migrations"
   },
   "dependencies": {
     "@mantine/core": "7.1.2",

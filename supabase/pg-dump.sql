@@ -668,21 +668,209 @@ $$;
 ALTER FUNCTION pgbouncer.get_auth(p_usename text) OWNER TO postgres;
 
 --
--- Name: handle_new_user(); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: delete_claim(uuid, text); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.handle_new_user() RETURNS trigger
+CREATE FUNCTION public.delete_claim(uid uuid, claim text) RETURNS text
     LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'public'
     AS $$
-begin
-  insert into public.profiles (id, full_name, avatar_url)
-  values (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');
-  return new;
-end;
+    BEGIN
+      IF NOT is_claims_admin() THEN
+          RETURN 'error: access denied';
+      ELSE        
+        update auth.users set raw_app_meta_data = 
+          raw_app_meta_data - claim where id = uid;
+        return 'OK';
+      END IF;
+    END;
 $$;
 
 
-ALTER FUNCTION public.handle_new_user() OWNER TO postgres;
+ALTER FUNCTION public.delete_claim(uid uuid, claim text) OWNER TO postgres;
+
+--
+-- Name: get_claim(uuid, text); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_claim(uid uuid, claim text) RETURNS jsonb
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'public'
+    AS $$
+    DECLARE retval jsonb;
+    BEGIN
+      IF NOT is_claims_admin() THEN
+          RETURN '{"error":"access denied"}'::jsonb;
+      ELSE
+        select coalesce(raw_app_meta_data->claim, null) from auth.users into retval where id = uid::uuid;
+        return retval;
+      END IF;
+    END;
+$$;
+
+
+ALTER FUNCTION public.get_claim(uid uuid, claim text) OWNER TO postgres;
+
+--
+-- Name: get_claims(uuid); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_claims(uid uuid) RETURNS jsonb
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'public'
+    AS $$
+    DECLARE retval jsonb;
+    BEGIN
+      IF NOT is_claims_admin() THEN
+          RETURN '{"error":"access denied"}'::jsonb;
+      ELSE
+        select raw_app_meta_data from auth.users into retval where id = uid::uuid;
+        return retval;
+      END IF;
+    END;
+$$;
+
+
+ALTER FUNCTION public.get_claims(uid uuid) OWNER TO postgres;
+
+--
+-- Name: get_my_claim(text); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_my_claim(claim text) RETURNS jsonb
+    LANGUAGE sql STABLE
+    AS $$
+  select 
+  	coalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb -> 'app_metadata' -> claim, null)
+$$;
+
+
+ALTER FUNCTION public.get_my_claim(claim text) OWNER TO postgres;
+
+--
+-- Name: get_my_claims(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_my_claims() RETURNS jsonb
+    LANGUAGE sql STABLE
+    AS $$
+  select 
+  	coalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb -> 'app_metadata', '{}'::jsonb)::jsonb
+$$;
+
+
+ALTER FUNCTION public.get_my_claims() OWNER TO postgres;
+
+--
+-- Name: handle_auth_user_new(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.handle_auth_user_new() RETURNS trigger
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$
+BEGIN
+  INSERT INTO public.profiles (auth_user_id, full_name, avatar_url)
+	  VALUES (
+		  NEW.id,
+		  NEW.raw_user_meta_data->>'full_name',
+		  NEW.raw_user_meta_data->>'avatar_url'
+	  );
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.handle_auth_user_new() OWNER TO postgres;
+
+--
+-- Name: handle_public_profile_new(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.handle_public_profile_new() RETURNS trigger
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$
+
+BEGIN
+
+/**
+ * see `set claim` at
+ * https://github.com/supabase-community/supabase-custom-claims/blob/main/install.sql
+ **/
+  UPDATE auth.users
+  SET
+	  raw_app_meta_data = COALESCE(
+		  raw_app_meta_data || JSON_BUILD_OBJECT('profile_id', NEW.id)::jsonb,
+		  JSON_BUILD_OBJECT('profile_id', NEW.id)::jsonb
+	  )
+  WHERE id = NEW.auth_user_id;
+
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.handle_public_profile_new() OWNER TO postgres;
+
+--
+-- Name: is_claims_admin(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.is_claims_admin() RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+  BEGIN
+    IF session_user = 'authenticator' THEN
+      --------------------------------------------
+      -- To disallow any authenticated app users
+      -- from editing claims, delete the following
+      -- block of code and replace it with:
+      -- RETURN FALSE;
+      --------------------------------------------
+      IF extract(epoch from now()) > coalesce((current_setting('request.jwt.claims', true)::jsonb)->>'exp', '0')::numeric THEN
+        return false; -- jwt expired
+      END IF;
+      If current_setting('request.jwt.claims', true)::jsonb->>'role' = 'service_role' THEN
+        RETURN true; -- service role users have admin rights
+      END IF;
+      IF coalesce((current_setting('request.jwt.claims', true)::jsonb)->'app_metadata'->'claims_admin', 'false')::bool THEN
+        return true; -- user has claims_admin set to true
+      ELSE
+        return false; -- user does NOT have claims_admin set to true
+      END IF;
+      --------------------------------------------
+      -- End of block 
+      --------------------------------------------
+    ELSE -- not a user session, probably being called from a trigger or something
+      return true;
+    END IF;
+  END;
+$$;
+
+
+ALTER FUNCTION public.is_claims_admin() OWNER TO postgres;
+
+--
+-- Name: set_claim(uuid, text, jsonb); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.set_claim(uid uuid, claim text, value jsonb) RETURNS text
+    LANGUAGE plpgsql SECURITY DEFINER
+    SET search_path TO 'public'
+    AS $$
+    BEGIN
+      IF NOT is_claims_admin() THEN
+          RETURN 'error: access denied';
+      ELSE        
+        update auth.users set raw_app_meta_data = 
+          raw_app_meta_data || 
+            json_build_object(claim, value)::jsonb where id = uid;
+        return 'OK';
+      END IF;
+    END;
+$$;
+
+
+ALTER FUNCTION public.set_claim(uid uuid, claim text, value jsonb) OWNER TO postgres;
 
 --
 -- Name: can_insert_object(text, text, uuid, jsonb); Type: FUNCTION; Schema: storage; Owner: supabase_storage_admin
@@ -2526,6 +2714,16 @@ COPY auth.audit_log_entries (instance_id, id, payload, created_at, ip_address) F
 00000000-0000-0000-0000-000000000000	e0794af9-c761-4835-be19-dbfa7d5f9580	{"action":"token_revoked","actor_id":"b5f563a3-b794-49d0-a0e3-dbf9fffd2321","actor_username":"d9k@ya.ru","actor_via_sso":false,"log_type":"token"}	2023-12-06 14:02:31.049027+00	
 00000000-0000-0000-0000-000000000000	521e5677-cd53-4248-9ed9-2759b209b969	{"action":"token_refreshed","actor_id":"b5f563a3-b794-49d0-a0e3-dbf9fffd2321","actor_username":"d9k@ya.ru","actor_via_sso":false,"log_type":"token"}	2023-12-06 14:16:01.283155+00	
 00000000-0000-0000-0000-000000000000	46ebeae0-e8dd-457c-b8e7-3ee1fd455b47	{"action":"token_revoked","actor_id":"b5f563a3-b794-49d0-a0e3-dbf9fffd2321","actor_username":"d9k@ya.ru","actor_via_sso":false,"log_type":"token"}	2023-12-06 14:16:01.283958+00	
+00000000-0000-0000-0000-000000000000	a44b5bfa-5b2e-421b-a217-edccb9e5c09e	{"action":"user_recovery_requested","actor_id":"b5f563a3-b794-49d0-a0e3-dbf9fffd2321","actor_username":"d9k@ya.ru","actor_via_sso":false,"log_type":"user"}	2023-12-08 23:53:57.627239+00	
+00000000-0000-0000-0000-000000000000	5e312a23-4499-4003-8715-5d4572490ff5	{"action":"login","actor_id":"b5f563a3-b794-49d0-a0e3-dbf9fffd2321","actor_username":"d9k@ya.ru","actor_via_sso":false,"log_type":"account"}	2023-12-08 23:55:03.710369+00	
+00000000-0000-0000-0000-000000000000	a336f5a0-cc3d-4d14-9143-5e1a16b39077	{"action":"token_refreshed","actor_id":"b5f563a3-b794-49d0-a0e3-dbf9fffd2321","actor_username":"d9k@ya.ru","actor_via_sso":false,"log_type":"token"}	2023-12-09 00:08:10.996512+00	
+00000000-0000-0000-0000-000000000000	6c5f5115-5b49-49af-827e-7d7322c433c2	{"action":"token_revoked","actor_id":"b5f563a3-b794-49d0-a0e3-dbf9fffd2321","actor_username":"d9k@ya.ru","actor_via_sso":false,"log_type":"token"}	2023-12-09 00:08:10.997608+00	
+00000000-0000-0000-0000-000000000000	b69642b2-2867-44b7-8c5c-5620f5be387f	{"action":"token_refreshed","actor_id":"b5f563a3-b794-49d0-a0e3-dbf9fffd2321","actor_username":"d9k@ya.ru","actor_via_sso":false,"log_type":"token"}	2023-12-09 00:21:41.072128+00	
+00000000-0000-0000-0000-000000000000	4ec95b9a-a189-4c07-9e85-339e0a1804d5	{"action":"token_revoked","actor_id":"b5f563a3-b794-49d0-a0e3-dbf9fffd2321","actor_username":"d9k@ya.ru","actor_via_sso":false,"log_type":"token"}	2023-12-09 00:21:41.073132+00	
+00000000-0000-0000-0000-000000000000	a18cd616-04d1-480d-833a-297e92423aee	{"action":"user_confirmation_requested","actor_id":"e76b244b-6f9e-42fc-b216-5ea74f94bd4c","actor_username":"gavriillarin263@inbox.lv","actor_via_sso":false,"log_type":"user","traits":{"provider":"email"}}	2023-12-09 00:24:14.075622+00	
+00000000-0000-0000-0000-000000000000	af7dab5c-d11a-44a9-a942-d677cdf9e229	{"action":"user_signedup","actor_id":"e76b244b-6f9e-42fc-b216-5ea74f94bd4c","actor_username":"gavriillarin263@inbox.lv","actor_via_sso":false,"log_type":"team"}	2023-12-09 00:25:02.816375+00	
+00000000-0000-0000-0000-000000000000	ee063634-2e46-42cf-8cd3-a26ae0723704	{"action":"user_recovery_requested","actor_id":"b5f563a3-b794-49d0-a0e3-dbf9fffd2321","actor_username":"d9k@ya.ru","actor_via_sso":false,"log_type":"user"}	2023-12-09 02:11:13.104323+00	
+00000000-0000-0000-0000-000000000000	08b378aa-efb0-4ac9-8349-516cf42299a7	{"action":"login","actor_id":"b5f563a3-b794-49d0-a0e3-dbf9fffd2321","actor_username":"d9k@ya.ru","actor_via_sso":false,"log_type":"account"}	2023-12-09 02:11:26.255821+00	
 \.
 
 
@@ -2561,6 +2759,8 @@ COPY auth.instances (id, uuid, raw_base_config, created_at, updated_at) FROM std
 
 COPY auth.mfa_amr_claims (session_id, created_at, updated_at, authentication_method, id) FROM stdin;
 6833ddc7-223d-4093-ad07-559f00b07419	2023-12-02 19:58:46.130137+00	2023-12-02 19:58:46.130137+00	otp	88a74b71-7813-45c4-8138-e24b0858407b
+810df881-05f6-4234-a115-23a34045ebfb	2023-12-08 23:55:03.718962+00	2023-12-08 23:55:03.718962+00	otp	0cbf26e3-442c-4fc5-8cd2-c293f452cc61
+5bba6304-8a77-4f59-9c0c-c00a6fd7ce91	2023-12-09 02:11:26.262948+00	2023-12-09 02:11:26.262948+00	otp	fdc0630b-421a-4ab7-b563-6ec8c8a04e2a
 \.
 
 
@@ -2663,6 +2863,10 @@ COPY auth.refresh_tokens (instance_id, id, token, user_id, revoked, created_at, 
 00000000-0000-0000-0000-000000000000	174	QdbIRZN-fv1EECcFNKpEBQ	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	t	2023-12-06 13:49:01.205543+00	2023-12-06 14:02:31.049605+00	sd571IrbrsKdLXDrmHnr7g	6833ddc7-223d-4093-ad07-559f00b07419
 00000000-0000-0000-0000-000000000000	175	cpyVsMAh8t1c4SZQWsRIvQ	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	t	2023-12-06 14:02:31.049935+00	2023-12-06 14:16:01.28454+00	QdbIRZN-fv1EECcFNKpEBQ	6833ddc7-223d-4093-ad07-559f00b07419
 00000000-0000-0000-0000-000000000000	176	lX4ZRdaoKYlfStIucDq-4w	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	t	2023-12-06 14:16:01.284979+00	2023-12-07 21:01:19.72161+00	cpyVsMAh8t1c4SZQWsRIvQ	6833ddc7-223d-4093-ad07-559f00b07419
+00000000-0000-0000-0000-000000000000	177	S6E9CjrF2bjJxIUfG9DTJA	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	t	2023-12-08 23:55:03.715355+00	2023-12-09 00:08:10.9981+00	\N	810df881-05f6-4234-a115-23a34045ebfb
+00000000-0000-0000-0000-000000000000	178	sq7kjAQuhlgwnU5tQ3VdgQ	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	t	2023-12-09 00:08:11.000274+00	2023-12-09 00:21:41.073601+00	S6E9CjrF2bjJxIUfG9DTJA	810df881-05f6-4234-a115-23a34045ebfb
+00000000-0000-0000-0000-000000000000	179	RHrU7052u_GAGRxsfw40NQ	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	t	2023-12-09 00:21:41.075286+00	2023-12-09 00:22:29.030265+00	sq7kjAQuhlgwnU5tQ3VdgQ	810df881-05f6-4234-a115-23a34045ebfb
+00000000-0000-0000-0000-000000000000	181	psgCYW6tHJYZlyCtBopQGQ	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	f	2023-12-09 02:11:26.257194+00	2023-12-09 02:11:26.257194+00	\N	5bba6304-8a77-4f59-9c0c-c00a6fd7ce91
 \.
 
 
@@ -2747,6 +2951,8 @@ COPY auth.schema_migrations (version) FROM stdin;
 
 COPY auth.sessions (id, user_id, created_at, updated_at, factor_id, aal, not_after, refreshed_at, user_agent, ip, tag) FROM stdin;
 6833ddc7-223d-4093-ad07-559f00b07419	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	2023-12-02 19:58:46.128371+00	2023-12-06 14:16:01.286879+00	\N	aal1	\N	2023-12-06 14:16:01.28681	Deno/1.38.4	94.25.187.158	\N
+810df881-05f6-4234-a115-23a34045ebfb	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	2023-12-08 23:55:03.711848+00	2023-12-09 00:21:41.077088+00	\N	aal1	\N	2023-12-09 00:21:41.077018	Deno/1.38.4	94.25.187.158	\N
+5bba6304-8a77-4f59-9c0c-c00a6fd7ce91	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	2023-12-09 02:11:26.256446+00	2023-12-09 02:11:26.256446+00	\N	aal1	\N	\N	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36	94.25.187.158	\N
 \.
 
 
@@ -2771,7 +2977,8 @@ COPY auth.sso_providers (id, resource_id, created_at, updated_at) FROM stdin;
 --
 
 COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, invited_at, confirmation_token, confirmation_sent_at, recovery_token, recovery_sent_at, email_change_token_new, email_change, email_change_sent_at, last_sign_in_at, raw_app_meta_data, raw_user_meta_data, is_super_admin, created_at, updated_at, phone, phone_confirmed_at, phone_change, phone_change_token, phone_change_sent_at, email_change_token_current, email_change_confirm_status, banned_until, reauthentication_token, reauthentication_sent_at, is_sso_user, deleted_at) FROM stdin;
-00000000-0000-0000-0000-000000000000	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	authenticated	authenticated	d9k@ya.ru	$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2	2023-11-30 13:20:52.160287+00	\N		2023-11-30 13:19:57.235919+00		2023-12-02 19:58:36.863429+00			\N	2023-12-02 19:58:46.128307+00	{"provider": "email", "providers": ["email"]}	{}	\N	2023-11-30 13:19:57.22183+00	2023-12-06 14:16:01.285939+00	\N	\N			\N		0	\N		\N	f	\N
+00000000-0000-0000-0000-000000000000	e76b244b-6f9e-42fc-b216-5ea74f94bd4c	authenticated	authenticated	gavriillarin263@inbox.lv	$2a$10$W8/g0R7arxlSsdWrn.5hXOqbolOsyQrpCcAKTOEkoIy2Vekr3vgSS	2023-12-09 05:25:02.817+00	\N		2023-12-09 05:24:14.076+00		\N			\N	2023-12-09 05:25:02.818+00	{"provider": "email", "providers": ["email"], "profile_id": 19}	\N	\N	2023-12-09 05:24:14.065+00	2023-12-09 05:25:02.819+00	\N	\N			\N		0	\N		\N	f	\N
+00000000-0000-0000-0000-000000000000	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	authenticated	authenticated	d9k@ya.ru	$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2	2023-11-30 13:20:52.160287+00	\N		2023-11-30 13:19:57.235919+00		2023-12-09 02:11:13.105958+00			\N	2023-12-09 02:11:26.256371+00	{"provider": "email", "providers": ["email"], "profile_id": 1}	{}	\N	2023-11-30 13:19:57.22183+00	2023-12-09 02:11:26.26131+00	\N	\N			\N		0	\N		\N	f	\N
 \.
 
 
@@ -2830,6 +3037,7 @@ COPY public.place (id, name, created_at, updated_at, town_id) FROM stdin;
 
 COPY public.profiles (auth_user_id, updated_at, username, full_name, avatar_url, website, id) FROM stdin;
 b5f563a3-b794-49d0-a0e3-dbf9fffd2321	\N	\N	\N	\N	\N	1
+e76b244b-6f9e-42fc-b216-5ea74f94bd4c	\N	\N	\N	\N	\N	19
 \.
 
 
@@ -2892,6 +3100,8 @@ COPY supabase_migrations.schema_migrations (version, statements, name) FROM stdi
 20231129030618	{"SET statement_timeout = 0","SET lock_timeout = 0","SET idle_in_transaction_session_timeout = 0","SET client_encoding = 'UTF8'","SET standard_conforming_strings = on","SELECT pg_catalog.set_config('search_path', '', false)","SET check_function_bodies = false","SET xmloption = content","SET client_min_messages = warning","SET row_security = off","CREATE EXTENSION IF NOT EXISTS \\"pgsodium\\" WITH SCHEMA \\"pgsodium\\"","CREATE EXTENSION IF NOT EXISTS \\"pg_graphql\\" WITH SCHEMA \\"graphql\\"","CREATE EXTENSION IF NOT EXISTS \\"pg_stat_statements\\" WITH SCHEMA \\"extensions\\"","CREATE EXTENSION IF NOT EXISTS \\"pgcrypto\\" WITH SCHEMA \\"extensions\\"","CREATE EXTENSION IF NOT EXISTS \\"pgjwt\\" WITH SCHEMA \\"extensions\\"","CREATE EXTENSION IF NOT EXISTS \\"supabase_vault\\" WITH SCHEMA \\"vault\\"","CREATE EXTENSION IF NOT EXISTS \\"uuid-ossp\\" WITH SCHEMA \\"extensions\\"","SET default_tablespace = ''","SET default_table_access_method = \\"heap\\"","CREATE TABLE IF NOT EXISTS \\"public\\".\\"authors\\" (\n    \\"id\\" bigint NOT NULL,\n    \\"lastname_name_patronymic\\" \\"text\\" NOT NULL,\n    \\"created_at\\" timestamp with time zone DEFAULT \\"now\\"() NOT NULL,\n    \\"birth_year\\" bigint,\n    \\"death_year\\" bigint,\n    \\"approximate_years\\" boolean DEFAULT false NOT NULL,\n    \\"updated_at\\" timestamp with time zone DEFAULT \\"now\\"() NOT NULL\n)","ALTER TABLE \\"public\\".\\"authors\\" OWNER TO \\"postgres\\"","ALTER TABLE \\"public\\".\\"authors\\" ALTER COLUMN \\"id\\" ADD GENERATED BY DEFAULT AS IDENTITY (\n    SEQUENCE NAME \\"public\\".\\"author_id_seq\\"\n    START WITH 1\n    INCREMENT BY 1\n    NO MINVALUE\n    NO MAXVALUE\n    CACHE 1\n)","CREATE TABLE IF NOT EXISTS \\"public\\".\\"citations\\" (\n    \\"id\\" bigint NOT NULL,\n    \\"english_text\\" \\"text\\",\n    \\"author_id\\" bigint NOT NULL,\n    \\"year\\" bigint,\n    \\"created_at\\" timestamp with time zone DEFAULT \\"now\\"() NOT NULL,\n    \\"updated_at\\" timestamp without time zone DEFAULT \\"now\\"() NOT NULL,\n    \\"original_language_text\\" \\"text\\"\n)","ALTER TABLE \\"public\\".\\"citations\\" OWNER TO \\"postgres\\"","ALTER TABLE \\"public\\".\\"citations\\" ALTER COLUMN \\"id\\" ADD GENERATED BY DEFAULT AS IDENTITY (\n    SEQUENCE NAME \\"public\\".\\"citations_id_seq\\"\n    START WITH 1\n    INCREMENT BY 1\n    NO MINVALUE\n    NO MAXVALUE\n    CACHE 1\n)","CREATE TABLE IF NOT EXISTS \\"public\\".\\"country\\" (\n    \\"id\\" bigint NOT NULL,\n    \\"name\\" \\"text\\",\n    \\"created_at\\" timestamp with time zone DEFAULT \\"now\\"() NOT NULL,\n    \\"updated_at\\" timestamp with time zone DEFAULT \\"now\\"(),\n    \\"found_year\\" bigint,\n    \\"next_rename_year\\" bigint\n)","ALTER TABLE \\"public\\".\\"country\\" OWNER TO \\"postgres\\"","ALTER TABLE \\"public\\".\\"country\\" ALTER COLUMN \\"id\\" ADD GENERATED BY DEFAULT AS IDENTITY (\n    SEQUENCE NAME \\"public\\".\\"country_id_seq\\"\n    START WITH 1\n    INCREMENT BY 1\n    NO MINVALUE\n    NO MAXVALUE\n    CACHE 1\n)","CREATE TABLE IF NOT EXISTS \\"public\\".\\"place\\" (\n    \\"id\\" bigint NOT NULL,\n    \\"name\\" \\"text\\" DEFAULT 'in'::\\"text\\" NOT NULL,\n    \\"created_at\\" timestamp with time zone DEFAULT \\"now\\"() NOT NULL,\n    \\"updated_at\\" timestamp with time zone DEFAULT \\"now\\"() NOT NULL\n)","ALTER TABLE \\"public\\".\\"place\\" OWNER TO \\"postgres\\"","ALTER TABLE \\"public\\".\\"place\\" ALTER COLUMN \\"id\\" ADD GENERATED BY DEFAULT AS IDENTITY (\n    SEQUENCE NAME \\"public\\".\\"place_id_seq\\"\n    START WITH 1\n    INCREMENT BY 1\n    NO MINVALUE\n    NO MAXVALUE\n    CACHE 1\n)","CREATE TABLE IF NOT EXISTS \\"public\\".\\"province\\" (\n    \\"id\\" bigint NOT NULL,\n    \\"name\\" \\"text\\" NOT NULL,\n    \\"country_id\\" bigint NOT NULL,\n    \\"created_at\\" timestamp with time zone DEFAULT \\"now\\"() NOT NULL,\n    \\"updated_at\\" timestamp with time zone DEFAULT \\"now\\"() NOT NULL\n)","ALTER TABLE \\"public\\".\\"province\\" OWNER TO \\"postgres\\"","ALTER TABLE \\"public\\".\\"province\\" ALTER COLUMN \\"id\\" ADD GENERATED BY DEFAULT AS IDENTITY (\n    SEQUENCE NAME \\"public\\".\\"province_id_seq\\"\n    START WITH 1\n    INCREMENT BY 1\n    NO MINVALUE\n    NO MAXVALUE\n    CACHE 1\n)","CREATE TABLE IF NOT EXISTS \\"public\\".\\"town\\" (\n    \\"id\\" bigint NOT NULL,\n    \\"name\\" \\"text\\" NOT NULL,\n    \\"province_id\\" bigint NOT NULL,\n    \\"created_at\\" timestamp with time zone DEFAULT \\"now\\"() NOT NULL,\n    \\"updated_at\\" timestamp with time zone DEFAULT \\"now\\"() NOT NULL\n)","ALTER TABLE \\"public\\".\\"town\\" OWNER TO \\"postgres\\"","ALTER TABLE \\"public\\".\\"town\\" ALTER COLUMN \\"id\\" ADD GENERATED BY DEFAULT AS IDENTITY (\n    SEQUENCE NAME \\"public\\".\\"town_id_seq\\"\n    START WITH 1\n    INCREMENT BY 1\n    NO MINVALUE\n    NO MAXVALUE\n    CACHE 1\n)","ALTER TABLE ONLY \\"public\\".\\"authors\\"\n    ADD CONSTRAINT \\"author_pkey\\" PRIMARY KEY (\\"id\\")","ALTER TABLE ONLY \\"public\\".\\"citations\\"\n    ADD CONSTRAINT \\"citations_pkey\\" PRIMARY KEY (\\"id\\")","ALTER TABLE ONLY \\"public\\".\\"country\\"\n    ADD CONSTRAINT \\"country_pkey\\" PRIMARY KEY (\\"id\\")","ALTER TABLE ONLY \\"public\\".\\"place\\"\n    ADD CONSTRAINT \\"place_pkey\\" PRIMARY KEY (\\"id\\")","ALTER TABLE ONLY \\"public\\".\\"province\\"\n    ADD CONSTRAINT \\"province_pkey\\" PRIMARY KEY (\\"id\\")","ALTER TABLE ONLY \\"public\\".\\"town\\"\n    ADD CONSTRAINT \\"town_pkey\\" PRIMARY KEY (\\"id\\")","ALTER TABLE ONLY \\"public\\".\\"citations\\"\n    ADD CONSTRAINT \\"citations_author_id_fkey\\" FOREIGN KEY (\\"author_id\\") REFERENCES \\"public\\".\\"authors\\"(\\"id\\") ON UPDATE CASCADE ON DELETE RESTRICT","ALTER TABLE ONLY \\"public\\".\\"province\\"\n    ADD CONSTRAINT \\"province_country_id_fkey\\" FOREIGN KEY (\\"country_id\\") REFERENCES \\"public\\".\\"country\\"(\\"id\\") ON UPDATE CASCADE ON DELETE RESTRICT","ALTER TABLE ONLY \\"public\\".\\"town\\"\n    ADD CONSTRAINT \\"town_province_id_fkey\\" FOREIGN KEY (\\"province_id\\") REFERENCES \\"public\\".\\"province\\"(\\"id\\") ON UPDATE CASCADE ON DELETE RESTRICT","REVOKE USAGE ON SCHEMA \\"public\\" FROM PUBLIC","GRANT USAGE ON SCHEMA \\"public\\" TO \\"postgres\\"","GRANT USAGE ON SCHEMA \\"public\\" TO \\"anon\\"","GRANT USAGE ON SCHEMA \\"public\\" TO \\"authenticated\\"","GRANT USAGE ON SCHEMA \\"public\\" TO \\"service_role\\"","GRANT ALL ON TABLE \\"public\\".\\"authors\\" TO \\"anon\\"","GRANT ALL ON TABLE \\"public\\".\\"authors\\" TO \\"authenticated\\"","GRANT ALL ON TABLE \\"public\\".\\"authors\\" TO \\"service_role\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"author_id_seq\\" TO \\"anon\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"author_id_seq\\" TO \\"authenticated\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"author_id_seq\\" TO \\"service_role\\"","GRANT ALL ON TABLE \\"public\\".\\"citations\\" TO \\"anon\\"","GRANT ALL ON TABLE \\"public\\".\\"citations\\" TO \\"authenticated\\"","GRANT ALL ON TABLE \\"public\\".\\"citations\\" TO \\"service_role\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"citations_id_seq\\" TO \\"anon\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"citations_id_seq\\" TO \\"authenticated\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"citations_id_seq\\" TO \\"service_role\\"","GRANT ALL ON TABLE \\"public\\".\\"country\\" TO \\"anon\\"","GRANT ALL ON TABLE \\"public\\".\\"country\\" TO \\"authenticated\\"","GRANT ALL ON TABLE \\"public\\".\\"country\\" TO \\"service_role\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"country_id_seq\\" TO \\"anon\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"country_id_seq\\" TO \\"authenticated\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"country_id_seq\\" TO \\"service_role\\"","GRANT ALL ON TABLE \\"public\\".\\"place\\" TO \\"anon\\"","GRANT ALL ON TABLE \\"public\\".\\"place\\" TO \\"authenticated\\"","GRANT ALL ON TABLE \\"public\\".\\"place\\" TO \\"service_role\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"place_id_seq\\" TO \\"anon\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"place_id_seq\\" TO \\"authenticated\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"place_id_seq\\" TO \\"service_role\\"","GRANT ALL ON TABLE \\"public\\".\\"province\\" TO \\"anon\\"","GRANT ALL ON TABLE \\"public\\".\\"province\\" TO \\"authenticated\\"","GRANT ALL ON TABLE \\"public\\".\\"province\\" TO \\"service_role\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"province_id_seq\\" TO \\"anon\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"province_id_seq\\" TO \\"authenticated\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"province_id_seq\\" TO \\"service_role\\"","GRANT ALL ON TABLE \\"public\\".\\"town\\" TO \\"anon\\"","GRANT ALL ON TABLE \\"public\\".\\"town\\" TO \\"authenticated\\"","GRANT ALL ON TABLE \\"public\\".\\"town\\" TO \\"service_role\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"town_id_seq\\" TO \\"anon\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"town_id_seq\\" TO \\"authenticated\\"","GRANT ALL ON SEQUENCE \\"public\\".\\"town_id_seq\\" TO \\"service_role\\"","ALTER DEFAULT PRIVILEGES FOR ROLE \\"postgres\\" IN SCHEMA \\"public\\" GRANT ALL ON SEQUENCES  TO \\"postgres\\"","ALTER DEFAULT PRIVILEGES FOR ROLE \\"postgres\\" IN SCHEMA \\"public\\" GRANT ALL ON SEQUENCES  TO \\"anon\\"","ALTER DEFAULT PRIVILEGES FOR ROLE \\"postgres\\" IN SCHEMA \\"public\\" GRANT ALL ON SEQUENCES  TO \\"authenticated\\"","ALTER DEFAULT PRIVILEGES FOR ROLE \\"postgres\\" IN SCHEMA \\"public\\" GRANT ALL ON SEQUENCES  TO \\"service_role\\"","ALTER DEFAULT PRIVILEGES FOR ROLE \\"postgres\\" IN SCHEMA \\"public\\" GRANT ALL ON FUNCTIONS  TO \\"postgres\\"","ALTER DEFAULT PRIVILEGES FOR ROLE \\"postgres\\" IN SCHEMA \\"public\\" GRANT ALL ON FUNCTIONS  TO \\"anon\\"","ALTER DEFAULT PRIVILEGES FOR ROLE \\"postgres\\" IN SCHEMA \\"public\\" GRANT ALL ON FUNCTIONS  TO \\"authenticated\\"","ALTER DEFAULT PRIVILEGES FOR ROLE \\"postgres\\" IN SCHEMA \\"public\\" GRANT ALL ON FUNCTIONS  TO \\"service_role\\"","ALTER DEFAULT PRIVILEGES FOR ROLE \\"postgres\\" IN SCHEMA \\"public\\" GRANT ALL ON TABLES  TO \\"postgres\\"","ALTER DEFAULT PRIVILEGES FOR ROLE \\"postgres\\" IN SCHEMA \\"public\\" GRANT ALL ON TABLES  TO \\"anon\\"","ALTER DEFAULT PRIVILEGES FOR ROLE \\"postgres\\" IN SCHEMA \\"public\\" GRANT ALL ON TABLES  TO \\"authenticated\\"","ALTER DEFAULT PRIVILEGES FOR ROLE \\"postgres\\" IN SCHEMA \\"public\\" GRANT ALL ON TABLES  TO \\"service_role\\"","RESET ALL"}	remote_schema
 20231129093821	{"alter table \\"public\\".\\"province\\" drop constraint \\"province_country_id_fkey\\"","alter table \\"public\\".\\"town\\" drop constraint \\"town_province_id_fkey\\"","alter table \\"public\\".\\"citations\\" drop constraint \\"citations_author_id_fkey\\"","alter table \\"public\\".\\"province\\" drop constraint \\"province_pkey\\"","drop index if exists \\"public\\".\\"province_pkey\\"","drop table \\"public\\".\\"province\\"","create table \\"public\\".\\"event\\" (\n    \\"id\\" bigint generated by default as identity not null,\n    \\"name\\" text not null,\n    \\"created_at\\" timestamp with time zone not null default now(),\n    \\"updated_at\\" timestamp with time zone not null default now(),\n    \\"start_year\\" bigint not null,\n    \\"start_month\\" smallint not null,\n    \\"end_year\\" bigint,\n    \\"end_month\\" smallint,\n    \\"place_id\\" bigint\n)","alter table \\"public\\".\\"authors\\" add column \\"birth_town\\" bigint","alter table \\"public\\".\\"citations\\" add column \\"event_id\\" bigint","alter table \\"public\\".\\"citations\\" add column \\"place_id\\" bigint","alter table \\"public\\".\\"place\\" add column \\"town_id\\" bigint not null","alter table \\"public\\".\\"town\\" drop column \\"province_id\\"","alter table \\"public\\".\\"town\\" add column \\"country_id\\" bigint not null","CREATE UNIQUE INDEX event_pkey ON public.event USING btree (id)","alter table \\"public\\".\\"event\\" add constraint \\"event_pkey\\" PRIMARY KEY using index \\"event_pkey\\"","alter table \\"public\\".\\"authors\\" add constraint \\"authors_birth_town_fkey\\" FOREIGN KEY (birth_town) REFERENCES town(id) ON UPDATE CASCADE not valid","alter table \\"public\\".\\"authors\\" validate constraint \\"authors_birth_town_fkey\\"","alter table \\"public\\".\\"citations\\" add constraint \\"citations_event_id_fkey\\" FOREIGN KEY (event_id) REFERENCES event(id) ON UPDATE CASCADE not valid","alter table \\"public\\".\\"citations\\" validate constraint \\"citations_event_id_fkey\\"","alter table \\"public\\".\\"citations\\" add constraint \\"citations_place_id_fkey\\" FOREIGN KEY (place_id) REFERENCES place(id) not valid","alter table \\"public\\".\\"citations\\" validate constraint \\"citations_place_id_fkey\\"","alter table \\"public\\".\\"event\\" add constraint \\"event_place_id_fkey\\" FOREIGN KEY (place_id) REFERENCES place(id) ON UPDATE CASCADE not valid","alter table \\"public\\".\\"event\\" validate constraint \\"event_place_id_fkey\\"","alter table \\"public\\".\\"place\\" add constraint \\"place_town_id_fkey\\" FOREIGN KEY (town_id) REFERENCES town(id) ON UPDATE CASCADE not valid","alter table \\"public\\".\\"place\\" validate constraint \\"place_town_id_fkey\\"","alter table \\"public\\".\\"town\\" add constraint \\"town_country_id_fkey\\" FOREIGN KEY (country_id) REFERENCES country(id) ON UPDATE CASCADE not valid","alter table \\"public\\".\\"town\\" validate constraint \\"town_country_id_fkey\\"","alter table \\"public\\".\\"citations\\" add constraint \\"citations_author_id_fkey\\" FOREIGN KEY (author_id) REFERENCES authors(id) ON UPDATE CASCADE not valid","alter table \\"public\\".\\"citations\\" validate constraint \\"citations_author_id_fkey\\""}	remote_schema
 20231129114012	{"create table \\"public\\".\\"profiles\\" (\n    \\"id\\" uuid not null,\n    \\"updated_at\\" timestamp with time zone,\n    \\"username\\" text,\n    \\"full_name\\" text,\n    \\"avatar_url\\" text,\n    \\"website\\" text\n)","alter table \\"public\\".\\"profiles\\" enable row level security","CREATE UNIQUE INDEX profiles_pkey ON public.profiles USING btree (id)","CREATE UNIQUE INDEX profiles_username_key ON public.profiles USING btree (username)","alter table \\"public\\".\\"profiles\\" add constraint \\"profiles_pkey\\" PRIMARY KEY using index \\"profiles_pkey\\"","alter table \\"public\\".\\"profiles\\" add constraint \\"profiles_id_fkey\\" FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE not valid","alter table \\"public\\".\\"profiles\\" validate constraint \\"profiles_id_fkey\\"","alter table \\"public\\".\\"profiles\\" add constraint \\"profiles_username_key\\" UNIQUE using index \\"profiles_username_key\\"","alter table \\"public\\".\\"profiles\\" add constraint \\"username_length\\" CHECK ((char_length(username) >= 3)) not valid","alter table \\"public\\".\\"profiles\\" validate constraint \\"username_length\\"","set check_function_bodies = off","CREATE OR REPLACE FUNCTION public.handle_new_user()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\nbegin\n  insert into public.profiles (id, full_name, avatar_url)\n  values (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url');\n  return new;\nend;\n$function$","create policy \\"Public profiles are viewable by everyone.\\"\non \\"public\\".\\"profiles\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"Users can insert their own profile.\\"\non \\"public\\".\\"profiles\\"\nas permissive\nfor insert\nto public\nwith check ((auth.uid() = id))","create policy \\"Users can update own profile.\\"\non \\"public\\".\\"profiles\\"\nas permissive\nfor update\nto public\nusing ((auth.uid() = id))"}	user_management_starter
+20231207142347	{"alter table \\"public\\".\\"town\\" drop constraint \\"town_country_id_fkey\\"","alter table \\"public\\".\\"country\\" drop constraint \\"country_pkey\\"","drop index if exists \\"public\\".\\"country_pkey\\"","drop table \\"public\\".\\"country\\"","create table \\"public\\".\\"countries\\" (\n    \\"id\\" bigint generated by default as identity not null,\n    \\"name\\" text,\n    \\"created_at\\" timestamp with time zone not null default now(),\n    \\"updated_at\\" timestamp with time zone default now(),\n    \\"found_year\\" bigint,\n    \\"next_rename_year\\" bigint\n)","CREATE UNIQUE INDEX country_pkey ON public.countries USING btree (id)","alter table \\"public\\".\\"countries\\" add constraint \\"country_pkey\\" PRIMARY KEY using index \\"country_pkey\\"","alter table \\"public\\".\\"town\\" add constraint \\"town_country_id_fkey\\" FOREIGN KEY (country_id) REFERENCES countries(id) ON UPDATE CASCADE not valid","alter table \\"public\\".\\"town\\" validate constraint \\"town_country_id_fkey\\""}	rename_countries
+20231209022533	{"CREATE TRIGGER on_auth_user_new AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION handle_auth_user_new()","drop policy \\"Users can insert their own profile.\\" on \\"public\\".\\"profiles\\"","drop policy \\"Users can update own profile.\\" on \\"public\\".\\"profiles\\"","alter table \\"public\\".\\"profiles\\" drop constraint \\"profiles_id_fkey\\"","drop function if exists \\"public\\".\\"handle_new_user\\"()","alter table \\"public\\".\\"countries\\" enable row level security","alter table \\"public\\".\\"profiles\\" add column \\"auth_user_id\\" uuid not null","alter table \\"public\\".\\"profiles\\" alter column \\"id\\" add generated by default as identity","alter table \\"public\\".\\"profiles\\" alter column \\"id\\" set data type bigint using \\"id\\"::bigint","alter table \\"public\\".\\"profiles\\" add constraint \\"profiles_id_fkey\\" FOREIGN KEY (auth_user_id) REFERENCES auth.users(id) ON DELETE CASCADE not valid","alter table \\"public\\".\\"profiles\\" validate constraint \\"profiles_id_fkey\\"","set check_function_bodies = off","CREATE OR REPLACE FUNCTION public.delete_claim(uid uuid, claim text)\n RETURNS text\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\n    BEGIN\n      IF NOT is_claims_admin() THEN\n          RETURN 'error: access denied';\n      ELSE        \n        update auth.users set raw_app_meta_data = \n          raw_app_meta_data - claim where id = uid;\n        return 'OK';\n      END IF;\n    END;\n$function$","CREATE OR REPLACE FUNCTION public.get_claim(uid uuid, claim text)\n RETURNS jsonb\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\n    DECLARE retval jsonb;\n    BEGIN\n      IF NOT is_claims_admin() THEN\n          RETURN '{\\"error\\":\\"access denied\\"}'::jsonb;\n      ELSE\n        select coalesce(raw_app_meta_data->claim, null) from auth.users into retval where id = uid::uuid;\n        return retval;\n      END IF;\n    END;\n$function$","CREATE OR REPLACE FUNCTION public.get_claims(uid uuid)\n RETURNS jsonb\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\n    DECLARE retval jsonb;\n    BEGIN\n      IF NOT is_claims_admin() THEN\n          RETURN '{\\"error\\":\\"access denied\\"}'::jsonb;\n      ELSE\n        select raw_app_meta_data from auth.users into retval where id = uid::uuid;\n        return retval;\n      END IF;\n    END;\n$function$","CREATE OR REPLACE FUNCTION public.get_my_claim(claim text)\n RETURNS jsonb\n LANGUAGE sql\n STABLE\nAS $function$\n  select \n  \tcoalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb -> 'app_metadata' -> claim, null)\n$function$","CREATE OR REPLACE FUNCTION public.get_my_claims()\n RETURNS jsonb\n LANGUAGE sql\n STABLE\nAS $function$\n  select \n  \tcoalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb -> 'app_metadata', '{}'::jsonb)::jsonb\n$function$","CREATE OR REPLACE FUNCTION public.handle_auth_user_new()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\nBEGIN\n  INSERT INTO public.profiles (auth_user_id, full_name, avatar_url)\n\t  VALUES (\n\t\t  NEW.id,\n\t\t  NEW.raw_user_meta_data->>'full_name',\n\t\t  NEW.raw_user_meta_data->>'avatar_url'\n\t  );\n  RETURN NEW;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.handle_public_profile_new()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\n\nBEGIN\n\n/**\n * see `set claim` at\n * https://github.com/supabase-community/supabase-custom-claims/blob/main/install.sql\n **/\n  UPDATE auth.users\n  SET\n\t  raw_app_meta_data = COALESCE(\n\t\t  raw_app_meta_data || JSON_BUILD_OBJECT('profile_id', NEW.id)::jsonb,\n\t\t  JSON_BUILD_OBJECT('profile_id', NEW.id)::jsonb\n\t  )\n  WHERE id = NEW.auth_user_id;\n\n  RETURN NEW;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.is_claims_admin()\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\n  BEGIN\n    IF session_user = 'authenticator' THEN\n      --------------------------------------------\n      -- To disallow any authenticated app users\n      -- from editing claims, delete the following\n      -- block of code and replace it with:\n      -- RETURN FALSE;\n      --------------------------------------------\n      IF extract(epoch from now()) > coalesce((current_setting('request.jwt.claims', true)::jsonb)->>'exp', '0')::numeric THEN\n        return false; -- jwt expired\n      END IF;\n      If current_setting('request.jwt.claims', true)::jsonb->>'role' = 'service_role' THEN\n        RETURN true; -- service role users have admin rights\n      END IF;\n      IF coalesce((current_setting('request.jwt.claims', true)::jsonb)->'app_metadata'->'claims_admin', 'false')::bool THEN\n        return true; -- user has claims_admin set to true\n      ELSE\n        return false; -- user does NOT have claims_admin set to true\n      END IF;\n      --------------------------------------------\n      -- End of block \n      --------------------------------------------\n    ELSE -- not a user session, probably being called from a trigger or something\n      return true;\n    END IF;\n  END;\n$function$","CREATE OR REPLACE FUNCTION public.set_claim(uid uuid, claim text, value jsonb)\n RETURNS text\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\n    BEGIN\n      IF NOT is_claims_admin() THEN\n          RETURN 'error: access denied';\n      ELSE        \n        update auth.users set raw_app_meta_data = \n          raw_app_meta_data || \n            json_build_object(claim, value)::jsonb where id = uid;\n        return 'OK';\n      END IF;\n    END;\n$function$","create policy \\"countries: authed can read\\"\non \\"public\\".\\"countries\\"\nas permissive\nfor select\nto authenticated\nusing (true)","create policy \\"Users can insert their own profile.\\"\non \\"public\\".\\"profiles\\"\nas permissive\nfor insert\nto public\nwith check ((auth.uid() = auth_user_id))","create policy \\"Users can update own profile.\\"\non \\"public\\".\\"profiles\\"\nas permissive\nfor update\nto public\nusing ((auth.uid() = auth_user_id))","CREATE TRIGGER on_public_profiles_new AFTER INSERT ON public.profiles FOR EACH ROW EXECUTE FUNCTION handle_public_profile_new()"}	profile_id
 \.
 
 
@@ -2907,7 +3117,7 @@ COPY vault.secrets (id, name, description, secret, key_id, nonce, created_at, up
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 176, true);
+SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 181, true);
 
 
 --
@@ -2956,7 +3166,7 @@ SELECT pg_catalog.setval('public.place_id_seq', 1, false);
 -- Name: profiles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.profiles_id_seq', 1, true);
+SELECT pg_catalog.setval('public.profiles_id_seq', 19, true);
 
 
 --
@@ -3497,10 +3707,17 @@ CREATE INDEX name_prefix_search ON storage.objects USING btree (name text_patter
 
 
 --
--- Name: users on_auth_user_created; Type: TRIGGER; Schema: auth; Owner: supabase_auth_admin
+-- Name: users on_auth_user_new; Type: TRIGGER; Schema: auth; Owner: supabase_auth_admin
 --
 
-CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+CREATE TRIGGER on_auth_user_new AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION public.handle_auth_user_new();
+
+
+--
+-- Name: profiles on_public_profiles_new; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER on_public_profiles_new AFTER INSERT ON public.profiles FOR EACH ROW EXECUTE FUNCTION public.handle_public_profile_new();
 
 
 --
@@ -3690,10 +3907,10 @@ CREATE POLICY "Users can update own profile." ON public.profiles FOR UPDATE USIN
 ALTER TABLE public.countries ENABLE ROW LEVEL SECURITY;
 
 --
--- Name: countries countries: all can read; Type: POLICY; Schema: public; Owner: postgres
+-- Name: countries countries: authed can read; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "countries: all can read" ON public.countries FOR SELECT USING (true);
+CREATE POLICY "countries: authed can read" ON public.countries FOR SELECT TO authenticated USING (true);
 
 
 --
@@ -4373,12 +4590,84 @@ GRANT ALL ON FUNCTION pgsodium.crypto_aead_det_keygen() TO service_role;
 
 
 --
--- Name: FUNCTION handle_new_user(); Type: ACL; Schema: public; Owner: postgres
+-- Name: FUNCTION delete_claim(uid uuid, claim text); Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON FUNCTION public.handle_new_user() TO anon;
-GRANT ALL ON FUNCTION public.handle_new_user() TO authenticated;
-GRANT ALL ON FUNCTION public.handle_new_user() TO service_role;
+GRANT ALL ON FUNCTION public.delete_claim(uid uuid, claim text) TO anon;
+GRANT ALL ON FUNCTION public.delete_claim(uid uuid, claim text) TO authenticated;
+GRANT ALL ON FUNCTION public.delete_claim(uid uuid, claim text) TO service_role;
+
+
+--
+-- Name: FUNCTION get_claim(uid uuid, claim text); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.get_claim(uid uuid, claim text) TO anon;
+GRANT ALL ON FUNCTION public.get_claim(uid uuid, claim text) TO authenticated;
+GRANT ALL ON FUNCTION public.get_claim(uid uuid, claim text) TO service_role;
+
+
+--
+-- Name: FUNCTION get_claims(uid uuid); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.get_claims(uid uuid) TO anon;
+GRANT ALL ON FUNCTION public.get_claims(uid uuid) TO authenticated;
+GRANT ALL ON FUNCTION public.get_claims(uid uuid) TO service_role;
+
+
+--
+-- Name: FUNCTION get_my_claim(claim text); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.get_my_claim(claim text) TO anon;
+GRANT ALL ON FUNCTION public.get_my_claim(claim text) TO authenticated;
+GRANT ALL ON FUNCTION public.get_my_claim(claim text) TO service_role;
+
+
+--
+-- Name: FUNCTION get_my_claims(); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.get_my_claims() TO anon;
+GRANT ALL ON FUNCTION public.get_my_claims() TO authenticated;
+GRANT ALL ON FUNCTION public.get_my_claims() TO service_role;
+
+
+--
+-- Name: FUNCTION handle_auth_user_new(); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.handle_auth_user_new() TO anon;
+GRANT ALL ON FUNCTION public.handle_auth_user_new() TO authenticated;
+GRANT ALL ON FUNCTION public.handle_auth_user_new() TO service_role;
+
+
+--
+-- Name: FUNCTION handle_public_profile_new(); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.handle_public_profile_new() TO anon;
+GRANT ALL ON FUNCTION public.handle_public_profile_new() TO authenticated;
+GRANT ALL ON FUNCTION public.handle_public_profile_new() TO service_role;
+
+
+--
+-- Name: FUNCTION is_claims_admin(); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.is_claims_admin() TO anon;
+GRANT ALL ON FUNCTION public.is_claims_admin() TO authenticated;
+GRANT ALL ON FUNCTION public.is_claims_admin() TO service_role;
+
+
+--
+-- Name: FUNCTION set_claim(uid uuid, claim text, value jsonb); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.set_claim(uid uuid, claim text, value jsonb) TO anon;
+GRANT ALL ON FUNCTION public.set_claim(uid uuid, claim text, value jsonb) TO authenticated;
+GRANT ALL ON FUNCTION public.set_claim(uid uuid, claim text, value jsonb) TO service_role;
 
 
 --
