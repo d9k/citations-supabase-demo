@@ -10,7 +10,10 @@ export const PageFrameLayout = ({ children }: WithChildren) => {
   const supabaseUser = useSupabaseUser();
   const email = supabaseUser?.email;
   const userName = email?.split('@')[0];
-  const [opened, { toggle }] = useDisclosure();
+  const [
+    navbarOpened,
+    { toggle: navbarToggle },
+  ] = useDisclosure();
 
   return (
     <AppShell
@@ -18,7 +21,10 @@ export const PageFrameLayout = ({ children }: WithChildren) => {
       navbar={{
         width: 300,
         breakpoint: 'sm',
-        collapsed: { desktop: !opened, mobile: !opened },
+        collapsed: {
+          desktop: !navbarOpened,
+          mobile: !navbarOpened,
+        },
       }}
       padding='md'
     >
@@ -50,11 +56,11 @@ export const PageFrameLayout = ({ children }: WithChildren) => {
           ]}
         >
           <Burger
-            opened={opened}
-            onClick={toggle}
+            opened={navbarOpened}
+            onClick={navbarToggle}
             size='md'
           />
-          <div>Logo</div>
+          <div>Citations</div>
         </LayoutHeader>
       </AppShell.Header>
 
