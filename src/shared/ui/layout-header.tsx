@@ -98,9 +98,9 @@ export function LayoutHeader({
       <div
         className={`header_inner ${
           css(cssProps({
-            borderBottom: `1px solid var(${
-              dark ? '--mantine-color-dark-4' : '--mantine-color-gray-3'
-            })`,
+            // borderBottom: `1px solid var(${
+            //   dark ? '--mantine-color-dark-4' : '--mantine-color-gray-3'
+            // })`,
             display: 'flex',
             flexDirection: 'row-reverse',
             justifyContent: 'space-between',

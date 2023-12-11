@@ -1,9 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
-import { PageFrameLayout } from '/~/pages/layouts/PageFrameLayout.tsx';
-import { BodyLayout } from '/~/pages/layouts/BodyLayout.tsx';
-import { Loader } from '@mantine/core';
+import { PageFrameLayout } from '/~/pages/layouts/page-frame.tsx';
 import { Spinner } from '/~/shared/ui/spinner.tsx';
 import { useSupabaseUser } from '/~/shared/providers/supabase/user.ts';
 

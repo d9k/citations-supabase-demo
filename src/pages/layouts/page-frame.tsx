@@ -17,7 +17,7 @@ export const PageFrameLayout = ({ children }: WithChildren) => {
 
   return (
     <AppShell
-      header={{ height: 30 }}
+      header={{ height: 40 }}
       navbar={{
         width: 300,
         breakpoint: 'sm',
@@ -26,7 +26,8 @@ export const PageFrameLayout = ({ children }: WithChildren) => {
           mobile: !navbarOpened,
         },
       }}
-      padding='md'
+      // padding={'md'}
+      padding={20}
     >
       <AppShell.Header>
         <LayoutHeader
