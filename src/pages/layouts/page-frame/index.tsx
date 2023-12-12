@@ -1,19 +1,34 @@
-import { NavLink } from 'react-router-dom';
 import { WithChildren } from '/~/shared/lib/react/WithChildren.ts';
 import { LayoutHeader } from '/~/shared/ui/layout-header.tsx';
 import { useSupabaseUser } from '/~/shared/providers/supabase/user.ts';
 
 import { AppShell, Burger } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 
-export const PageFrameLayout = ({ children }: WithChildren) => {
+import {
+  PageFrameLayoutContextCreator,
+  usePageFrameLayoutContext,
+} from './context.tsx';
+
+export const PageFrameLayoutInExistingContext = (
+  { children }: WithChildren,
+) => {
+  const context = usePageFrameLayoutContext();
+
+  if (!context) {
+    throw Error(
+      'No <PageFrameLayoutContext> found. Try use <PageFrameLayout> instead of <PageFrameLayoutInExistingContext>',
+    );
+  }
+
+  const {
+    navbarOpened,
+    navbarOpenedSet,
+    navbarContent,
+  } = context;
+
   const supabaseUser = useSupabaseUser();
   const email = supabaseUser?.email;
   const userName = email?.split('@')[0];
-  const [
-    navbarOpened,
-    { toggle: navbarToggle },
-  ] = useDisclosure();
 
   return (
     <AppShell
@@ -37,6 +52,14 @@ export const PageFrameLayout = ({ children }: WithChildren) => {
               caption: 'Home',
             },
             {
+              path: '/tables',
+              pathMatchPattern: [
+                { path: '/table', end: false },
+                { path: '/tables', end: false },
+              ],
+              caption: 'Tables',
+            },
+            {
               path: '/demo',
               caption: 'Demo',
             },
@@ -56,16 +79,20 @@ export const PageFrameLayout = ({ children }: WithChildren) => {
               ]),
           ]}
         >
-          <Burger
-            opened={navbarOpened}
-            onClick={navbarToggle}
-            size='md'
-          />
+          {navbarContent &&
+            (
+              <Burger
+                opened={navbarOpened}
+                onClick={() => navbarOpenedSet((v) => !v)}
+                size='md'
+              />
+            )}
           <div>Citations</div>
         </LayoutHeader>
       </AppShell.Header>
 
-      <AppShell.Navbar p='md'>Navbar</AppShell.Navbar>
+      {navbarContent &&
+        <AppShell.Navbar p='md'>{navbarContent}</AppShell.Navbar>}
 
       <AppShell.Main>
         {children}
@@ -73,3 +100,11 @@ export const PageFrameLayout = ({ children }: WithChildren) => {
     </AppShell>
   );
 };
+
+export const PageFrameLayout = ({ children }: WithChildren) => (
+  <PageFrameLayoutContextCreator>
+    <PageFrameLayoutInExistingContext>
+      {children}
+    </PageFrameLayoutInExistingContext>
+  </PageFrameLayoutContextCreator>
+);

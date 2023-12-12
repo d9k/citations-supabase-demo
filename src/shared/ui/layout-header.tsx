@@ -5,8 +5,8 @@ import { Container, Group } from '@mantine/core';
 import { ReactNode } from 'react';
 // import { MantineLogo } from '@mantine/ds';
 // , NavLink
-import { matchPath } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { matchPath, useLocation } from 'react-router-dom';
+import { PathPattern } from 'react-router';
 import { useMantineDarkMode } from '/~/shared/lib/mantine/useMantineDarkMode.ts';
 import { useFela } from '/~/deps/react-fela/index.ts';
 import { cssProps } from '/~/shared/lib/react/cssProps.ts';
@@ -15,7 +15,7 @@ export type MenuItem = {
   active?: boolean;
   key?: string;
   path: string;
-  pathMatchPattern?: string;
+  pathMatchPattern?: string | PathPattern | (string | PathPattern)[];
   caption: string;
 };
 
@@ -44,8 +44,24 @@ export function LayoutHeader({
   const menuNodes = menuItems.map((item) => {
     const location = useLocation();
 
-    const active = item.active ||
-      matchPath(item.pathMatchPattern || item.path, location.pathname);
+    let pathMatchPatterns: (string | PathPattern)[];
+
+    if (Array.isArray(item.pathMatchPattern)) {
+      pathMatchPatterns = item.pathMatchPattern;
+    } else {
+      if (item.pathMatchPattern) {
+        pathMatchPatterns = [item.pathMatchPattern];
+      } else {
+        pathMatchPatterns = [item.path];
+      }
+    }
+
+    const active = (item.active ||
+        pathMatchPatterns.some((pattern) =>
+          !!matchPath(pattern, location.pathname)
+        ))
+      ? true
+      : undefined;
 
     return (
       <a

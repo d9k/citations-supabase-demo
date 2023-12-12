@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import {
   browserCookiesDeleteOnSupabaseSignOut,
   browserCookiesSetOnSupabaseAuth,
@@ -16,8 +14,7 @@ import {
 
 import { Session } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { WithChildren } from '/~/shared/lib/react/WithChildren.ts';
 
 // let singularSupabaseSession: Session | null = null;
