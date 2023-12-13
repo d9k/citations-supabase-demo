@@ -31,7 +31,7 @@ export const PageFrameLayoutContextCreator = ({ children }: WithChildren) => {
   const [
     navbarOpened,
     navbarOpenedSet,
-  ] = useState<boolean>(true);
+  ] = useState<boolean>(false);
 
   const [
     navbarContent,

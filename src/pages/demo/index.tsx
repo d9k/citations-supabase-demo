@@ -6,28 +6,32 @@ import { lazy } from 'react';
 
 const Comments = lazy(() => import('/~/entities/ui/comments.tsx'));
 
-const DemoPage = () => (
-  <main>
-    <h1>
-      Demo
-    </h1>
+const DemoPage = () => {
+  console.log('DemoPage');
 
-    <h2>Fela component demo:</h2>
+  return (
+    <main>
+      <h1>
+        Demo
+      </h1>
 
-    <DemoFelaColorBlock someBaseProp='some value'>
-      Fela colored block content
-    </DemoFelaColorBlock>
+      <h2>Fela component demo:</h2>
 
-    <h2>Mantine component demo:</h2>
+      <DemoFelaColorBlock someBaseProp='some value'>
+        Fela colored block content
+      </DemoFelaColorBlock>
 
-    <Button>__TEST__</Button>
+      <h2>Mantine component demo:</h2>
 
-    <h2>Comments (SSR render delay demo):</h2>
+      <Button>__TEST__</Button>
 
-    <Suspense fallback={<Spinner />}>
-      <Comments date={+new Date()} />
-    </Suspense>
-  </main>
-);
+      <h2>Comments (SSR render delay demo):</h2>
+
+      <Suspense fallback={<Spinner />}>
+        <Comments date={+new Date()} />
+      </Suspense>
+    </main>
+  );
+};
 
 export default DemoPage;

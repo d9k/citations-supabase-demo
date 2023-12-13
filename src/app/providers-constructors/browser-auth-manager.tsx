@@ -16,6 +16,8 @@ import { Session } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { WithChildren } from '/~/shared/lib/react/WithChildren.ts';
+import { useRef } from 'react';
+import { useCallback } from 'react';
 
 // let singularSupabaseSession: Session | null = null;
 
@@ -47,17 +49,39 @@ export type SupabaseBrowserAuthManagerProps = WithChildren & {
 export const SupabaseBrowserAuthManager = (
   { children, queryKeyUniqueSuffix }: SupabaseBrowserAuthManagerProps,
 ) => {
+  console.log('SupabaseBrowserAuthManager rerender');
+
   // const ssrSupabaseUser = useSupabaseUser();
   const supabase = useSupabase();
 
-  const [session, setSession] = useState<Session | null | false>(false);
+  const [session, setSessionRaw] = useState<Session | null | false>(false);
+
+  const sessionRef = useRef(session);
+
+  const setSession = useCallback((newSession: Session | null) => {
+    /**
+     * Prevent forced redraw on tab focus:
+     * [onAuthStateChange (SIGNED\_IN event) Fired everytime I change Chrome Tab or refocus on tab . · Issue #7250 · supabase/supabase](https://github.com/supabase/supabase/issues/7250)
+     */
+    if (JSON.stringify(sessionRef.current) === JSON.stringify(newSession)) {
+      console.debug('SupabaseBrowserAuthManager: no update, the same');
+      return;
+    }
+
+    console.debug('SupabaseBrowserAuthManager: update, new session');
+
+    sessionRef.current = newSession;
+    setSession(newSession);
+  }, [setSessionRaw]);
 
   const { data, error } = useQuery({
-    queryKey: ['SsrSupabaseConstructor_' + queryKeyUniqueSuffix],
+    queryKey: ['SupabaseBrowserAuthManager_' + queryKeyUniqueSuffix],
     queryFn: () => createSupabaseSession(supabase),
   });
 
   useEffect(() => {
+    console.log('SupabaseBrowserAuthManager: useEffect on data changed');
+
     const newSession = data?.data?.session || null;
     if (newSession) {
       browserCookiesSetOnSupabaseAuth(newSession);
@@ -67,7 +91,7 @@ export const SupabaseBrowserAuthManager = (
     if (supabase) {
       supabase.auth.onAuthStateChange((event, newSession) => {
         console.log(
-          '__TEST__: App: onAuthStateChange: session:',
+          'SupabaseBrowserAuthManager: App: onAuthStateChange: session:',
           newSession,
           event,
         );

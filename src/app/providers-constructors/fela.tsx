@@ -39,8 +39,12 @@ export const felaRenderer = createRenderer({
 
 console.log('providers/fela.tsx: renderer created');
 
-export const FelaRendererProviderConstructor = ({ children }: WithChildren) => (
-  <RendererProvider renderer={felaRenderer}>
-    {children}
-  </RendererProvider>
-);
+export const FelaRendererProviderConstructor = ({ children }: WithChildren) => {
+  // console.log('FelaRendererProviderConstructor');
+
+  return (
+    <RendererProvider renderer={felaRenderer}>
+      {children}
+    </RendererProvider>
+  );
+};

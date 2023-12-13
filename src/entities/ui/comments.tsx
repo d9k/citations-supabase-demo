@@ -20,14 +20,15 @@ export type CommentsProps = {
 };
 
 export default function Comments({ date }: CommentsProps) {
-  console.log('Comments');
+  console.log('Comments', date);
 
   const queryResult = useQuery({
+    staleTime: 5000,
     queryKey: ['comments' + date],
     queryFn: fetcher,
   });
 
-  console.log(queryResult);
+  console.log('Comments:', queryResult);
 
   const { data, error } = queryResult;
 

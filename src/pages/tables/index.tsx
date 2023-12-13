@@ -5,6 +5,7 @@ const TablesPage = () => {
     <>
       <PageFrameLayoutProviderContextUpdate
         navbarContent={<p>__TEST__</p>}
+        navbarOpened={true}
       />
       <h3>Tables</h3>
 
