@@ -52,25 +52,28 @@ export const PageFrameLayoutInExistingContext = (
               caption: 'Home',
             },
             {
-              path: '/tables',
-              pathMatchPattern: [
-                { path: '/table', end: false },
-                { path: '/tables', end: false },
-              ],
-              caption: 'Tables',
-            },
-            {
               path: '/demo',
               caption: 'Demo',
             },
             ...(supabaseUser
-              ? [{
-                path: '/profile',
-                caption: `${userName} profile`,
-              }, {
-                path: '/logout',
-                caption: 'Log out',
-              }]
+              ? [
+                {
+                  path: '/tables',
+                  pathMatchPattern: [
+                    { path: '/table', end: false },
+                    { path: '/tables', end: false },
+                  ],
+                  caption: 'Tables',
+                },
+                {
+                  path: '/profile',
+                  caption: `${userName} profile`,
+                },
+                {
+                  path: '/logout',
+                  caption: 'Log out',
+                },
+              ]
               : [
                 {
                   path: '/login',

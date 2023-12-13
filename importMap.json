@@ -52,7 +52,6 @@
     "@supabase/ssr": "https://esm.sh/@supabase/ssr@0.0.10",
 
     "@tanstack/react-query": "https://esm.sh/@tanstack/react-query@4.2.3?external=react",
-
-    "ultra/": "https://deno.land/x/ultra@v2.3.8/"
+    "ultra/": "https://deno.land/x/ultra_fork_d9k@v2.3.8.1/"
   }
 }

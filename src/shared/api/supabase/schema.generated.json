@@ -236,6 +236,17 @@
       }
     },
     "profiles": {
+      "auth_user_id": {
+        "name": "auth_user_id",
+        "nullable": false,
+        "type": "string",
+        "fkInfo": {
+          "foreignField": "id",
+          "fkName": "profiles_id_fkey",
+          "isOneToOne": false,
+          "foreignTable": "users"
+        }
+      },
       "avatar_url": {
         "name": "avatar_url",
         "nullable": true,
@@ -249,13 +260,7 @@
       "id": {
         "name": "id",
         "nullable": false,
-        "type": "string",
-        "fkInfo": {
-          "foreignField": "id",
-          "fkName": "profiles_id_fkey",
-          "isOneToOne": true,
-          "foreignTable": "users"
-        }
+        "type": "number"
       },
       "updated_at": {
         "name": "updated_at",

@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "ultra/": "https://deno.land/x/ultra_fork_d9k@v2.3.8.1/"
+  }
+}

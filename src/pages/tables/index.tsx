@@ -1,10 +1,11 @@
 import { PageFrameLayoutProviderContextUpdate } from '/~/pages/layouts/page-frame/context.tsx';
+import { TablesList } from '/~/features/tables/list.tsx';
 
 const TablesPage = () => {
   return (
     <>
       <PageFrameLayoutProviderContextUpdate
-        navbarContent={<p>__TEST__</p>}
+        navbarContent={<TablesList />}
         navbarOpened={true}
       />
       <h3>Tables</h3>
