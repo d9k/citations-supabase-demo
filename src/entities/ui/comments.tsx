@@ -1,6 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
+import { WithQueryKeyUniqueSuffix } from '/~/shared/lib/react/WithQueryKeyUniqueSuffix.ts';
 
 export const fetcher = async () => {
   const comments = await new Promise((resolve, reject) => {
@@ -15,16 +16,14 @@ export const fetcher = async () => {
   return { comments };
 };
 
-export type CommentsProps = {
-  date: any;
-};
+export type CommentsProps = WithQueryKeyUniqueSuffix;
 
-export default function Comments({ date }: CommentsProps) {
-  console.log('Comments', date);
+export default function Comments({ queryKeyUniqueSuffix }: CommentsProps) {
+  console.log('Comments', queryKeyUniqueSuffix);
 
   const queryResult = useQuery({
     staleTime: 5000,
-    queryKey: ['comments' + date],
+    queryKey: ['comments' + queryKeyUniqueSuffix],
     queryFn: fetcher,
   });
 

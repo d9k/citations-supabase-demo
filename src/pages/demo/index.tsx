@@ -9,10 +9,16 @@ import {
 } from '/~/shared/providers/layout/page-frame.tsx';
 import { randomRange } from '/~/shared/lib/math/random.ts';
 const Comments = lazy(() => import('/~/entities/ui/comments.tsx'));
+import { generateQueryKeyUniqueSuffix } from '/~/shared/lib/react/WithQueryKeyUniqueSuffix.ts';
+import { useState } from 'react';
 
 const DemoPage = () => {
   console.log('DemoPage');
+
+  const [qkey] = useState(() => generateQueryKeyUniqueSuffix());
+
   const PageFrameComponent = usePageFrameLayoutComponent();
+
   const {
     navbarOpenedRef,
     navbarContentRef,
@@ -46,7 +52,7 @@ const DemoPage = () => {
       <h2>Comments (SSR render delay demo):</h2>
 
       <Suspense fallback={<Spinner />}>
-        <Comments date={+new Date()} />
+        <Comments queryKeyUniqueSuffix={qkey} />
       </Suspense>
     </PageFrameComponent>
   );
