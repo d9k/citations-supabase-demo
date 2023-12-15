@@ -1,15 +1,24 @@
-import { DbSchema } from '/~/shared/api/supabase/json-schema.types.ts';
-import schemaData from '/~/shared/api/supabase/schema.generated.json' assert {
-  type: 'json',
-};
-const schema = schemaData as unknown as DbSchema;
+import { publicSchema } from '/~/shared/api/supabase/schemas.ts';
+// import { upperFirst } from 'lodash';
+import _ from 'lodash';
+const { upperFirst } = _;
 
 export const TablesList = () => {
-  console.log('TablesList:', schema);
-  const publicSchema = schema['public'];
+  console.log('TablesList: schemas:', publicSchema);
+  // console.log('upperFirst:', upperFirst);
+  // console.log('lodash:', _);
 
   const list = Object.entries(publicSchema).map(([tableName, _tableSchema]) => {
-    return <a key={tableName} href={`table/${tableName}`}>{tableName}</a>;
+    const href = `table/${tableName}`;
+    const caption = upperFirst(tableName);
+    // const caption = upperFirst(tableName);
+    // const caption = tableName;
+
+    return (
+      <div key={tableName}>
+        <a href={href}>{caption}</a>
+      </div>
+    );
   });
 
   return <>{list}</>;

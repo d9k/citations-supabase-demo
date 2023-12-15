@@ -5,7 +5,7 @@
     "esm:/": "https://esm.sh/",
 
     "dotenv": "https://deno.land/std@0.203.0/dotenv/mod.ts",
-    "lodash": "https://raw.githubusercontent.com/lodash/lodash/4.17.21-es/lodash.js",
+    "lodash": "https://esm.sh/lodash@4.17.21",
 
     "std/fs": "https://deno.land/std@0.176.0/fs/mod.ts",
     "std/path": "https://deno.land/std@0.176.0/path/mod.ts",

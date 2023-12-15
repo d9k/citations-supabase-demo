@@ -1,17 +1,16 @@
-import { PageFrameLayoutProviderContextUpdate } from '/~/pages/layouts/page-frame/context.tsx';
+import { PageFrameLayoutProviderContextUpdate } from '/~/shared/providers/layout/page-frame.tsx';
 import { TablesList } from '/~/features/tables/list.tsx';
+import { usePageFrameLayoutContext } from '/~/shared/providers/layout/page-frame.tsx';
 
 const TablesPage = () => {
+  const { PageFrameComponent } = usePageFrameLayoutContext();
+
   return (
-    <>
-      <PageFrameLayoutProviderContextUpdate
-        navbarContent={<TablesList />}
-        navbarOpened={true}
-      />
+    <PageFrameComponent>
       <h3>Tables</h3>
 
       <p>Select table from the side menu</p>
-    </>
+    </PageFrameComponent>
   );
 };
 

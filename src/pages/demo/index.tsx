@@ -3,14 +3,16 @@ import { DemoFelaColorBlock } from '/~/shared/demo-stories/demoFelaColorBlock.ts
 import { Suspense } from 'react';
 import { Spinner } from '/~/shared/ui/spinner.tsx';
 import { lazy } from 'react';
+import { usePageFrameLayoutContext } from '/~/shared/providers/layout/page-frame.tsx';
 
 const Comments = lazy(() => import('/~/entities/ui/comments.tsx'));
 
 const DemoPage = () => {
   console.log('DemoPage');
+  const { PageFrameComponent } = usePageFrameLayoutContext();
 
   return (
-    <main>
+    <PageFrameComponent>
       <h1>
         Demo
       </h1>
@@ -30,7 +32,7 @@ const DemoPage = () => {
       <Suspense fallback={<Spinner />}>
         <Comments date={+new Date()} />
       </Suspense>
-    </main>
+    </PageFrameComponent>
   );
 };
 

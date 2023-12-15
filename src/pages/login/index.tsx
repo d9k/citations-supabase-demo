@@ -2,8 +2,11 @@ import { useSupabase } from '/~/shared/providers/supabase/client.ts';
 import { OtpForm, OtpFormValues } from '/~/features/auth/OtpForm.tsx';
 import { useCallback } from 'react';
 import { useState } from 'react';
+import { usePageFrameLayoutContext } from '/~/shared/providers/layout/page-frame.tsx';
 
 const LoginPage = () => {
+  const { PageFrameComponent } = usePageFrameLayoutContext();
+
   const [loading, setLoading] = useState(false);
   const supabase = useSupabase();
 
@@ -27,7 +30,11 @@ const LoginPage = () => {
     setLoading(false);
   }, []);
 
-  return <OtpForm onOtpLogin={handleLogin} loading={loading} />;
+  return (
+    <PageFrameComponent>
+      <OtpForm onOtpLogin={handleLogin} loading={loading} />
+    </PageFrameComponent>
+  );
 };
 
 export default LoginPage;

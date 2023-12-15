@@ -7,18 +7,12 @@ import { AppShell, Burger } from '@mantine/core';
 import {
   PageFrameLayoutContextCreator,
   usePageFrameLayoutContext,
-} from './context.tsx';
+} from '/~/shared/providers/layout/page-frame.tsx';
 
-export const PageFrameLayoutInExistingContext = (
+export const PageFrameLayout = (
   { children }: WithChildren,
 ) => {
   const context = usePageFrameLayoutContext();
-
-  if (!context) {
-    throw Error(
-      'No <PageFrameLayoutContext> found. Try use <PageFrameLayout> instead of <PageFrameLayoutInExistingContext>',
-    );
-  }
 
   const {
     navbarOpened,
@@ -103,11 +97,3 @@ export const PageFrameLayoutInExistingContext = (
     </AppShell>
   );
 };
-
-export const PageFrameLayout = ({ children }: WithChildren) => (
-  <PageFrameLayoutContextCreator>
-    <PageFrameLayoutInExistingContext>
-      {children}
-    </PageFrameLayoutInExistingContext>
-  </PageFrameLayoutContextCreator>
-);
