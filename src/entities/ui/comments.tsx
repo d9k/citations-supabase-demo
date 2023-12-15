@@ -22,9 +22,9 @@ export default function Comments({ queryKeyUniqueSuffix }: CommentsProps) {
   console.log('Comments', queryKeyUniqueSuffix);
 
   const queryResult = useQuery({
-    staleTime: 5000,
     queryKey: ['comments' + queryKeyUniqueSuffix],
     queryFn: fetcher,
+    refetchInterval: 5000,
   });
 
   console.log('Comments:', queryResult);

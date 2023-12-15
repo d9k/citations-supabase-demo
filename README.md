@@ -5,12 +5,12 @@ Project in the draft stage, only [Storybook section](#Storybook) is meaningful y
 ## Techologies used
 
 - [Supabase](https://supabase.com)
-- [React](https://react.dev)
+- [React](https://react.dev), [React query](https://tanstack.com/query)
 - [Deno](https://github.com/denoland/deno) instead of Node.js
 - [Ultra](https://ultrajs.dev) as web framework
 - [FELA](https://fela.js.org) for CSS-in-JS
-- [Mantine](https://mantine.dev) for UI components and hooks.
-- [FSD](https://feature-sliced.design/)
+- [Mantine](https://mantine.dev) for UI components and hooks
+- [FSD](https://feature-sliced.design/) as architecture methodology
 - [Storybook](https://storybook.js.org/)
 - [VS Code](https://code.visualstudio.com/Download) (see [IDE configuration section](#vscode-configuration) below)
 

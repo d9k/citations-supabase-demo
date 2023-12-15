@@ -1,4 +1,4 @@
-import { Button } from '@mantine/core';
+import { Button, Stack } from '@mantine/core';
 import { DemoFelaColorBlock } from '/~/shared/demo-stories/demoFelaColorBlock.tsx';
 import { Suspense } from 'react';
 import { Spinner } from '/~/shared/ui/spinner.tsx';
@@ -15,7 +15,7 @@ import { useState } from 'react';
 const DemoPage = () => {
   console.log('DemoPage');
 
-  const [qkey] = useState(() => generateQueryKeyUniqueSuffix());
+  const [qkey, qkeySet] = useState(() => generateQueryKeyUniqueSuffix());
 
   const PageFrameComponent = usePageFrameLayoutComponent();
 
@@ -29,6 +29,10 @@ const DemoPage = () => {
     navbarContentRef.current = randomRange(1, 6);
     navbarOpenedRef.current = true;
     rerender();
+  };
+
+  const updateQKey = () => {
+    qkeySet(generateQueryKeyUniqueSuffix());
   };
 
   return (
@@ -52,6 +56,9 @@ const DemoPage = () => {
       <h2>Comments (SSR render delay demo):</h2>
 
       <Suspense fallback={<Spinner />}>
+        <Button onClick={() => updateQKey()} mb='md'>
+          Update comments
+        </Button>
         <Comments queryKeyUniqueSuffix={qkey} />
       </Suspense>
     </PageFrameComponent>
