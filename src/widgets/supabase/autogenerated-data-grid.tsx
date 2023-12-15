@@ -1,5 +1,5 @@
 import { JsonView } from '/~/shared/ui/json-view.tsx';
-import { WithQueryKeyUniqueSuffix } from '/~/shared/lib/react/WithQueryKeyUniqueSuffix.ts';
+import { WithQueryKeyUniqueSuffix } from '/~/shared/lib/react/query/key.ts';
 import { useQuery } from '@tanstack/react-query';
 import { useSupabase } from '/~/shared/providers/supabase/client.ts';
 

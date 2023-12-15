@@ -1,7 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
-import { WithQueryKeyUniqueSuffix } from '/~/shared/lib/react/WithQueryKeyUniqueSuffix.ts';
+import { WithQueryKeyUniqueSuffix } from '/~/shared/lib/react/query/key.ts';
 
 export const fetcher = async () => {
   const comments = await new Promise((resolve, reject) => {

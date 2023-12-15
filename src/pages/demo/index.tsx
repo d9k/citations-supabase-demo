@@ -9,13 +9,13 @@ import {
 } from '/~/shared/providers/layout/page-frame.tsx';
 import { randomRange } from '/~/shared/lib/math/random.ts';
 const Comments = lazy(() => import('/~/entities/ui/comments.tsx'));
-import { generateQueryKeyUniqueSuffix } from '/~/shared/lib/react/WithQueryKeyUniqueSuffix.ts';
+import { useQueryKeyUniqueSuffix } from '/~/shared/lib/react/query/key.ts';
 import { useState } from 'react';
 
 const DemoPage = () => {
   console.log('DemoPage');
 
-  const [qkey, qkeySet] = useState(() => generateQueryKeyUniqueSuffix());
+  const [qkey, qkeyRegen] = useQueryKeyUniqueSuffix();
 
   const PageFrameComponent = usePageFrameLayoutComponent();
 
@@ -29,10 +29,6 @@ const DemoPage = () => {
     navbarContentRef.current = randomRange(1, 6);
     navbarOpenedRef.current = true;
     rerender();
-  };
-
-  const updateQKey = () => {
-    qkeySet(generateQueryKeyUniqueSuffix());
   };
 
   return (
@@ -56,7 +52,7 @@ const DemoPage = () => {
       <h2>Comments (SSR render delay demo):</h2>
 
       <Suspense fallback={<Spinner />}>
-        <Button onClick={() => updateQKey()} mb='md'>
+        <Button onClick={() => qkeyRegen()} mb='md'>
           Update comments
         </Button>
         <Comments queryKeyUniqueSuffix={qkey} />
