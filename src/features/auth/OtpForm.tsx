@@ -53,7 +53,7 @@ export function OtpForm(
     onOtpLogin,
     initialValues = {},
     loading,
-    title = 'OTP Login',
+    title = 'Login with email only',
     ...props
   }: OtpFormProps,
 ) {

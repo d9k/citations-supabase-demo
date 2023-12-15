@@ -9,7 +9,7 @@ export const TablesList = () => {
   // console.log('lodash:', _);
 
   const list = Object.entries(publicSchema).map(([tableName, _tableSchema]) => {
-    const href = `table/${tableName}`;
+    const href = `/table/${tableName}`;
     const caption = upperFirst(tableName);
     // const caption = upperFirst(tableName);
     // const caption = tableName;
