@@ -10,7 +10,6 @@ import {
 import { randomRange } from '/~/shared/lib/math/random.ts';
 const Comments = lazy(() => import('/~/entities/ui/comments.tsx'));
 import { useQueryKeyUniqueSuffix } from '/~/shared/lib/react/query/key.ts';
-import { useState } from 'react';
 
 const DemoPage = () => {
   console.log('DemoPage');
