@@ -20,6 +20,7 @@ const DemoPage = React.lazy(() => import('/~/pages/demo/index.tsx'));
 const ProfilePage = React.lazy(() => import('/~/pages/profile/index.tsx'));
 const TablePage = React.lazy(() => import('/~/pages/table/index.tsx'));
 const TablesPage = React.lazy(() => import('/~/pages/tables/index.tsx'));
+
 const NavbarTables = React.lazy(() => import('/~/pages/navbar/tables.tsx'));
 
 export const AppRoutes = () => {

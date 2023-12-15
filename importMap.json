@@ -5,7 +5,9 @@
     "esm:/": "https://esm.sh/",
 
     "dotenv": "https://deno.land/std@0.203.0/dotenv/mod.ts",
-    "lodash": "https://esm.sh/lodash@4.17.21",
+
+    "lodash": "https://cdn.skypack.dev/lodash-es@4.17.21?dts",
+    "@types/lodash": "https://cdn.skypack.dev/@types/lodash@v4.14.202?dts",
 
     "std/fs": "https://deno.land/std@0.176.0/fs/mod.ts",
     "std/path": "https://deno.land/std@0.176.0/path/mod.ts",

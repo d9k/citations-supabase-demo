@@ -20,13 +20,12 @@ const TablePage = () => {
   // const user = useSupabase();
   const name = useUrlParamName();
 
-  console.log('__TEST__: TablePage: table name:', name);
-
   if (!name) {
     return <>Error: can't parse url param "name"</>;
   }
 
   const tableSchema = publicSchema[name];
+  console.debug('__TEST__: TablePage: table schema:', tableSchema);
 
   if (!tableSchema) {
     return <>Error: no schema with dis table</>;
@@ -41,6 +40,7 @@ const TablePage = () => {
           tableName={name}
           tableSchema={tableSchema}
           queryKeyUniqueSuffix={qkey}
+          firstColumnsNames={['id', 'name']}
         />
       </Suspense>
     </PageFrameComponent>

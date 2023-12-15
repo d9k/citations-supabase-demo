@@ -17,7 +17,7 @@ const meta = {
 
 console.log('__TEST__: demoDataBoredApiTasks:', demoDataBoredApiTasks);
 
-const columns: readonly Column<BoredApiTask>[] = [
+const columns: Column<BoredApiTask>[] = [
   {
     key: 'key',
     name: 'key',
