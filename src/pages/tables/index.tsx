@@ -1,9 +1,9 @@
 import { PageFrameLayoutProviderContextUpdate } from '/~/shared/providers/layout/page-frame.tsx';
 import { TablesList } from '/~/features/tables/list.tsx';
-import { usePageFrameLayoutContext } from '/~/shared/providers/layout/page-frame.tsx';
+import { usePageFrameLayoutComponent } from '/~/shared/providers/layout/page-frame.tsx';
 
 const TablesPage = () => {
-  const { PageFrameComponent } = usePageFrameLayoutContext();
+  const PageFrameComponent = usePageFrameLayoutComponent();
 
   return (
     <PageFrameComponent>

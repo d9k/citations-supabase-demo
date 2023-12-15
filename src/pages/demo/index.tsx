@@ -3,13 +3,27 @@ import { DemoFelaColorBlock } from '/~/shared/demo-stories/demoFelaColorBlock.ts
 import { Suspense } from 'react';
 import { Spinner } from '/~/shared/ui/spinner.tsx';
 import { lazy } from 'react';
-import { usePageFrameLayoutContext } from '/~/shared/providers/layout/page-frame.tsx';
-
+import {
+  usePageFrameLayoutComponent,
+  usePageFrameLayoutContext,
+} from '/~/shared/providers/layout/page-frame.tsx';
+import { randomRange } from '/~/shared/lib/math/random.ts';
 const Comments = lazy(() => import('/~/entities/ui/comments.tsx'));
 
 const DemoPage = () => {
   console.log('DemoPage');
-  const { PageFrameComponent } = usePageFrameLayoutContext();
+  const PageFrameComponent = usePageFrameLayoutComponent();
+  const {
+    navbarOpenedRef,
+    navbarContentRef,
+    rerender,
+  } = usePageFrameLayoutContext();
+
+  const updateFrameLayoutContext = () => {
+    navbarContentRef.current = randomRange(1, 6);
+    navbarOpenedRef.current = true;
+    rerender();
+  };
 
   return (
     <PageFrameComponent>
@@ -25,7 +39,9 @@ const DemoPage = () => {
 
       <h2>Mantine component demo:</h2>
 
-      <Button>__TEST__</Button>
+      <Button onClick={() => updateFrameLayoutContext()}>
+        Update frame layout context
+      </Button>
 
       <h2>Comments (SSR render delay demo):</h2>
 

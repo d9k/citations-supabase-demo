@@ -6,3 +6,8 @@ type SetStateAction<S> = S | ((prevState: S) => S);
 // >;
 // export type UseStateSetter<T extends {} | null> = UseStateReturnType<T>[1];
 export type UseStateSetter<S> = Dispatch<SetStateAction<S>>;
+
+// MutableRefObject
+export interface UseRefResult<T> {
+  current: T;
+}

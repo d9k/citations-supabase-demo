@@ -1,4 +1,4 @@
-import { usePageFrameLayoutContext } from '/~/shared/providers/layout/page-frame.tsx';
+import { usePageFrameLayoutComponent } from '/~/shared/providers/layout/page-frame.tsx';
 import { useSupabaseUser } from '/~/shared/providers/supabase/user.ts';
 import { useSupabase } from '/~/shared/providers/supabase/client.ts';
 import { Spinner } from '/~/shared/ui/spinner.tsx';
@@ -13,7 +13,7 @@ import { Suspense } from 'react';
 import { publicSchema } from '/~/shared/api/supabase/schemas.ts';
 
 const TablePage = () => {
-  const { PageFrameComponent } = usePageFrameLayoutContext();
+  const PageFrameComponent = usePageFrameLayoutComponent();
   // const [loading, setLoading] = useState(false);
   // const user = useSupabase();
   const name = useUrlParamName();

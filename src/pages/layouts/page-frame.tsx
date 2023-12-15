@@ -5,7 +5,6 @@ import { useSupabaseUser } from '/~/shared/providers/supabase/user.ts';
 import { AppShell, Burger } from '@mantine/core';
 
 import {
-  PageFrameLayoutContextCreator,
   usePageFrameLayoutContext,
 } from '/~/shared/providers/layout/page-frame.tsx';
 
@@ -15,14 +14,18 @@ export const PageFrameLayout = (
   const context = usePageFrameLayoutContext();
 
   const {
-    navbarOpened,
-    navbarOpenedSet,
-    navbarContent,
+    navbarOpenedRef,
+    navbarContentRef,
+    rerendersCount,
+    rerender,
   } = context;
 
   const supabaseUser = useSupabaseUser();
   const email = supabaseUser?.email;
   const userName = email?.split('@')[0];
+
+  const navbarOpened = navbarOpenedRef.current;
+  const navbarContent = navbarContentRef.current;
 
   return (
     <AppShell
@@ -37,6 +40,7 @@ export const PageFrameLayout = (
       }}
       // padding={'md'}
       padding={20}
+      data-rerenders-count={rerendersCount}
     >
       <AppShell.Header>
         <LayoutHeader
@@ -80,7 +84,10 @@ export const PageFrameLayout = (
             (
               <Burger
                 opened={navbarOpened}
-                onClick={() => navbarOpenedSet((v) => !v)}
+                onClick={() => {
+                  navbarOpenedRef.current = !navbarOpenedRef.current;
+                  rerender();
+                }}
                 size='md'
               />
             )}
