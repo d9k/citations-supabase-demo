@@ -1,6 +1,7 @@
 import { WithChildren } from '/~/shared/lib/react/WithChildren.ts';
 import { LayoutHeader } from '/~/shared/ui/layout-header.tsx';
 import { useSupabaseUser } from '/~/shared/providers/supabase/user.ts';
+import { getMenuItems } from './menu-items.tsx';
 
 import { AppShell, Burger } from '@mantine/core';
 
@@ -11,6 +12,8 @@ import {
 export const PageFrameLayout = (
   { children }: WithChildren,
 ) => {
+  console.log('PageFrameLayout: redraw');
+
   const context = usePageFrameLayoutContext();
 
   const {
@@ -19,10 +22,8 @@ export const PageFrameLayout = (
     rerendersCount,
     rerender,
   } = context;
-
   const supabaseUser = useSupabaseUser();
   const email = supabaseUser?.email;
-  const userName = email?.split('@')[0];
 
   const navbarOpened = navbarOpenedRef.current;
   const navbarContent = navbarContentRef.current;
@@ -44,41 +45,7 @@ export const PageFrameLayout = (
     >
       <AppShell.Header>
         <LayoutHeader
-          menuItems={[
-            {
-              path: '/',
-              caption: 'Home',
-            },
-            {
-              path: '/demo',
-              caption: 'Demo',
-            },
-            ...(supabaseUser
-              ? [
-                {
-                  path: '/tables',
-                  pathMatchPattern: [
-                    { path: '/table', end: false },
-                    { path: '/tables', end: false },
-                  ],
-                  caption: 'Tables',
-                },
-                {
-                  path: '/profile',
-                  caption: `${userName} profile`,
-                },
-                {
-                  path: '/logout',
-                  caption: 'Log out',
-                },
-              ]
-              : [
-                {
-                  path: '/login',
-                  caption: 'Login',
-                },
-              ]),
-          ]}
+          menuItems={getMenuItems({ supabaseUser })}
         >
           {navbarContent &&
             (
