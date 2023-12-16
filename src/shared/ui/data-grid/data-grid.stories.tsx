@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import demoDataBoredApiTasks from '/~/shared/demo-data/tasks-from-bored-api.generated.json';
+import demoDataBoredApiTasksRaw from '/~/shared/demo-data/tasks-from-bored-api.generated.json';
 
 import { BoredApiTask } from '/~/shared/demo-data/bored-api-task.ts';
 
@@ -14,6 +14,9 @@ const meta = {
   },
   argTypes: {},
 } satisfies Meta<typeof DataGrid>;
+
+const demoDataBoredApiTasks =
+  demoDataBoredApiTasksRaw as unknown as BoredApiTask[];
 
 console.log('__TEST__: demoDataBoredApiTasks:', demoDataBoredApiTasks);
 
