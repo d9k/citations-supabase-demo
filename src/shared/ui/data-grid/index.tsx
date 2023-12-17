@@ -6,6 +6,7 @@ import VendorDataGrid, {
 
 import { useFela } from '/~/deps/react-fela/index.ts';
 import { cssProps } from '/~/shared/lib/react/cssProps.ts';
+import { EmptyRowsRenderer } from './empty-rows.tsx';
 
 type Key = string | number;
 
@@ -34,6 +35,7 @@ export const DataGrid = <R, SR = unknown, K extends Key = Key>(
           fontFamily: 'var(--mantine-font-family)',
         }),
       })}
+      renderers={{ noRowsFallback: <EmptyRowsRenderer /> }}
     />
   );
 };
