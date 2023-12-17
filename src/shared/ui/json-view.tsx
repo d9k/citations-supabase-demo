@@ -5,4 +5,6 @@ export type JsonViewProps = {
   data: any;
 };
 
-export const JsonView = ({ data }: JsonViewProps) => <pre>{json(data)}</pre>;
+export const JsonView = ({ data }: JsonViewProps) => (
+  <pre style={{ fontSize: '10px' }}>{json(data)}</pre>
+);

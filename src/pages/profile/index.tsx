@@ -1,9 +1,6 @@
 import { useSupabaseUser } from '/~/shared/providers/supabase/user.ts';
-import { useSupabase } from '/~/shared/providers/supabase/client.ts';
-import { Spinner } from '/~/shared/ui/spinner.tsx';
-import { useNavigate } from 'react-router-dom';
-import { json } from '/~/shared/lib/json.ts';
 import { usePageFrameLayoutComponent } from '/~/shared/providers/layout/page-frame.tsx';
+import { JsonView } from '/~/shared/ui/json-view.tsx';
 
 const ProfilePage = () => {
   const PageFrameComponent = usePageFrameLayoutComponent();
@@ -13,9 +10,7 @@ const ProfilePage = () => {
   return (
     <PageFrameComponent>
       <h3>Profile</h3>
-      <pre>
-        {json(user)}
-      </pre>
+      <JsonView data={user} />
     </PageFrameComponent>
   );
 };
