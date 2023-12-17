@@ -5,9 +5,7 @@ import { getMenuItems } from './menu-items.tsx';
 
 import { AppShell, Burger } from '@mantine/core';
 
-import {
-  usePageFrameLayoutContext,
-} from '/~/shared/providers/layout/page-frame.tsx';
+import { usePageFrameLayoutContext } from '/~/shared/providers/layout/page-frame/context.ts';
 
 export const PageFrameLayout = (
   { children }: WithChildren,

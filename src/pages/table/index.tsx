@@ -1,4 +1,4 @@
-import { usePageFrameLayoutComponent } from '/~/shared/providers/layout/page-frame.tsx';
+import { usePageFrameLayoutComponent } from '/~/shared/providers/layout/page-frame/index.tsx';
 import { useSupabaseUser } from '/~/shared/providers/supabase/user.ts';
 import { useSupabase } from '/~/shared/providers/supabase/client.ts';
 import { Spinner } from '/~/shared/ui/spinner.tsx';
@@ -27,7 +27,7 @@ const TablePage = () => {
   }
 
   const tableSchema = publicSchema[name];
-  console.debug('__TEST__: TablePage: table schema:', tableSchema);
+  // console.debug('__TEST__: TablePage: table schema:', tableSchema);
 
   if (!tableSchema) {
     return <>Error: no schema with dis table</>;

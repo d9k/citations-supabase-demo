@@ -3,10 +3,8 @@ import React, { lazy, Suspense } from 'react';
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import { Spinner } from '/~/shared/ui/spinner.tsx';
 import { useSupabaseUser } from '/~/shared/providers/supabase/user.ts';
-import {
-  PageFrameLayoutContextCreator,
-  PageFrameLayoutProviderContextUpdate,
-} from '/~/shared/providers/layout/page-frame.tsx';
+import { PageFrameLayoutProviderContextUpdate } from '/~/shared/providers/layout/page-frame/index.tsx';
+import { PageFrameLayoutContextCreator } from '/~/shared/providers/layout/page-frame/index.tsx';
 
 import { PageFrameLayout } from '/~/pages/layouts/page-frame.tsx';
 import { useUrlParamRetPath } from '/~/shared/lib/react/routing/useUrlParamRetPath.ts';
@@ -61,14 +59,17 @@ export const AppRoutes = () => {
               </PageFrameLayoutProviderContextUpdate>
             }
           >
-            <Route element={<TablePage />} path='table/:name' />
-
             <Route
               element={
                 <PageFrameLayoutProviderContextUpdate navbarOpened={false}>
-                  <TablesPage />
+                  <TablePage />
                 </PageFrameLayoutProviderContextUpdate>
               }
+              path='table/:name'
+            />
+
+            <Route
+              element={<TablesPage />}
               path='tables'
             />
           </Route>

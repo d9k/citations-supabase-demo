@@ -1,4 +1,4 @@
-import { usePageFrameLayoutComponent } from '/~/shared/providers/layout/page-frame.tsx';
+import { usePageFrameLayoutComponent } from '/~/shared/providers/layout/page-frame/index.tsx';
 
 const HomePage = () => {
   const PageFrameComponent = usePageFrameLayoutComponent();

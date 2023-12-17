@@ -1,5 +1,5 @@
 import { useSupabaseUser } from '/~/shared/providers/supabase/user.ts';
-import { usePageFrameLayoutComponent } from '/~/shared/providers/layout/page-frame.tsx';
+import { usePageFrameLayoutComponent } from '/~/shared/providers/layout/page-frame/index.tsx';
 import { JsonView } from '/~/shared/ui/json-view.tsx';
 
 const ProfilePage = () => {

@@ -5,8 +5,8 @@ import { Spinner } from '/~/shared/ui/spinner.tsx';
 import { lazy } from 'react';
 import {
   usePageFrameLayoutComponent,
-  usePageFrameLayoutContext,
-} from '/~/shared/providers/layout/page-frame.tsx';
+} from '/~/shared/providers/layout/page-frame/index.tsx';
+import { usePageFrameLayoutContext } from '/~/shared/providers/layout/page-frame/index.tsx';
 import { randomRange } from '/~/shared/lib/math/random.ts';
 const Comments = lazy(() => import('/~/entities/ui/comments.tsx'));
 import { useQueryKeyUniqueSuffix } from '/~/shared/lib/react/query/key.ts';

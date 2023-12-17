@@ -2,7 +2,7 @@ import { useSupabase } from '/~/shared/providers/supabase/client.ts';
 import { OtpForm, OtpFormValues } from '/~/features/auth/OtpForm.tsx';
 import { useCallback } from 'react';
 import { useState } from 'react';
-import { usePageFrameLayoutComponent } from '/~/shared/providers/layout/page-frame.tsx';
+import { usePageFrameLayoutComponent } from '/~/shared/providers/layout/page-frame/index.tsx';
 
 const LoginPage = () => {
   const PageFrameComponent = usePageFrameLayoutComponent();
