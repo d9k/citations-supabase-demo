@@ -62,7 +62,15 @@ export const AppRoutes = () => {
             }
           >
             <Route element={<TablePage />} path='table/:name' />
-            <Route element={<TablesPage />} path='tables' />
+
+            <Route
+              element={
+                <PageFrameLayoutProviderContextUpdate navbarOpened={false}>
+                  <TablesPage />
+                </PageFrameLayoutProviderContextUpdate>
+              }
+              path='tables'
+            />
           </Route>
 
           <Route

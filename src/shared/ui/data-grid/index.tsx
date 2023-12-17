@@ -7,6 +7,7 @@ import VendorDataGrid, {
 import { useFela } from '/~/deps/react-fela/index.ts';
 import { cssProps } from '/~/shared/lib/react/cssProps.ts';
 import { EmptyRowsRenderer } from './empty-rows.tsx';
+import { useCallback } from 'react';
 
 type Key = string | number;
 
@@ -19,6 +20,10 @@ export type DataGridProps<R, SR = unknown, K extends Key = Key> = Pick<
   VendorDataGridProps<R, SR, K>,
   'rows' | 'columns'
 >;
+
+const handleRowsChange = (a: any) => {
+  console.log(a);
+};
 
 export const DataGrid = <R, SR = unknown, K extends Key = Key>(
   props: DataGridProps<R, SR, K>,
@@ -35,7 +40,8 @@ export const DataGrid = <R, SR = unknown, K extends Key = Key>(
           fontFamily: 'var(--mantine-font-family)',
         }),
       })}
-      renderers={{ noRowsFallback: <EmptyRowsRenderer /> }}
+      onRowsChange={handleRowsChange}
+      renderers={{ noRowsFallback: <EmptyRowsRenderer key='no-rows' /> }}
     />
   );
 };

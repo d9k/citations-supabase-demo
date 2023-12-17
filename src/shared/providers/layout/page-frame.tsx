@@ -143,7 +143,9 @@ export const PageFrameLayoutProviderContextUpdate = ({
   updateRef(pageFrameComponentRef, pageFrameComponent);
 
   if (anyRefUpdated && !firstTime) {
-    rerender();
+    setTimeout(() => {
+      rerender();
+    }, 0);
   }
 
   // useEffect(() => {
