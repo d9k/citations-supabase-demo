@@ -31,6 +31,7 @@
     "@mantine/core": "https://esm.sh/@mantine/core@7.1.2?external=react",
     "@mantine/hooks": "https://esm.sh/@mantine/hooks@7.1.2?external=react",
     "@mantine/form": "https://esm.sh/@mantine/form@7.1.2?external=react",
+    "@mantine/notifications": "https://esm.sh/@mantine/notifications@7.1.2?external=react",
 
     "@types/react-data-grid": "https://cdn.skypack.dev/react-data-grid@7.0.0-beta.41?dts",
     "react-data-grid": "https://esm.sh/react-data-grid@7.0.0-beta.41?external=react",

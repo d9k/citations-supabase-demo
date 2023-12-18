@@ -1,6 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 
 import { AppRoutes } from '/~/app/routes/index.tsx';
+import { Notifications } from '@mantine/notifications';
 
 export type AppProps = {
   cache?: any;
@@ -13,5 +14,10 @@ export default function App({ cache }: AppProps) {
   //   'ULTRA_PUBLIC_SUPABASE_ANON_KEY',
   //   useEnv('ULTRA_PUBLIC_SUPABASE_ANON_KEY'),
   // );
-  return <AppRoutes />;
+  return (
+    <>
+      <Notifications />
+      <AppRoutes />
+    </>
+  );
 }
