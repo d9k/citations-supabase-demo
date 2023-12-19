@@ -134,7 +134,7 @@
       },
       "name": {
         "name": "name",
-        "nullable": true,
+        "nullable": false,
         "type": "string"
       },
       "next_rename_year": {

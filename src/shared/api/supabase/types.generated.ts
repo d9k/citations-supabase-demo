@@ -138,7 +138,7 @@ export interface Database {
           created_at: string
           found_year: number | null
           id: number
-          name: string | null
+          name: string
           next_rename_year: number | null
           updated_at: string | null
         }
@@ -146,7 +146,7 @@ export interface Database {
           created_at?: string
           found_year?: number | null
           id?: number
-          name?: string | null
+          name: string
           next_rename_year?: number | null
           updated_at?: string | null
         }
@@ -154,7 +154,7 @@ export interface Database {
           created_at?: string
           found_year?: number | null
           id?: number
-          name?: string | null
+          name?: string
           next_rename_year?: number | null
           updated_at?: string | null
         }

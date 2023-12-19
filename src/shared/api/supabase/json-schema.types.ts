@@ -23,7 +23,7 @@ export type DbFieldInfo = {
 };
 
 export type DbTable = {
-  [fieldName: string]: DbFieldInfo[];
+  [fieldName: string]: DbFieldInfo;
 };
 
 export type DbSchema = { [tableName: string]: DbTable };
