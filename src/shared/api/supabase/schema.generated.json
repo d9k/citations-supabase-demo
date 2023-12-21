@@ -121,6 +121,17 @@
         "nullable": false,
         "type": "string"
       },
+      "created_by": {
+        "name": "created_by",
+        "nullable": true,
+        "type": "number",
+        "fkInfo": {
+          "foreignField": "id",
+          "fkName": "countries_created_by_fkey",
+          "isOneToOne": false,
+          "foreignTable": "profiles"
+        }
+      },
       "found_year": {
         "name": "found_year",
         "nullable": true,
@@ -147,6 +158,17 @@
         "name": "updated_at",
         "nullable": true,
         "type": "string"
+      },
+      "updated_by": {
+        "name": "updated_by",
+        "nullable": true,
+        "type": "number",
+        "fkInfo": {
+          "foreignField": "id",
+          "fkName": "countries_updated_by_fkey",
+          "isOneToOne": false,
+          "foreignTable": "profiles"
+        }
       }
     },
     "event": {

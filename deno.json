@@ -21,6 +21,8 @@
     "db:dump": "pnpm run db:dump",
     "db:dump:schema": "pnpm run db:dump:schema",
     "db:dump:data": "pnpm run db:dump:data",
+    "db:dump:data:only": "pnpm run db:dump:data:only",
+    "db:dump:data:cleaning": "pnpm run db:dump:data:cleaning",
     "db:dump:migrations": "pnpm run db:dump:migrations",
     "db:gen:typescript": "pnpm run db:gen:typescript",
     "db:migrations": "pnpm run db:migrations",

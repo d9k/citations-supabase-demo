@@ -136,29 +136,50 @@ export interface Database {
       countries: {
         Row: {
           created_at: string
+          created_by: number | null
           found_year: number | null
           id: number
           name: string
           next_rename_year: number | null
           updated_at: string | null
+          updated_by: number | null
         }
         Insert: {
           created_at?: string
-          found_year?: number | null
-          id?: number
-          name: string
-          next_rename_year?: number | null
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string
+          created_by?: number | null
           found_year?: number | null
           id?: number
           name?: string
           next_rename_year?: number | null
           updated_at?: string | null
+          updated_by?: number | null
         }
-        Relationships: []
+        Update: {
+          created_at?: string
+          created_by?: number | null
+          found_year?: number | null
+          id?: number
+          name?: string
+          next_rename_year?: number | null
+          updated_at?: string | null
+          updated_by?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "countries_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "countries_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       event: {
         Row: {
