@@ -9,6 +9,7 @@ export type DbFn = {
   Returns: string;
 };
 
-export type DbFnsSchema = { [functionName: string]: RecordAny };
+/** `string` in case of parse errors */
+export type DbFnsSchema = { [functionName: string]: DbFn | string };
 
 export type DbFnsData = { [schemaName: string]: DbFnsSchema };

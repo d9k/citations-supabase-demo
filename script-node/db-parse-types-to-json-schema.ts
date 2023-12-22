@@ -71,6 +71,7 @@ const resultFunctions: DbFnsData = {};
 const traverseHelperDbSchemas = new BabelTraverseHelper({ maxLevel: 1 });
 const traverseHelperDbSchemaSections = new BabelTraverseHelper({ maxLevel: 1 });
 const traverseHelperDbTables = new BabelTraverseHelper({ maxLevel: 1 });
+const traverseHelperDbFns = new BabelTraverseHelper({ maxLevel: 1 });
 const traverseHelperDbTablesSections = new BabelTraverseHelper({ maxLevel: 1 });
 const traverseHelperDbTablesFields = new BabelTraverseHelper({ maxLevel: 1 });
 
@@ -179,6 +180,50 @@ const visitDatabaseSchemasTables: Visitor = {
   },
 };
 
+const visitDatabaseSchemasFns: Visitor = {
+  TSPropertySignature(path) {
+    const { node } = path;
+
+    traverseHelperDbFns.process(path);
+
+    const fnName = (node.key as any).name;
+
+    const fnInfoString = `${path.get('typeAnnotation.typeAnnotation')}`;
+
+    let fnInfo: DbFnsSchema | string = '';
+
+    const jsonEncodedFnInfoBroken = fnInfoString.replace(
+      /;$/gm,
+      ',',
+    ).replace(/(Record<[^>]*>)/gm, '"$1"')
+      /** }[] */
+      .replace(/[\s]*}\[\]/gm, '\n      __array: true\n    }')
+      /** ?: */
+      .replace(/\?:\s+(\w+)/gm, ': "null | $1"');
+
+    let jsonEncodedFnInfo = '';
+
+    try {
+      jsonEncodedFnInfo = jsonLoose(
+        jsonEncodedFnInfoBroken,
+      );
+
+      fnInfo = JSON.parse(
+        jsonEncodedFnInfo,
+      ) as DbFnsSchema;
+    } catch (e) {
+      console.error(
+        'jsonEncodedFnInfoBroken:',
+        jsonEncodedFnInfoBroken,
+      );
+      console.error('jsonEncodedFnInfo:', jsonEncodedFnInfo);
+      fnInfo = jsonEncodedFnInfoBroken;
+      // throw e;
+    }
+    set(resultFunctions, [currentSchemaName, fnName], fnInfo);
+  },
+};
+
 const visitDatabaseSchemasSection: Visitor = {
   TSPropertySignature(path) {
     const { node } = path;
@@ -192,36 +237,8 @@ const visitDatabaseSchemasSection: Visitor = {
       path.traverse(visitDatabaseSchemasTables);
     }
     if (name === 'Functions') {
-      const fnsDeclarationString = `${
-        path.get('typeAnnotation.typeAnnotation')
-      }`;
-      const jsonEncodedFnsDeclarationsBroken = fnsDeclarationString.replace(
-        /;$/gm,
-        ',',
-      ).replace(/(Record<[^>]*>)/gm, '"$1"')
-        /** }[] */
-        .replace(/[\s]*}\[\]/gm, '\n      __array: true\n    }')
-        /** ?: */
-        .replace(/\?:\s+(\w+)/gm, ': "null | $1"');
-      const jsonEncodedFnDeclarations = jsonLoose(
-        jsonEncodedFnsDeclarationsBroken,
-      );
-
-      let currentSchemaFnsInfo: DbFnsSchema = {};
-
-      try {
-        currentSchemaFnsInfo = JSON.parse(
-          jsonEncodedFnDeclarations,
-        ) as DbFnsSchema;
-      } catch (e) {
-        console.error(
-          'jsonEncodedFnsDeclarationsBroken:',
-          jsonEncodedFnsDeclarationsBroken,
-        );
-        console.error('jsonEncodedFnDeclarations:', jsonEncodedFnDeclarations);
-        throw e;
-      }
-      set(resultFunctions, [currentSchemaName], currentSchemaFnsInfo);
+      traverseHelperDbFns.reset();
+      path.traverse(visitDatabaseSchemasFns);
     }
   },
 };
