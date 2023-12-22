@@ -23,6 +23,29 @@
         "--unhandled-rejections=strict",
         "--nolazy"
       ]
+    },
+    {
+      "name": "db-parse-types-to-json-schema: debug",
+      "type": "node",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**"
+      ],
+      "cwd": "${workspaceRoot}",
+      "internalConsoleOptions": "openOnSessionStart",
+      "env": {
+        "LOCAL_MODE": "true"
+      },
+      "args": [
+        "node_modules/tsx/dist/cli.mjs",
+        "--inspect",
+        "script-node/db-parse-types-to-json-schema.ts"
+      ],
+      "runtimeArgs": [
+        "--unhandled-rejections=strict",
+        "--nolazy"
+      ]
     }
   ]
 }

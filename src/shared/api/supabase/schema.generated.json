@@ -332,6 +332,23 @@
         "nullable": false,
         "type": "string"
       }
+    },
+    "trusts": {
+      "id": {
+        "name": "id",
+        "nullable": false,
+        "type": "number"
+      },
+      "trusts_who": {
+        "name": "trusts_who",
+        "nullable": false,
+        "type": "number"
+      },
+      "who": {
+        "name": "who",
+        "nullable": false,
+        "type": "number"
+      }
     }
   },
   "storage": {

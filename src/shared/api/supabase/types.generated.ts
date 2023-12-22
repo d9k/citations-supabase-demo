@@ -327,6 +327,24 @@ export interface Database {
           }
         ]
       }
+      trusts: {
+        Row: {
+          id: number
+          trusts_who: number
+          who: number
+        }
+        Insert: {
+          id?: number
+          trusts_who: number
+          who: number
+        }
+        Update: {
+          id?: number
+          trusts_who?: number
+          who?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

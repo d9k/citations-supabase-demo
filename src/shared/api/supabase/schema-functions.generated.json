@@ -1,0 +1,104 @@
+{
+  "public": {
+    "delete_claim": {
+      "Args": {
+        "uid": "string",
+        "claim": "string"
+      },
+      "Returns": "string"
+    },
+    "get_claim": {
+      "Args": {
+        "uid": "string",
+        "claim": "string"
+      },
+      "Returns": "Json"
+    },
+    "get_claims": {
+      "Args": {
+        "uid": "string"
+      },
+      "Returns": "Json"
+    },
+    "get_my_claim": {
+      "Args": {
+        "claim": "string"
+      },
+      "Returns": "Json"
+    },
+    "get_my_claims": {
+      "Args": "Record<PropertyKey, never>",
+      "Returns": "Json"
+    },
+    "is_claims_admin": {
+      "Args": "Record<PropertyKey, never>",
+      "Returns": "boolean"
+    },
+    "set_claim": {
+      "Args": {
+        "uid": "string",
+        "claim": "string",
+        "value": "Json"
+      },
+      "Returns": "string"
+    }
+  },
+  "storage": {
+    "can_insert_object": {
+      "Args": {
+        "bucketid": "string",
+        "name": "string",
+        "owner": "string",
+        "metadata": "Json"
+      },
+      "Returns": "undefined"
+    },
+    "extension": {
+      "Args": {
+        "name": "string"
+      },
+      "Returns": "string"
+    },
+    "filename": {
+      "Args": {
+        "name": "string"
+      },
+      "Returns": "string"
+    },
+    "foldername": {
+      "Args": {
+        "name": "string"
+      },
+      "Returns": "unknown"
+    },
+    "get_size_by_bucket": {
+      "Args": "Record<PropertyKey, never>",
+      "Returns": {
+        "size": "number",
+        "bucket_id": "string",
+        "__array": true
+      }
+    },
+    "search": {
+      "Args": {
+        "prefix": "string",
+        "bucketname": "string",
+        "limits": "null | number",
+        "levels": "null | number",
+        "offsets": "null | number",
+        "search": "null | string",
+        "sortcolumn": "null | string",
+        "sortorder": "null | string"
+      },
+      "Returns": {
+        "name": "string",
+        "id": "string",
+        "updated_at": "string",
+        "created_at": "string",
+        "last_accessed_at": "string",
+        "metadata": "Json",
+        "__array": true
+      }
+    }
+  }
+}

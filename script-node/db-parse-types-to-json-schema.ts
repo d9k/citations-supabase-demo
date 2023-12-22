@@ -23,6 +23,10 @@ import {
 
 import { envValueRequire } from '/~/shared/lib/node/env';
 import { json } from '/~/shared/lib/json';
+import {
+  DbFnsData,
+  DbFnsSchema,
+} from '/~/shared/api/supabase/json-db-functions.types';
 
 const inputSupabaseGeneratedTypesPath = envValueRequire(
   'SUPABASE_GENERATED_TYPES_PATH',
@@ -33,6 +37,10 @@ const outputSupabaseRawParsedTypesPath = envValueRequire(
 );
 const outputSupabaseSchemaJsonPath = envValueRequire(
   'SUPABASE_SCHEMA_JSON_PATH',
+);
+
+const outputSupabaseFunctionsJsonPath = envValueRequire(
+  'SUPABASE_FUNCTIONS_JSON_PATH',
 );
 
 const source = fs.readFileSync(inputSupabaseGeneratedTypesPath).toString();
@@ -57,6 +65,8 @@ const parsed = parse(source, {
 // }
 
 const result: DbStructure = {};
+
+const resultFunctions: DbFnsData = {};
 
 const traverseHelperDbSchemas = new BabelTraverseHelper({ maxLevel: 1 });
 const traverseHelperDbSchemaSections = new BabelTraverseHelper({ maxLevel: 1 });
@@ -181,6 +191,38 @@ const visitDatabaseSchemasSection: Visitor = {
       traverseHelperDbTables.reset();
       path.traverse(visitDatabaseSchemasTables);
     }
+    if (name === 'Functions') {
+      const fnsDeclarationString = `${
+        path.get('typeAnnotation.typeAnnotation')
+      }`;
+      const jsonEncodedFnsDeclarationsBroken = fnsDeclarationString.replace(
+        /;$/gm,
+        ',',
+      ).replace(/(Record<[^>]*>)/gm, '"$1"')
+        /** }[] */
+        .replace(/[\s]*}\[\]/gm, '\n      __array: true\n    }')
+        /** ?: */
+        .replace(/\?:\s+(\w+)/gm, ': "null | $1"');
+      const jsonEncodedFnDeclarations = jsonLoose(
+        jsonEncodedFnsDeclarationsBroken,
+      );
+
+      let currentSchemaFnsInfo: DbFnsSchema = {};
+
+      try {
+        currentSchemaFnsInfo = JSON.parse(
+          jsonEncodedFnDeclarations,
+        ) as DbFnsSchema;
+      } catch (e) {
+        console.error(
+          'jsonEncodedFnsDeclarationsBroken:',
+          jsonEncodedFnsDeclarationsBroken,
+        );
+        console.error('jsonEncodedFnDeclarations:', jsonEncodedFnDeclarations);
+        throw e;
+      }
+      set(resultFunctions, [currentSchemaName], currentSchemaFnsInfo);
+    }
   },
 };
 
@@ -226,4 +268,10 @@ console.log(`Writing schema to "${outputSupabaseSchemaJsonPath}"`);
 fs.writeFileSync(
   outputSupabaseSchemaJsonPath,
   json(result),
+);
+
+console.log(`Writing functions info to "${outputSupabaseFunctionsJsonPath}"`);
+fs.writeFileSync(
+  outputSupabaseFunctionsJsonPath,
+  json(resultFunctions),
 );
