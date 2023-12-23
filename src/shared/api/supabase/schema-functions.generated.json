@@ -34,6 +34,7 @@
       "Args": "Record<PropertyKey, never>",
       "Returns": "boolean"
     },
+    "rls_profiles_edit": "{\n  Args: {\n    record: unknown,\n  },\n  Returns: boolean,\n} | {\n  Args: {\n    records: unknown[],\n  },\n  Returns: boolean,\n}",
     "set_claim": {
       "Args": {
         "uid": "string",
@@ -41,6 +42,10 @@
         "value": "Json"
       },
       "Returns": "string"
+    },
+    "temporary_fn": {
+      "Args": "Record<PropertyKey, never>",
+      "Returns": "boolean"
     }
   },
   "storage": {

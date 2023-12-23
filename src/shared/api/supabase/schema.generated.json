@@ -129,7 +129,7 @@
           "foreignField": "id",
           "fkName": "countries_created_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "rls_edit_for_table"
         }
       },
       "found_year": {
@@ -167,7 +167,7 @@
           "foreignField": "id",
           "fkName": "countries_updated_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "rls_edit_for_table"
         }
       }
     },

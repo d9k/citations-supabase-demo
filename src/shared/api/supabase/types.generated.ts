@@ -173,10 +173,24 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "countries_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "rls_edit_for_table"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "countries_updated_by_fkey"
             columns: ["updated_by"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "countries_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "rls_edit_for_table"
             referencedColumns: ["id"]
           }
         ]
@@ -347,7 +361,24 @@ export interface Database {
       }
     }
     Views: {
-      [_ in never]: never
+      rls_edit_for_table: {
+        Row: {
+          editable: boolean | null
+          id: number | null
+          table_name: string | null
+        }
+        Insert: {
+          editable?: never
+          id?: number | null
+          table_name?: never
+        }
+        Update: {
+          editable?: never
+          id?: number | null
+          table_name?: never
+        }
+        Relationships: []
+      }
     }
     Functions: {
       delete_claim: {
@@ -384,6 +415,19 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      rls_profiles_edit:
+        | {
+            Args: {
+              record: unknown
+            }
+            Returns: boolean
+          }
+        | {
+            Args: {
+              records: unknown[]
+            }
+            Returns: boolean
+          }
       set_claim: {
         Args: {
           uid: string
@@ -391,6 +435,10 @@ export interface Database {
           value: Json
         }
         Returns: string
+      }
+      temporary_fn: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
       }
     }
     Enums: {
