@@ -4,10 +4,10 @@ Project in the draft stage, only [Storybook section](#Storybook) is meaningful y
 
 ## Techologies used
 
-- [Supabase](https://supabase.com)
 - [React](https://react.dev), [React query](https://tanstack.com/query)
 - [Deno](https://github.com/denoland/deno) instead of Node.js
 - [Ultra](https://ultrajs.dev) as web framework
+- [Supabase](https://supabase.com) ([PostgreSQL](https://www.postgresql.org/about)) \+ [custom claims](https://github.com/supabase-community/supabase-custom-claims), [RLS](https://supabase.com/docs/guides/auth/row-level-security), [triggers](https://supabase.com/docs/guides/database/postgres/triggers)
 - [FELA](https://fela.js.org) for CSS-in-JS
 - [Mantine](https://mantine.dev) for UI components and hooks
 - [FSD](https://feature-sliced.design/) as architecture methodology
