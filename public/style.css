@@ -35,7 +35,7 @@ h1 span::before {
 }
 
 p {
-  margin: 0 auto 1em;
+  /* margin: 0 auto 1em; */
 }
 
 /* https://codepen.io/mandelid/pen/vwKoe */

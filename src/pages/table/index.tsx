@@ -13,6 +13,9 @@ import {
   FIELDS_SHOW_LAST,
 } from '/~/shared/api/supabase/const.ts';
 
+//@deno-types="@types/lodash"
+import { startCase } from 'lodash';
+
 const TablePage = () => {
   const isBrowser = useRenderOnlyInBrowser();
 
@@ -35,7 +38,7 @@ const TablePage = () => {
 
   return (
     <PageFrameComponent>
-      <h3>Table {name}</h3>
+      <h3>{startCase(name)} table</h3>
 
       {isBrowser
         ? (

@@ -101,13 +101,17 @@ export function OtpForm(
           />
         </Stack>
 
-        {
-          <Group align='flex-end' justify='space-between' mt='xl'>
+        <Stack mt='xl'>
+          <div>
+            Note: sometimes login link doesn't work. If it happens, try to
+            resend link again.
+          </div>
+          <Group align='flex-end' justify='space-between'>
             <Button type='submit' radius='xl' loading={loading}>
               Send one-time password
             </Button>
           </Group>
-        }
+        </Stack>
       </form>
     </Paper>
   );
