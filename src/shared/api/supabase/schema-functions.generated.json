@@ -34,6 +34,34 @@
       "Args": "Record<PropertyKey, never>",
       "Returns": "boolean"
     },
+    "rls_check_delete_by_created_by": {
+      "Args": {
+        "created_by": "number",
+        "allow_trust": "null | boolean",
+        "claim_check": "null | string"
+      },
+      "Returns": "boolean"
+    },
+    "rls_check_edit_by_created_by": {
+      "Args": {
+        "created_by": "number",
+        "allow_trust": "null | boolean",
+        "claim_check": "null | string"
+      },
+      "Returns": "boolean"
+    },
+    "rls_countries_delete": {
+      "Args": {
+        "record": "unknown"
+      },
+      "Returns": "boolean"
+    },
+    "rls_countries_edit": {
+      "Args": {
+        "record": "unknown"
+      },
+      "Returns": "boolean"
+    },
     "rls_profiles_edit": "{\n  Args: {\n    record: unknown,\n  },\n  Returns: boolean,\n} | {\n  Args: {\n    records: unknown[],\n  },\n  Returns: boolean,\n}",
     "set_claim": {
       "Args": {

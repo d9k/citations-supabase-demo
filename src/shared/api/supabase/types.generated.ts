@@ -173,24 +173,10 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "countries_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "rls_edit_for_table"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "countries_updated_by_fkey"
             columns: ["updated_by"]
             isOneToOne: false
             referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "countries_updated_by_fkey"
-            columns: ["updated_by"]
-            isOneToOne: false
-            referencedRelation: "rls_edit_for_table"
             referencedColumns: ["id"]
           }
         ]
@@ -343,18 +329,21 @@ export interface Database {
       }
       trusts: {
         Row: {
+          end_at: string
           id: number
-          trusts_who: number
+          trusts_whom: number
           who: number
         }
         Insert: {
+          end_at?: string
           id?: number
-          trusts_who: number
+          trusts_whom: number
           who: number
         }
         Update: {
+          end_at?: string
           id?: number
-          trusts_who?: number
+          trusts_whom?: number
           who?: number
         }
         Relationships: []
@@ -363,19 +352,10 @@ export interface Database {
     Views: {
       rls_edit_for_table: {
         Row: {
+          deletable: boolean | null
           editable: boolean | null
           id: number | null
           table_name: string | null
-        }
-        Insert: {
-          editable?: never
-          id?: number | null
-          table_name?: never
-        }
-        Update: {
-          editable?: never
-          id?: number | null
-          table_name?: never
         }
         Relationships: []
       }
@@ -413,6 +393,34 @@ export interface Database {
       }
       is_claims_admin: {
         Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      rls_check_delete_by_created_by: {
+        Args: {
+          created_by: number
+          allow_trust?: boolean
+          claim_check?: string
+        }
+        Returns: boolean
+      }
+      rls_check_edit_by_created_by: {
+        Args: {
+          created_by: number
+          allow_trust?: boolean
+          claim_check?: string
+        }
+        Returns: boolean
+      }
+      rls_countries_delete: {
+        Args: {
+          record: unknown
+        }
+        Returns: boolean
+      }
+      rls_countries_edit: {
+        Args: {
+          record: unknown
+        }
         Returns: boolean
       }
       rls_profiles_edit:

@@ -129,7 +129,7 @@
           "foreignField": "id",
           "fkName": "countries_created_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "rls_edit_for_table"
+          "foreignTable": "profiles"
         }
       },
       "found_year": {
@@ -167,7 +167,7 @@
           "foreignField": "id",
           "fkName": "countries_updated_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "rls_edit_for_table"
+          "foreignTable": "profiles"
         }
       }
     },
@@ -334,13 +334,18 @@
       }
     },
     "trusts": {
+      "end_at": {
+        "name": "end_at",
+        "nullable": false,
+        "type": "string"
+      },
       "id": {
         "name": "id",
         "nullable": false,
         "type": "number"
       },
-      "trusts_who": {
-        "name": "trusts_who",
+      "trusts_whom": {
+        "name": "trusts_whom",
         "nullable": false,
         "type": "number"
       },
