@@ -27,7 +27,7 @@
     "db:dump:migrations": "pnpm run db:dump:migrations",
     "db:gen:typescript": "pnpm run db:gen:typescript",
     "db:migrations": "pnpm run db:migrations",
-    "db:migration:create:from-remote": "pnpm run db:migration:create:from-remote",
+    "db:migrations:create:from-remote": "pnpm run db:migrations:create:from-remote",
     "db:pg-dump": "deno run --no-npm -A script/db-pg-dump.ts",
     "supabase": "pnpm exec supabase",
     "example": "pnpm run example",

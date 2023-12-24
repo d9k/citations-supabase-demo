@@ -40,37 +40,57 @@ export interface Database {
           birth_town: number | null
           birth_year: number | null
           created_at: string
+          created_by: number | null
           death_year: number | null
           id: number
           lastname_name_patronymic: string
           updated_at: string
+          updated_by: number | null
         }
         Insert: {
           approximate_years?: boolean
           birth_town?: number | null
           birth_year?: number | null
           created_at?: string
+          created_by?: number | null
           death_year?: number | null
           id?: number
           lastname_name_patronymic: string
           updated_at?: string
+          updated_by?: number | null
         }
         Update: {
           approximate_years?: boolean
           birth_town?: number | null
           birth_year?: number | null
           created_at?: string
+          created_by?: number | null
           death_year?: number | null
           id?: number
           lastname_name_patronymic?: string
           updated_at?: string
+          updated_by?: number | null
         }
         Relationships: [
           {
             foreignKeyName: "authors_birth_town_fkey"
             columns: ["birth_town"]
             isOneToOne: false
-            referencedRelation: "town"
+            referencedRelation: "towns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "authors_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "authors_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
         ]
@@ -79,34 +99,40 @@ export interface Database {
         Row: {
           author_id: number
           created_at: string
+          created_by: number | null
           english_text: string | null
           event_id: number | null
           id: number
           original_language_text: string | null
           place_id: number | null
           updated_at: string
+          updated_by: number | null
           year: number | null
         }
         Insert: {
           author_id: number
           created_at?: string
+          created_by?: number | null
           english_text?: string | null
           event_id?: number | null
           id?: number
           original_language_text?: string | null
           place_id?: number | null
           updated_at?: string
+          updated_by?: number | null
           year?: number | null
         }
         Update: {
           author_id?: number
           created_at?: string
+          created_by?: number | null
           english_text?: string | null
           event_id?: number | null
           id?: number
           original_language_text?: string | null
           place_id?: number | null
           updated_at?: string
+          updated_by?: number | null
           year?: number | null
         }
         Relationships: [
@@ -118,17 +144,31 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "citations_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "citations_event_id_fkey"
             columns: ["event_id"]
             isOneToOne: false
-            referencedRelation: "event"
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "citations_place_id_fkey"
             columns: ["place_id"]
             isOneToOne: false
-            referencedRelation: "place"
+            referencedRelation: "places"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "citations_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
         ]
@@ -181,9 +221,10 @@ export interface Database {
           }
         ]
       }
-      event: {
+      events: {
         Row: {
           created_at: string
+          created_by: number | null
           end_month: number | null
           end_year: number | null
           id: number
@@ -192,9 +233,11 @@ export interface Database {
           start_month: number
           start_year: number
           updated_at: string
+          updated_by: number | null
         }
         Insert: {
           created_at?: string
+          created_by?: number | null
           end_month?: number | null
           end_year?: number | null
           id?: number
@@ -203,9 +246,11 @@ export interface Database {
           start_month: number
           start_year: number
           updated_at?: string
+          updated_by?: number | null
         }
         Update: {
           created_at?: string
+          created_by?: number | null
           end_month?: number | null
           end_year?: number | null
           id?: number
@@ -214,45 +259,80 @@ export interface Database {
           start_month?: number
           start_year?: number
           updated_at?: string
+          updated_by?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "event_place_id_fkey"
+            foreignKeyName: "events_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_place_id_fkey"
             columns: ["place_id"]
             isOneToOne: false
-            referencedRelation: "place"
+            referencedRelation: "places"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
         ]
       }
-      place: {
+      places: {
         Row: {
           created_at: string
+          created_by: number | null
           id: number
           name: string
           town_id: number
           updated_at: string
+          updated_by: number | null
         }
         Insert: {
           created_at?: string
+          created_by?: number | null
           id?: number
           name?: string
           town_id: number
           updated_at?: string
+          updated_by?: number | null
         }
         Update: {
           created_at?: string
+          created_by?: number | null
           id?: number
           name?: string
           town_id?: number
           updated_at?: string
+          updated_by?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "place_town_id_fkey"
+            foreignKeyName: "places_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "places_town_id_fkey"
             columns: ["town_id"]
             isOneToOne: false
-            referencedRelation: "town"
+            referencedRelation: "towns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "places_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
         ]
@@ -261,6 +341,7 @@ export interface Database {
         Row: {
           auth_user_id: string
           avatar_url: string | null
+          created_at: string | null
           full_name: string | null
           id: number
           updated_at: string | null
@@ -270,6 +351,7 @@ export interface Database {
         Insert: {
           auth_user_id: string
           avatar_url?: string | null
+          created_at?: string | null
           full_name?: string | null
           id?: number
           updated_at?: string | null
@@ -279,6 +361,7 @@ export interface Database {
         Update: {
           auth_user_id?: string
           avatar_url?: string | null
+          created_at?: string | null
           full_name?: string | null
           id?: number
           updated_at?: string | null
@@ -295,34 +378,54 @@ export interface Database {
           }
         ]
       }
-      town: {
+      towns: {
         Row: {
           country_id: number
           created_at: string
+          created_by: number | null
           id: number
           name: string
           updated_at: string
+          updated_by: number | null
         }
         Insert: {
           country_id: number
           created_at?: string
+          created_by?: number | null
           id?: number
           name: string
           updated_at?: string
+          updated_by?: number | null
         }
         Update: {
           country_id?: number
           created_at?: string
+          created_by?: number | null
           id?: number
           name?: string
           updated_at?: string
+          updated_by?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "town_country_id_fkey"
+            foreignKeyName: "towns_country_id_fkey"
             columns: ["country_id"]
             isOneToOne: false
             referencedRelation: "countries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "towns_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "towns_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
         ]

@@ -37,8 +37,8 @@ INSERT INTO "auth"."flow_state" ("id", "user_id", "auth_code", "code_challenge_m
 
 INSERT INTO "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at", "last_sign_in_at", "raw_app_meta_data", "raw_user_meta_data", "is_super_admin", "created_at", "updated_at", "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at") VALUES
 	('00000000-0000-0000-0000-000000000000', 'ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d', 'authenticated', 'authenticated', 'd9kd9k@gmail.com', '$2a$10$Nn9Lq26n.a2r92jcs25UI./rgH5OBb1gV6db5GhX.phqVA//i/Lmy', '2023-12-21 14:03:46.059171+00', NULL, '', '2023-12-21 13:53:06.021026+00', '', '2023-12-21 14:04:01.717252+00', '', '', NULL, '2023-12-21 14:04:13.902131+00', '{"provider": "email", "providers": ["email"], "profile_id": 21, "claim_edit_all_content": 1}', '{}', NULL, '2023-12-21 13:53:06.009726+00', '2023-12-23 00:06:21.059545+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
-	('00000000-0000-0000-0000-000000000000', 'e76b244b-6f9e-42fc-b216-5ea74f94bd4c', 'authenticated', 'authenticated', 'gavriillarin263@inbox.lv', '$2a$10$W8/g0R7arxlSsdWrn.5hXOqbolOsyQrpCcAKTOEkoIy2Vekr3vgSS', '2023-12-09 05:25:02.817+00', NULL, '', '2023-12-09 05:24:14.076+00', '', '2023-12-24 13:21:13.896693+00', '', '', NULL, '2023-12-24 13:21:25.863108+00', '{"provider": "email", "providers": ["email"], "profile_id": 19}', NULL, NULL, '2023-12-09 05:24:14.065+00', '2023-12-24 13:21:25.866322+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
-	('00000000-0000-0000-0000-000000000000', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', 'authenticated', 'authenticated', 'd9k@ya.ru', '$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2', '2023-11-30 13:20:52.160287+00', NULL, '', '2023-11-30 13:19:57.235919+00', '', '2023-12-23 03:06:10.700554+00', '', '', NULL, '2023-12-23 03:06:25.370053+00', '{"provider": "email", "providers": ["email"], "profile_id": 1}', '{}', NULL, '2023-11-30 13:19:57.22183+00', '2023-12-24 13:29:48.959871+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
+	('00000000-0000-0000-0000-000000000000', 'e76b244b-6f9e-42fc-b216-5ea74f94bd4c', 'authenticated', 'authenticated', 'gavriillarin263@inbox.lv', '$2a$10$W8/g0R7arxlSsdWrn.5hXOqbolOsyQrpCcAKTOEkoIy2Vekr3vgSS', '2023-12-09 05:25:02.817+00', NULL, '', '2023-12-09 05:24:14.076+00', '', '2023-12-24 13:21:13.896693+00', '', '', NULL, '2023-12-24 13:21:25.863108+00', '{"provider": "email", "providers": ["email"], "profile_id": 19}', NULL, NULL, '2023-12-09 05:24:14.065+00', '2023-12-24 19:53:03.783469+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
+	('00000000-0000-0000-0000-000000000000', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', 'authenticated', 'authenticated', 'd9k@ya.ru', '$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2', '2023-11-30 13:20:52.160287+00', NULL, '', '2023-11-30 13:19:57.235919+00', '', '2023-12-23 03:06:10.700554+00', '', '', NULL, '2023-12-23 03:06:25.370053+00', '{"provider": "email", "providers": ["email"], "profile_id": 1}', '{}', NULL, '2023-11-30 13:19:57.22183+00', '2023-12-24 16:50:30.362062+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
 	('00000000-0000-0000-0000-000000000000', '727a5d27-4b66-49ea-a2c1-0bccc7b8e2cd', 'authenticated', 'authenticated', 'd9k@ya.tu', '$2a$10$OR4GYiMa8vFpk1ywBfPrEeL8yj0TCJxO3joYXdlRezx8Kk6eBjmQ.', NULL, NULL, '45bc98dfe84800707f48a82df0ce417215a7869ba20ba657b46012c1', '2023-12-11 20:49:26.158057+00', '', NULL, '', '', NULL, NULL, '{"provider": "email", "providers": ["email"], "profile_id": 20}', '{}', NULL, '2023-12-11 20:49:26.145323+00', '2023-12-11 20:49:29.413083+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL);
 
 
@@ -85,10 +85,10 @@ INSERT INTO "auth"."identities" ("provider_id", "user_id", "identity_data", "pro
 	('304ff5a0-aa7f-4be0-948a-574dfe3aab41', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', '2023-12-11 20:47:32.716261+00', '2023-12-11 20:47:32.716261+00', NULL, 'aal1', NULL, NULL, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', '94.25.187.158', NULL),
 	('ed5401e1-9fd8-4304-b6ed-21129e618e6b', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', '2023-12-15 15:12:41.319869+00', '2023-12-15 16:32:10.842692+00', NULL, 'aal1', NULL, '2023-12-15 16:32:10.842622', 'Deno/1.38.4', '94.25.187.158', NULL),
 	('73a4d827-c6ea-4ba4-b341-601f97c11793', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', '2023-12-15 16:34:01.759597+00', '2023-12-15 16:34:01.759597+00', NULL, 'aal1', NULL, NULL, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', '94.25.187.158', NULL),
-	('18073615-2a08-49c6-8005-24f056bd2649', 'e76b244b-6f9e-42fc-b216-5ea74f94bd4c', '2023-12-24 13:21:25.863185+00', '2023-12-24 13:21:25.863185+00', NULL, 'aal1', NULL, NULL, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', '94.25.187.158', NULL),
 	('29752073-3cf1-4713-9698-013bd2d6982e', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', '2023-12-19 19:15:05.121435+00', '2023-12-19 20:48:38.166282+00', NULL, 'aal1', NULL, '2023-12-19 20:48:38.166205', 'Deno/1.38.4', '94.25.187.158', NULL),
-	('254763a1-d7f9-4f1d-a326-a457e2a53659', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', '2023-12-23 03:06:25.370128+00', '2023-12-24 13:29:49.766203+00', NULL, 'aal1', NULL, '2023-12-24 13:29:49.76612', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', '94.25.187.158', NULL),
+	('18073615-2a08-49c6-8005-24f056bd2649', 'e76b244b-6f9e-42fc-b216-5ea74f94bd4c', '2023-12-24 13:21:25.863185+00', '2023-12-24 19:53:03.784364+00', NULL, 'aal1', NULL, '2023-12-24 19:53:03.784292', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', '94.25.187.158', NULL),
 	('946e79ab-b3dc-421b-b4da-c85aabb772f0', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', '2023-12-20 11:50:40.524625+00', '2023-12-20 12:43:31.764655+00', NULL, 'aal1', NULL, '2023-12-20 12:43:31.764574', 'Deno/1.38.4', '94.25.187.158', NULL),
+	('254763a1-d7f9-4f1d-a326-a457e2a53659', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', '2023-12-23 03:06:25.370128+00', '2023-12-24 16:50:30.362865+00', NULL, 'aal1', NULL, '2023-12-24 16:50:30.362794', 'Deno/1.38.4', '94.25.187.158', NULL),
 	('ec442ecd-1e46-4dd3-8ceb-e8b6e12930a5', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', '2023-12-20 14:53:49.484797+00', '2023-12-20 15:20:24.686477+00', NULL, 'aal1', NULL, '2023-12-20 15:20:24.686404', 'Deno/1.38.4', '94.25.187.158', NULL),
 	('ba214b77-9e60-40e6-b4bb-aec101dd2e45', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', '2023-12-19 04:51:10.849971+00', '2023-12-19 12:48:58.181591+00', NULL, 'aal1', NULL, '2023-12-19 12:48:58.181518', 'Deno/1.38.4', '94.25.187.158', NULL),
 	('e336e347-853f-497a-afff-0b60220109d5', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', '2023-12-21 10:00:11.395436+00', '2023-12-21 13:46:17.951813+00', NULL, 'aal1', NULL, '2023-12-21 13:46:17.951741', 'Deno/1.38.4', '94.25.187.158', NULL);
@@ -154,11 +154,11 @@ INSERT INTO "auth"."identities" ("provider_id", "user_id", "identity_data", "pro
 -- Data for Name: profiles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."profiles" ("auth_user_id", "updated_at", "username", "full_name", "avatar_url", "website", "id") VALUES
-	('e76b244b-6f9e-42fc-b216-5ea74f94bd4c', NULL, 'gavriillarin263', NULL, NULL, NULL, 19),
-	('b5f563a3-b794-49d0-a0e3-dbf9fffd2321', NULL, 'd9k', 'y66y6y6767', NULL, NULL, 1),
-	('ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d', NULL, 'd9kd9k', NULL, NULL, NULL, 21),
-	('727a5d27-4b66-49ea-a2c1-0bccc7b8e2cd', NULL, '____1', NULL, NULL, NULL, 20);
+INSERT INTO "public"."profiles" ("auth_user_id", "updated_at", "username", "full_name", "avatar_url", "website", "id", "created_at") VALUES
+	('e76b244b-6f9e-42fc-b216-5ea74f94bd4c', NULL, 'gavriillarin263', NULL, NULL, NULL, 19, '2023-12-24 19:26:15.651828+00'),
+	('b5f563a3-b794-49d0-a0e3-dbf9fffd2321', NULL, 'd9k', 'y66y6y6767', NULL, NULL, 1, '2023-12-24 19:26:15.651828+00'),
+	('ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d', NULL, 'd9kd9k', NULL, NULL, NULL, 21, '2023-12-24 19:26:15.651828+00'),
+	('727a5d27-4b66-49ea-a2c1-0bccc7b8e2cd', NULL, '____1', NULL, NULL, NULL, 20, '2023-12-24 19:26:15.651828+00');
 
 
 --
@@ -175,7 +175,7 @@ INSERT INTO "public"."countries" ("id", "name", "created_at", "updated_at", "fou
 
 
 --
--- Data for Name: town; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: towns; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 
@@ -187,13 +187,13 @@ INSERT INTO "public"."countries" ("id", "name", "created_at", "updated_at", "fou
 
 
 --
--- Data for Name: place; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: places; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 
 
 --
--- Data for Name: event; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 
@@ -236,7 +236,7 @@ INSERT INTO "storage"."buckets" ("id", "name", "owner", "created_at", "updated_a
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 736, true);
+SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 764, true);
 
 
 --

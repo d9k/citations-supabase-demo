@@ -14,7 +14,7 @@
           "foreignField": "id",
           "fkName": "authors_birth_town_fkey",
           "isOneToOne": false,
-          "foreignTable": "town"
+          "foreignTable": "towns"
         },
         "description": "town of birth (test description)"
       },
@@ -27,6 +27,17 @@
         "name": "created_at",
         "nullable": false,
         "type": "string"
+      },
+      "created_by": {
+        "name": "created_by",
+        "nullable": true,
+        "type": "number",
+        "fkInfo": {
+          "foreignField": "id",
+          "fkName": "authors_created_by_fkey",
+          "isOneToOne": false,
+          "foreignTable": "profiles"
+        }
       },
       "death_year": {
         "name": "death_year",
@@ -48,6 +59,17 @@
         "name": "updated_at",
         "nullable": false,
         "type": "string"
+      },
+      "updated_by": {
+        "name": "updated_by",
+        "nullable": true,
+        "type": "number",
+        "fkInfo": {
+          "foreignField": "id",
+          "fkName": "authors_updated_by_fkey",
+          "isOneToOne": false,
+          "foreignTable": "profiles"
+        }
       }
     },
     "citations": {
@@ -67,6 +89,17 @@
         "nullable": false,
         "type": "string"
       },
+      "created_by": {
+        "name": "created_by",
+        "nullable": true,
+        "type": "number",
+        "fkInfo": {
+          "foreignField": "id",
+          "fkName": "citations_created_by_fkey",
+          "isOneToOne": false,
+          "foreignTable": "profiles"
+        }
+      },
       "english_text": {
         "name": "english_text",
         "nullable": true,
@@ -80,7 +113,7 @@
           "foreignField": "id",
           "fkName": "citations_event_id_fkey",
           "isOneToOne": false,
-          "foreignTable": "event"
+          "foreignTable": "events"
         }
       },
       "id": {
@@ -101,13 +134,24 @@
           "foreignField": "id",
           "fkName": "citations_place_id_fkey",
           "isOneToOne": false,
-          "foreignTable": "place"
+          "foreignTable": "places"
         }
       },
       "updated_at": {
         "name": "updated_at",
         "nullable": false,
         "type": "string"
+      },
+      "updated_by": {
+        "name": "updated_by",
+        "nullable": true,
+        "type": "number",
+        "fkInfo": {
+          "foreignField": "id",
+          "fkName": "citations_updated_by_fkey",
+          "isOneToOne": false,
+          "foreignTable": "profiles"
+        }
       },
       "year": {
         "name": "year",
@@ -171,11 +215,22 @@
         }
       }
     },
-    "event": {
+    "events": {
       "created_at": {
         "name": "created_at",
         "nullable": false,
         "type": "string"
+      },
+      "created_by": {
+        "name": "created_by",
+        "nullable": true,
+        "type": "number",
+        "fkInfo": {
+          "foreignField": "id",
+          "fkName": "events_created_by_fkey",
+          "isOneToOne": false,
+          "foreignTable": "profiles"
+        }
       },
       "end_month": {
         "name": "end_month",
@@ -203,9 +258,9 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "event_place_id_fkey",
+          "fkName": "events_place_id_fkey",
           "isOneToOne": false,
-          "foreignTable": "place"
+          "foreignTable": "places"
         }
       },
       "start_month": {
@@ -222,13 +277,35 @@
         "name": "updated_at",
         "nullable": false,
         "type": "string"
+      },
+      "updated_by": {
+        "name": "updated_by",
+        "nullable": true,
+        "type": "number",
+        "fkInfo": {
+          "foreignField": "id",
+          "fkName": "events_updated_by_fkey",
+          "isOneToOne": false,
+          "foreignTable": "profiles"
+        }
       }
     },
-    "place": {
+    "places": {
       "created_at": {
         "name": "created_at",
         "nullable": false,
         "type": "string"
+      },
+      "created_by": {
+        "name": "created_by",
+        "nullable": true,
+        "type": "number",
+        "fkInfo": {
+          "foreignField": "id",
+          "fkName": "places_created_by_fkey",
+          "isOneToOne": false,
+          "foreignTable": "profiles"
+        }
       },
       "id": {
         "name": "id",
@@ -246,15 +323,26 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "place_town_id_fkey",
+          "fkName": "places_town_id_fkey",
           "isOneToOne": false,
-          "foreignTable": "town"
+          "foreignTable": "towns"
         }
       },
       "updated_at": {
         "name": "updated_at",
         "nullable": false,
         "type": "string"
+      },
+      "updated_by": {
+        "name": "updated_by",
+        "nullable": true,
+        "type": "number",
+        "fkInfo": {
+          "foreignField": "id",
+          "fkName": "places_updated_by_fkey",
+          "isOneToOne": false,
+          "foreignTable": "profiles"
+        }
       }
     },
     "profiles": {
@@ -271,6 +359,11 @@
       },
       "avatar_url": {
         "name": "avatar_url",
+        "nullable": true,
+        "type": "string"
+      },
+      "created_at": {
+        "name": "created_at",
         "nullable": true,
         "type": "string"
       },
@@ -300,14 +393,14 @@
         "type": "string"
       }
     },
-    "town": {
+    "towns": {
       "country_id": {
         "name": "country_id",
         "nullable": false,
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "town_country_id_fkey",
+          "fkName": "towns_country_id_fkey",
           "isOneToOne": false,
           "foreignTable": "countries"
         }
@@ -316,6 +409,17 @@
         "name": "created_at",
         "nullable": false,
         "type": "string"
+      },
+      "created_by": {
+        "name": "created_by",
+        "nullable": true,
+        "type": "number",
+        "fkInfo": {
+          "foreignField": "id",
+          "fkName": "towns_created_by_fkey",
+          "isOneToOne": false,
+          "foreignTable": "profiles"
+        }
       },
       "id": {
         "name": "id",
@@ -331,6 +435,17 @@
         "name": "updated_at",
         "nullable": false,
         "type": "string"
+      },
+      "updated_by": {
+        "name": "updated_by",
+        "nullable": true,
+        "type": "number",
+        "fkInfo": {
+          "foreignField": "id",
+          "fkName": "towns_updated_by_fkey",
+          "isOneToOne": false,
+          "foreignTable": "profiles"
+        }
       }
     },
     "trusts": {
