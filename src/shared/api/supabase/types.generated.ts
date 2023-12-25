@@ -498,6 +498,18 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      rls_authors_delete: {
+        Args: {
+          record: unknown
+        }
+        Returns: boolean
+      }
+      rls_authors_edit: {
+        Args: {
+          record: unknown
+        }
+        Returns: boolean
+      }
       rls_check_delete_by_created_by: {
         Args: {
           created_by: number
@@ -514,6 +526,18 @@ export interface Database {
         }
         Returns: boolean
       }
+      rls_citations_delete: {
+        Args: {
+          record: unknown
+        }
+        Returns: boolean
+      }
+      rls_citations_edit: {
+        Args: {
+          record: unknown
+        }
+        Returns: boolean
+      }
       rls_countries_delete: {
         Args: {
           record: unknown
@@ -521,6 +545,30 @@ export interface Database {
         Returns: boolean
       }
       rls_countries_edit: {
+        Args: {
+          record: unknown
+        }
+        Returns: boolean
+      }
+      rls_events_delete: {
+        Args: {
+          record: unknown
+        }
+        Returns: boolean
+      }
+      rls_events_edit: {
+        Args: {
+          record: unknown
+        }
+        Returns: boolean
+      }
+      rls_places_delete: {
+        Args: {
+          record: unknown
+        }
+        Returns: boolean
+      }
+      rls_places_edit: {
         Args: {
           record: unknown
         }
@@ -539,6 +587,18 @@ export interface Database {
             }
             Returns: boolean
           }
+      rls_towns_delete: {
+        Args: {
+          record: unknown
+        }
+        Returns: boolean
+      }
+      rls_towns_edit: {
+        Args: {
+          record: unknown
+        }
+        Returns: boolean
+      }
       set_claim: {
         Args: {
           uid: string

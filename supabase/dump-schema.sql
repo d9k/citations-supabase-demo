@@ -189,6 +189,45 @@ $$;
 
 ALTER FUNCTION "public"."is_claims_admin"() OWNER TO "postgres";
 
+SET default_tablespace = '';
+
+SET default_table_access_method = "heap";
+
+CREATE TABLE IF NOT EXISTS "public"."authors" (
+    "id" bigint NOT NULL,
+    "lastname_name_patronymic" "text" NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "birth_year" bigint,
+    "death_year" bigint,
+    "approximate_years" boolean DEFAULT false NOT NULL,
+    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "birth_town" bigint,
+    "created_by" bigint,
+    "updated_by" bigint
+);
+
+ALTER TABLE "public"."authors" OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."rls_authors_delete"("record" "public"."authors") RETURNS boolean
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN rls_check_delete_by_created_by(record.created_by);
+END;
+$$;
+
+ALTER FUNCTION "public"."rls_authors_delete"("record" "public"."authors") OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."rls_authors_edit"("record" "public"."authors") RETURNS boolean
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN rls_check_edit_by_created_by(record.created_by);
+END;
+$$;
+
+ALTER FUNCTION "public"."rls_authors_edit"("record" "public"."authors") OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."rls_check_delete_by_created_by"("created_by" bigint, "allow_trust" boolean DEFAULT true, "claim_check" character varying DEFAULT 'claim_delete_all_content'::character varying) RETURNS boolean
     LANGUAGE "plpgsql"
     AS $$
@@ -224,9 +263,41 @@ $$;
 
 ALTER FUNCTION "public"."rls_check_edit_by_created_by"("created_by" bigint, "allow_trust" boolean, "claim_check" character varying) OWNER TO "postgres";
 
-SET default_tablespace = '';
+CREATE TABLE IF NOT EXISTS "public"."citations" (
+    "id" bigint NOT NULL,
+    "english_text" "text",
+    "author_id" bigint NOT NULL,
+    "year" bigint,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp without time zone DEFAULT "now"() NOT NULL,
+    "original_language_text" "text",
+    "place_id" bigint,
+    "event_id" bigint,
+    "created_by" bigint,
+    "updated_by" bigint
+);
 
-SET default_table_access_method = "heap";
+ALTER TABLE "public"."citations" OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."rls_citations_delete"("record" "public"."citations") RETURNS boolean
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN rls_check_delete_by_created_by(record.created_by);
+END;
+$$;
+
+ALTER FUNCTION "public"."rls_citations_delete"("record" "public"."citations") OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."rls_citations_edit"("record" "public"."citations") RETURNS boolean
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN rls_check_edit_by_created_by(record.created_by);
+END;
+$$;
+
+ALTER FUNCTION "public"."rls_citations_edit"("record" "public"."citations") OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."countries" (
     "id" bigint NOT NULL,
@@ -261,6 +332,74 @@ END;
 $$;
 
 ALTER FUNCTION "public"."rls_countries_edit"("record" "public"."countries") OWNER TO "postgres";
+
+CREATE TABLE IF NOT EXISTS "public"."events" (
+    "id" bigint NOT NULL,
+    "name" "text" NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "start_year" bigint NOT NULL,
+    "start_month" smallint NOT NULL,
+    "end_year" bigint,
+    "end_month" smallint,
+    "place_id" bigint,
+    "created_by" bigint,
+    "updated_by" bigint
+);
+
+ALTER TABLE "public"."events" OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."rls_events_delete"("record" "public"."events") RETURNS boolean
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN rls_check_delete_by_created_by(record.created_by);
+END;
+$$;
+
+ALTER FUNCTION "public"."rls_events_delete"("record" "public"."events") OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."rls_events_edit"("record" "public"."events") RETURNS boolean
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN rls_check_edit_by_created_by(record.created_by);
+END;
+$$;
+
+ALTER FUNCTION "public"."rls_events_edit"("record" "public"."events") OWNER TO "postgres";
+
+CREATE TABLE IF NOT EXISTS "public"."places" (
+    "id" bigint NOT NULL,
+    "name" "text" DEFAULT 'in'::"text" NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "town_id" bigint NOT NULL,
+    "created_by" bigint,
+    "updated_by" bigint
+);
+
+ALTER TABLE "public"."places" OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."rls_places_delete"("record" "public"."places") RETURNS boolean
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN rls_check_delete_by_created_by(record.created_by);
+END;
+$$;
+
+ALTER FUNCTION "public"."rls_places_delete"("record" "public"."places") OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."rls_places_edit"("record" "public"."places") RETURNS boolean
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN rls_check_edit_by_created_by(record.created_by);
+END;
+$$;
+
+ALTER FUNCTION "public"."rls_places_edit"("record" "public"."places") OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."profiles" (
     "auth_user_id" "uuid" NOT NULL,
@@ -302,6 +441,39 @@ $$;
 
 ALTER FUNCTION "public"."rls_profiles_edit"("record" "public"."profiles") OWNER TO "postgres";
 
+CREATE TABLE IF NOT EXISTS "public"."towns" (
+    "id" bigint NOT NULL,
+    "name" "text" NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "country_id" bigint NOT NULL,
+    "created_by" bigint,
+    "updated_by" bigint,
+    CONSTRAINT "towns_name_check" CHECK (("length"("name") > 0))
+);
+
+ALTER TABLE "public"."towns" OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."rls_towns_delete"("record" "public"."towns") RETURNS boolean
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN rls_check_delete_by_created_by(record.created_by);
+END;
+$$;
+
+ALTER FUNCTION "public"."rls_towns_delete"("record" "public"."towns") OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."rls_towns_edit"("record" "public"."towns") RETURNS boolean
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    RETURN rls_check_edit_by_created_by(record.created_by);
+END;
+$$;
+
+ALTER FUNCTION "public"."rls_towns_edit"("record" "public"."towns") OWNER TO "postgres";
+
 CREATE OR REPLACE FUNCTION "public"."set_claim"("uid" "uuid", "claim" "text", "value" "jsonb") RETURNS "text"
     LANGUAGE "plpgsql" SECURITY DEFINER
     SET "search_path" TO 'public'
@@ -331,21 +503,6 @@ $$;
 
 ALTER FUNCTION "public"."temporary_fn"() OWNER TO "postgres";
 
-CREATE TABLE IF NOT EXISTS "public"."authors" (
-    "id" bigint NOT NULL,
-    "lastname_name_patronymic" "text" NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "birth_year" bigint,
-    "death_year" bigint,
-    "approximate_years" boolean DEFAULT false NOT NULL,
-    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "birth_town" bigint,
-    "created_by" bigint,
-    "updated_by" bigint
-);
-
-ALTER TABLE "public"."authors" OWNER TO "postgres";
-
 ALTER TABLE "public"."authors" ALTER COLUMN "id" ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME "public"."author_id_seq"
     START WITH 1
@@ -354,22 +511,6 @@ ALTER TABLE "public"."authors" ALTER COLUMN "id" ADD GENERATED BY DEFAULT AS IDE
     NO MAXVALUE
     CACHE 1
 );
-
-CREATE TABLE IF NOT EXISTS "public"."citations" (
-    "id" bigint NOT NULL,
-    "english_text" "text",
-    "author_id" bigint NOT NULL,
-    "year" bigint,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "updated_at" timestamp without time zone DEFAULT "now"() NOT NULL,
-    "original_language_text" "text",
-    "place_id" bigint,
-    "event_id" bigint,
-    "created_by" bigint,
-    "updated_by" bigint
-);
-
-ALTER TABLE "public"."citations" OWNER TO "postgres";
 
 ALTER TABLE "public"."citations" ALTER COLUMN "id" ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME "public"."citations_id_seq"
@@ -389,22 +530,6 @@ ALTER TABLE "public"."countries" ALTER COLUMN "id" ADD GENERATED BY DEFAULT AS I
     CACHE 1
 );
 
-CREATE TABLE IF NOT EXISTS "public"."events" (
-    "id" bigint NOT NULL,
-    "name" "text" NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "start_year" bigint NOT NULL,
-    "start_month" smallint NOT NULL,
-    "end_year" bigint,
-    "end_month" smallint,
-    "place_id" bigint,
-    "created_by" bigint,
-    "updated_by" bigint
-);
-
-ALTER TABLE "public"."events" OWNER TO "postgres";
-
 ALTER TABLE "public"."events" ALTER COLUMN "id" ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME "public"."event_id_seq"
     START WITH 1
@@ -413,18 +538,6 @@ ALTER TABLE "public"."events" ALTER COLUMN "id" ADD GENERATED BY DEFAULT AS IDEN
     NO MAXVALUE
     CACHE 1
 );
-
-CREATE TABLE IF NOT EXISTS "public"."places" (
-    "id" bigint NOT NULL,
-    "name" "text" DEFAULT 'in'::"text" NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "town_id" bigint NOT NULL,
-    "created_by" bigint,
-    "updated_by" bigint
-);
-
-ALTER TABLE "public"."places" OWNER TO "postgres";
 
 ALTER TABLE "public"."places" ALTER COLUMN "id" ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME "public"."place_id_seq"
@@ -455,21 +568,15 @@ UNION
     "countries"."id",
     "public"."rls_countries_edit"("countries".*) AS "editable",
     "public"."rls_countries_delete"("countries".*) AS "deletable"
-   FROM "public"."countries";
+   FROM "public"."countries"
+UNION
+ SELECT 'towns'::"text" AS "table_name",
+    "towns"."id",
+    "public"."rls_towns_edit"("towns".*) AS "editable",
+    "public"."rls_towns_delete"("towns".*) AS "deletable"
+   FROM "public"."towns";
 
 ALTER TABLE "public"."rls_edit_for_table" OWNER TO "postgres";
-
-CREATE TABLE IF NOT EXISTS "public"."towns" (
-    "id" bigint NOT NULL,
-    "name" "text" NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "country_id" bigint NOT NULL,
-    "created_by" bigint,
-    "updated_by" bigint
-);
-
-ALTER TABLE "public"."towns" OWNER TO "postgres";
 
 ALTER TABLE "public"."towns" ALTER COLUMN "id" ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME "public"."town_id_seq"
@@ -618,21 +725,71 @@ CREATE POLICY "Enable read access for all users" ON "public"."trusts" FOR SELECT
 
 CREATE POLICY "Public profiles are viewable by everyone." ON "public"."profiles" FOR SELECT USING (true);
 
-CREATE POLICY "RLS: countries: delete" ON "public"."countries" FOR DELETE TO "authenticated" USING ("public"."rls_countries_edit"("countries".*));
+CREATE POLICY "RLS: authors: delete" ON "public"."authors" FOR DELETE TO "authenticated" USING ("public"."rls_authors_edit"("authors".*));
+
+CREATE POLICY "RLS: authors: insert" ON "public"."authors" FOR INSERT TO "authenticated" WITH CHECK ("public"."rls_authors_edit"("authors".*));
+
+CREATE POLICY "RLS: authors: select" ON "public"."authors" FOR SELECT USING (true);
+
+CREATE POLICY "RLS: authors: update" ON "public"."authors" FOR UPDATE TO "authenticated" USING ("public"."rls_authors_edit"("authors".*)) WITH CHECK ("public"."rls_authors_edit"("authors".*));
+
+CREATE POLICY "RLS: citations: delete" ON "public"."citations" FOR DELETE TO "authenticated" USING ("public"."rls_citations_edit"("citations".*));
+
+CREATE POLICY "RLS: citations: insert" ON "public"."citations" FOR INSERT TO "authenticated" WITH CHECK ("public"."rls_citations_edit"("citations".*));
+
+CREATE POLICY "RLS: citations: select" ON "public"."citations" FOR SELECT USING (true);
+
+CREATE POLICY "RLS: citations: update" ON "public"."citations" FOR UPDATE TO "authenticated" USING ("public"."rls_citations_edit"("citations".*)) WITH CHECK ("public"."rls_citations_edit"("citations".*));
+
+CREATE POLICY "RLS: countries: delete" ON "public"."countries" FOR DELETE TO "authenticated" USING ("public"."rls_countries_delete"("countries".*));
 
 CREATE POLICY "RLS: countries: insert" ON "public"."countries" FOR INSERT TO "authenticated" WITH CHECK ("public"."rls_countries_edit"("countries".*));
 
 CREATE POLICY "RLS: countries: select" ON "public"."countries" FOR SELECT USING (true);
 
-CREATE POLICY "RLS: countries: update" ON "public"."countries" FOR UPDATE TO "authenticated" WITH CHECK ("public"."rls_countries_edit"("countries".*));
+CREATE POLICY "RLS: countries: update" ON "public"."countries" FOR UPDATE TO "authenticated" USING ("public"."rls_countries_edit"("countries".*)) WITH CHECK ("public"."rls_countries_edit"("countries".*));
+
+CREATE POLICY "RLS: events: delete" ON "public"."events" FOR DELETE TO "authenticated" USING ("public"."rls_events_edit"("events".*));
+
+CREATE POLICY "RLS: events: insert" ON "public"."events" FOR INSERT TO "authenticated" WITH CHECK ("public"."rls_events_edit"("events".*));
+
+CREATE POLICY "RLS: events: select" ON "public"."events" FOR SELECT USING (true);
+
+CREATE POLICY "RLS: events: update" ON "public"."events" FOR UPDATE TO "authenticated" USING ("public"."rls_events_edit"("events".*)) WITH CHECK ("public"."rls_events_edit"("events".*));
+
+CREATE POLICY "RLS: places: delete" ON "public"."places" FOR DELETE TO "authenticated" USING ("public"."rls_places_edit"("places".*));
+
+CREATE POLICY "RLS: places: insert" ON "public"."places" FOR INSERT TO "authenticated" WITH CHECK ("public"."rls_places_edit"("places".*));
+
+CREATE POLICY "RLS: places: select" ON "public"."places" FOR SELECT USING (true);
+
+CREATE POLICY "RLS: places: update" ON "public"."places" FOR UPDATE TO "authenticated" USING ("public"."rls_places_edit"("places".*)) WITH CHECK ("public"."rls_places_edit"("places".*));
+
+CREATE POLICY "RLS: towns: delete" ON "public"."towns" FOR DELETE TO "authenticated" USING ("public"."rls_towns_edit"("towns".*));
+
+CREATE POLICY "RLS: towns: insert" ON "public"."towns" FOR INSERT TO "authenticated" WITH CHECK ("public"."rls_towns_edit"("towns".*));
+
+CREATE POLICY "RLS: towns: select" ON "public"."towns" FOR SELECT USING (true);
+
+CREATE POLICY "RLS: towns: update" ON "public"."towns" FOR UPDATE TO "authenticated" USING ("public"."rls_towns_edit"("towns".*)) WITH CHECK ("public"."rls_towns_edit"("towns".*));
 
 CREATE POLICY "Users can insert their own profile." ON "public"."profiles" FOR INSERT WITH CHECK (("auth"."uid"() = "auth_user_id"));
 
 CREATE POLICY "Users can update own profile." ON "public"."profiles" FOR UPDATE USING ("public"."rls_profiles_edit"("profiles".*));
 
+ALTER TABLE "public"."authors" ENABLE ROW LEVEL SECURITY;
+
+ALTER TABLE "public"."citations" ENABLE ROW LEVEL SECURITY;
+
 ALTER TABLE "public"."countries" ENABLE ROW LEVEL SECURITY;
 
+ALTER TABLE "public"."events" ENABLE ROW LEVEL SECURITY;
+
+ALTER TABLE "public"."places" ENABLE ROW LEVEL SECURITY;
+
 ALTER TABLE "public"."profiles" ENABLE ROW LEVEL SECURITY;
+
+ALTER TABLE "public"."towns" ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE "public"."trusts" ENABLE ROW LEVEL SECURITY;
 
@@ -682,6 +839,18 @@ GRANT ALL ON FUNCTION "public"."is_claims_admin"() TO "anon";
 GRANT ALL ON FUNCTION "public"."is_claims_admin"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."is_claims_admin"() TO "service_role";
 
+GRANT ALL ON TABLE "public"."authors" TO "anon";
+GRANT ALL ON TABLE "public"."authors" TO "authenticated";
+GRANT ALL ON TABLE "public"."authors" TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."rls_authors_delete"("record" "public"."authors") TO "anon";
+GRANT ALL ON FUNCTION "public"."rls_authors_delete"("record" "public"."authors") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."rls_authors_delete"("record" "public"."authors") TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."rls_authors_edit"("record" "public"."authors") TO "anon";
+GRANT ALL ON FUNCTION "public"."rls_authors_edit"("record" "public"."authors") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."rls_authors_edit"("record" "public"."authors") TO "service_role";
+
 GRANT ALL ON FUNCTION "public"."rls_check_delete_by_created_by"("created_by" bigint, "allow_trust" boolean, "claim_check" character varying) TO "anon";
 GRANT ALL ON FUNCTION "public"."rls_check_delete_by_created_by"("created_by" bigint, "allow_trust" boolean, "claim_check" character varying) TO "authenticated";
 GRANT ALL ON FUNCTION "public"."rls_check_delete_by_created_by"("created_by" bigint, "allow_trust" boolean, "claim_check" character varying) TO "service_role";
@@ -689,6 +858,18 @@ GRANT ALL ON FUNCTION "public"."rls_check_delete_by_created_by"("created_by" big
 GRANT ALL ON FUNCTION "public"."rls_check_edit_by_created_by"("created_by" bigint, "allow_trust" boolean, "claim_check" character varying) TO "anon";
 GRANT ALL ON FUNCTION "public"."rls_check_edit_by_created_by"("created_by" bigint, "allow_trust" boolean, "claim_check" character varying) TO "authenticated";
 GRANT ALL ON FUNCTION "public"."rls_check_edit_by_created_by"("created_by" bigint, "allow_trust" boolean, "claim_check" character varying) TO "service_role";
+
+GRANT ALL ON TABLE "public"."citations" TO "anon";
+GRANT ALL ON TABLE "public"."citations" TO "authenticated";
+GRANT ALL ON TABLE "public"."citations" TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."rls_citations_delete"("record" "public"."citations") TO "anon";
+GRANT ALL ON FUNCTION "public"."rls_citations_delete"("record" "public"."citations") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."rls_citations_delete"("record" "public"."citations") TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."rls_citations_edit"("record" "public"."citations") TO "anon";
+GRANT ALL ON FUNCTION "public"."rls_citations_edit"("record" "public"."citations") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."rls_citations_edit"("record" "public"."citations") TO "service_role";
 
 GRANT ALL ON TABLE "public"."countries" TO "anon";
 GRANT ALL ON TABLE "public"."countries" TO "authenticated";
@@ -702,6 +883,30 @@ GRANT ALL ON FUNCTION "public"."rls_countries_edit"("record" "public"."countries
 GRANT ALL ON FUNCTION "public"."rls_countries_edit"("record" "public"."countries") TO "authenticated";
 GRANT ALL ON FUNCTION "public"."rls_countries_edit"("record" "public"."countries") TO "service_role";
 
+GRANT ALL ON TABLE "public"."events" TO "anon";
+GRANT ALL ON TABLE "public"."events" TO "authenticated";
+GRANT ALL ON TABLE "public"."events" TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."rls_events_delete"("record" "public"."events") TO "anon";
+GRANT ALL ON FUNCTION "public"."rls_events_delete"("record" "public"."events") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."rls_events_delete"("record" "public"."events") TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."rls_events_edit"("record" "public"."events") TO "anon";
+GRANT ALL ON FUNCTION "public"."rls_events_edit"("record" "public"."events") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."rls_events_edit"("record" "public"."events") TO "service_role";
+
+GRANT ALL ON TABLE "public"."places" TO "anon";
+GRANT ALL ON TABLE "public"."places" TO "authenticated";
+GRANT ALL ON TABLE "public"."places" TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."rls_places_delete"("record" "public"."places") TO "anon";
+GRANT ALL ON FUNCTION "public"."rls_places_delete"("record" "public"."places") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."rls_places_delete"("record" "public"."places") TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."rls_places_edit"("record" "public"."places") TO "anon";
+GRANT ALL ON FUNCTION "public"."rls_places_edit"("record" "public"."places") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."rls_places_edit"("record" "public"."places") TO "service_role";
+
 GRANT ALL ON TABLE "public"."profiles" TO "anon";
 GRANT ALL ON TABLE "public"."profiles" TO "authenticated";
 GRANT ALL ON TABLE "public"."profiles" TO "service_role";
@@ -714,6 +919,18 @@ GRANT ALL ON FUNCTION "public"."rls_profiles_edit"("record" "public"."profiles")
 GRANT ALL ON FUNCTION "public"."rls_profiles_edit"("record" "public"."profiles") TO "authenticated";
 GRANT ALL ON FUNCTION "public"."rls_profiles_edit"("record" "public"."profiles") TO "service_role";
 
+GRANT ALL ON TABLE "public"."towns" TO "anon";
+GRANT ALL ON TABLE "public"."towns" TO "authenticated";
+GRANT ALL ON TABLE "public"."towns" TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."rls_towns_delete"("record" "public"."towns") TO "anon";
+GRANT ALL ON FUNCTION "public"."rls_towns_delete"("record" "public"."towns") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."rls_towns_delete"("record" "public"."towns") TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."rls_towns_edit"("record" "public"."towns") TO "anon";
+GRANT ALL ON FUNCTION "public"."rls_towns_edit"("record" "public"."towns") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."rls_towns_edit"("record" "public"."towns") TO "service_role";
+
 GRANT ALL ON FUNCTION "public"."set_claim"("uid" "uuid", "claim" "text", "value" "jsonb") TO "anon";
 GRANT ALL ON FUNCTION "public"."set_claim"("uid" "uuid", "claim" "text", "value" "jsonb") TO "authenticated";
 GRANT ALL ON FUNCTION "public"."set_claim"("uid" "uuid", "claim" "text", "value" "jsonb") TO "service_role";
@@ -722,17 +939,9 @@ GRANT ALL ON FUNCTION "public"."temporary_fn"() TO "anon";
 GRANT ALL ON FUNCTION "public"."temporary_fn"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."temporary_fn"() TO "service_role";
 
-GRANT ALL ON TABLE "public"."authors" TO "anon";
-GRANT ALL ON TABLE "public"."authors" TO "authenticated";
-GRANT ALL ON TABLE "public"."authors" TO "service_role";
-
 GRANT ALL ON SEQUENCE "public"."author_id_seq" TO "anon";
 GRANT ALL ON SEQUENCE "public"."author_id_seq" TO "authenticated";
 GRANT ALL ON SEQUENCE "public"."author_id_seq" TO "service_role";
-
-GRANT ALL ON TABLE "public"."citations" TO "anon";
-GRANT ALL ON TABLE "public"."citations" TO "authenticated";
-GRANT ALL ON TABLE "public"."citations" TO "service_role";
 
 GRANT ALL ON SEQUENCE "public"."citations_id_seq" TO "anon";
 GRANT ALL ON SEQUENCE "public"."citations_id_seq" TO "authenticated";
@@ -742,17 +951,9 @@ GRANT ALL ON SEQUENCE "public"."country_id_seq" TO "anon";
 GRANT ALL ON SEQUENCE "public"."country_id_seq" TO "authenticated";
 GRANT ALL ON SEQUENCE "public"."country_id_seq" TO "service_role";
 
-GRANT ALL ON TABLE "public"."events" TO "anon";
-GRANT ALL ON TABLE "public"."events" TO "authenticated";
-GRANT ALL ON TABLE "public"."events" TO "service_role";
-
 GRANT ALL ON SEQUENCE "public"."event_id_seq" TO "anon";
 GRANT ALL ON SEQUENCE "public"."event_id_seq" TO "authenticated";
 GRANT ALL ON SEQUENCE "public"."event_id_seq" TO "service_role";
-
-GRANT ALL ON TABLE "public"."places" TO "anon";
-GRANT ALL ON TABLE "public"."places" TO "authenticated";
-GRANT ALL ON TABLE "public"."places" TO "service_role";
 
 GRANT ALL ON SEQUENCE "public"."place_id_seq" TO "anon";
 GRANT ALL ON SEQUENCE "public"."place_id_seq" TO "authenticated";
@@ -765,10 +966,6 @@ GRANT ALL ON SEQUENCE "public"."profiles_id_seq" TO "service_role";
 GRANT ALL ON TABLE "public"."rls_edit_for_table" TO "anon";
 GRANT ALL ON TABLE "public"."rls_edit_for_table" TO "authenticated";
 GRANT ALL ON TABLE "public"."rls_edit_for_table" TO "service_role";
-
-GRANT ALL ON TABLE "public"."towns" TO "anon";
-GRANT ALL ON TABLE "public"."towns" TO "authenticated";
-GRANT ALL ON TABLE "public"."towns" TO "service_role";
 
 GRANT ALL ON SEQUENCE "public"."town_id_seq" TO "anon";
 GRANT ALL ON SEQUENCE "public"."town_id_seq" TO "authenticated";
