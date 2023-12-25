@@ -453,7 +453,16 @@ export interface Database {
       }
     }
     Views: {
-      rls_edit_for_table: {
+      view_id_name: {
+        Row: {
+          id: number | null
+          name: string | null
+          short_name: string | null
+          table_name: string | null
+        }
+        Relationships: []
+      }
+      view_rls_edit_for_table: {
         Row: {
           deletable: boolean | null
           editable: boolean | null
@@ -610,6 +619,13 @@ export interface Database {
           uid: string
           claim: string
           value: Json
+        }
+        Returns: string
+      }
+      string_limit: {
+        Args: {
+          s: string
+          max_length: number
         }
         Returns: string
       }

@@ -137,6 +137,13 @@
       },
       "Returns": "string"
     },
+    "string_limit": {
+      "Args": {
+        "s": "string",
+        "max_length": "number"
+      },
+      "Returns": "string"
+    },
     "temporary_fn": {
       "Args": "Record<PropertyKey, never>",
       "Returns": "boolean"

@@ -9,12 +9,16 @@ import { useFela } from '/~/deps/react-fela/index.ts';
 import { cssProps } from '/~/shared/lib/react/cssProps.ts';
 import { EmptyRowsRenderer } from './empty-rows.tsx';
 
+import { RecordAny } from '/~/shared/lib/ts/record-any.ts';
+
 type Key = string | number;
 
 export type Column<TRow, TSummaryRow = unknown> = VendorColumn<
   TRow,
   TSummaryRow
 >;
+
+export type ColumnAny = Column<RecordAny>;
 
 export type DataGridProps<R, SR = unknown, K extends Key = Key> =
   VendorDataGridProps<R, SR, K>;

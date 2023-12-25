@@ -13,9 +13,12 @@ const NO_CHANGE_JUST_TEST = false;
 
 const CLEANING_PATTERNS = [
   /INSERT INTO "auth"."audit_log_entries"[^;]+;/gm,
+  /INSERT INTO "auth"."flow_state"[^;]+;/gm,
   /INSERT INTO "auth"."mfa_amr_claims"[^;]+;/gm,
   /INSERT INTO "auth"."refresh_tokens"[^;]+;/gm,
-  /INSERT INTO "auth"."sessions"[^;]+;/gm,
+
+  /** Non-greedy https://stackoverflow.com/a/7124976/1760643 */
+  /INSERT INTO "auth"\."sessions".+?\);/gms,
 ];
 
 console.log(`Cleaning "${SUPABASE_DUMP_DATA_PATH}" with:`);

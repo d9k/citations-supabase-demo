@@ -27,8 +27,7 @@ SET row_security = off;
 -- Data for Name: flow_state; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
 --
 
-INSERT INTO "auth"."flow_state" ("id", "user_id", "auth_code", "code_challenge_method", "code_challenge", "provider_type", "provider_access_token", "provider_refresh_token", "created_at", "updated_at", "authentication_method") VALUES
-	('1f34cdf7-e7f0-4970-b263-19eb162bd846', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', '74d7e329-90c8-4d0b-b2d6-b75ecbd9cd57', 's256', 'OnWj5HXsonAXWE8-k2YDItq11wbqjXrtFJej8NkAO1g', 'email', '', '', '2023-11-30 13:19:57.233808+00', '2023-11-30 13:19:57.233808+00', 'email/signup');
+
 
 
 --
@@ -37,8 +36,8 @@ INSERT INTO "auth"."flow_state" ("id", "user_id", "auth_code", "code_challenge_m
 
 INSERT INTO "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at", "last_sign_in_at", "raw_app_meta_data", "raw_user_meta_data", "is_super_admin", "created_at", "updated_at", "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at") VALUES
 	('00000000-0000-0000-0000-000000000000', 'e76b244b-6f9e-42fc-b216-5ea74f94bd4c', 'authenticated', 'authenticated', 'gavriillarin263@inbox.lv', '$2a$10$W8/g0R7arxlSsdWrn.5hXOqbolOsyQrpCcAKTOEkoIy2Vekr3vgSS', '2023-12-09 05:25:02.817+00', NULL, '', '2023-12-09 05:24:14.076+00', '', '2023-12-24 13:21:13.896693+00', '', '', NULL, '2023-12-24 13:21:25.863108+00', '{"provider": "email", "providers": ["email"], "profile_id": 19}', NULL, NULL, '2023-12-09 05:24:14.065+00', '2023-12-24 23:26:51.847117+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
-	('00000000-0000-0000-0000-000000000000', 'ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d', 'authenticated', 'authenticated', 'd9kd9k@gmail.com', '$2a$10$Nn9Lq26n.a2r92jcs25UI./rgH5OBb1gV6db5GhX.phqVA//i/Lmy', '2023-12-21 14:03:46.059171+00', NULL, '', '2023-12-21 13:53:06.021026+00', '', '2023-12-24 23:31:21.017153+00', '', '', NULL, '2023-12-24 23:31:41.685951+00', '{"provider": "email", "providers": ["email"], "profile_id": 21, "claim_edit_all_content": 1}', '{}', NULL, '2023-12-21 13:53:06.009726+00', '2023-12-25 01:18:45.355131+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
-	('00000000-0000-0000-0000-000000000000', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', 'authenticated', 'authenticated', 'd9k@ya.ru', '$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2', '2023-11-30 13:20:52.160287+00', NULL, '', '2023-11-30 13:19:57.235919+00', '', '2023-12-25 01:30:19.771787+00', '', '', NULL, '2023-12-25 01:30:31.922428+00', '{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}', '{}', NULL, '2023-11-30 13:19:57.22183+00', '2023-12-25 01:30:31.92406+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
+	('00000000-0000-0000-0000-000000000000', 'ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d', 'authenticated', 'authenticated', 'd9kd9k@gmail.com', '$2a$10$Nn9Lq26n.a2r92jcs25UI./rgH5OBb1gV6db5GhX.phqVA//i/Lmy', '2023-12-21 14:03:46.059171+00', NULL, '', '2023-12-21 13:53:06.021026+00', '', '2023-12-24 23:31:21.017153+00', '', '', NULL, '2023-12-24 23:31:41.685951+00', '{"provider": "email", "providers": ["email"], "profile_id": 21, "claim_edit_all_content": 1}', '{}', NULL, '2023-12-21 13:53:06.009726+00', '2023-12-25 10:58:20.440871+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
+	('00000000-0000-0000-0000-000000000000', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', 'authenticated', 'authenticated', 'd9k@ya.ru', '$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2', '2023-11-30 13:20:52.160287+00', NULL, '', '2023-11-30 13:19:57.235919+00', '', '2023-12-25 01:30:19.771787+00', '', '', NULL, '2023-12-25 01:30:31.922428+00', '{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}', '{}', NULL, '2023-11-30 13:19:57.22183+00', '2023-12-25 23:05:02.200186+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
 	('00000000-0000-0000-0000-000000000000', '727a5d27-4b66-49ea-a2c1-0bccc7b8e2cd', 'authenticated', 'authenticated', 'd9k@ya.tu', '$2a$10$OR4GYiMa8vFpk1ywBfPrEeL8yj0TCJxO3joYXdlRezx8Kk6eBjmQ.', NULL, NULL, '45bc98dfe84800707f48a82df0ce417215a7869ba20ba657b46012c1', '2023-12-11 20:49:26.158057+00', '', NULL, '', '', NULL, NULL, '{"provider": "email", "providers": ["email"], "profile_id": 20}', '{}', NULL, '2023-12-11 20:49:26.145323+00', '2023-12-11 20:49:29.413083+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL);
 
 
@@ -62,11 +61,7 @@ INSERT INTO "auth"."identities" ("provider_id", "user_id", "identity_data", "pro
 -- Data for Name: sessions; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
 --
 
- Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', '94.25.187.158', NULL),
-	('db18e052-e83b-401e-ae15-a399dd391b21', 'ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d', '2023-12-24 23:31:41.686023+00', '2023-12-25 01:19:00.676148+00', NULL, 'aal1', NULL, '2023-12-25 01:19:00.67606', 'Deno/1.38.4', '94.25.187.158', NULL),
-	('e59874a7-ab5f-4cc1-b6f5-46bb24b01e9d', 'ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d', '2023-12-24 23:26:04.854161+00', '2023-12-24 23:26:04.854161+00', NULL, 'aal1', NULL, NULL, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', '94.25.187.158', NULL),
-	('18073615-2a08-49c6-8005-24f056bd2649', 'e76b244b-6f9e-42fc-b216-5ea74f94bd4c', '2023-12-24 13:21:25.863185+00', '2023-12-24 23:26:51.847992+00', NULL, 'aal1', NULL, '2023-12-24 23:26:51.847909', 'Deno/1.38.4', '94.25.187.158', NULL),
-	('6883e778-9346-49a8-add0-fbd0c27a6986', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', '2023-12-25 01:30:31.922501+00', '2023-12-25 01:30:31.922501+00', NULL, 'aal1', NULL, NULL, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', '94.25.187.158', NULL);
+
 
 
 --
@@ -214,7 +209,7 @@ INSERT INTO "storage"."buckets" ("id", "name", "owner", "created_at", "updated_a
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 798, true);
+SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 845, true);
 
 
 --
