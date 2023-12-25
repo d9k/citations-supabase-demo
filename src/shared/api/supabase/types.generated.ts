@@ -599,6 +599,12 @@ export interface Database {
         }
         Returns: boolean
       }
+      rls_trusts_edit: {
+        Args: {
+          record: unknown
+        }
+        Returns: boolean
+      }
       set_claim: {
         Args: {
           uid: string
