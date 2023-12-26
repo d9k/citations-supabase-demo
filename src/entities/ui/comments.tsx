@@ -17,11 +17,13 @@ export const fetcher = async () => {
 
 export type CommentsProps = WithQueryKeyUniqueSuffix;
 
+export const ELEMENT_NAME = 'Comments';
+
 export default function Comments({ queryKeyUniqueSuffix }: CommentsProps) {
-  console.log('Comments', queryKeyUniqueSuffix);
+  console.log(ELEMENT_NAME, queryKeyUniqueSuffix);
 
   const queryResult = useQuery({
-    queryKey: ['comments' + queryKeyUniqueSuffix],
+    queryKey: [ELEMENT_NAME, queryKeyUniqueSuffix],
     queryFn: fetcher,
     refetchInterval: 5000,
   });

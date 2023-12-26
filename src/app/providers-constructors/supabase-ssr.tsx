@@ -124,12 +124,14 @@ const testAsyncFn = async (i: number) => {
 const promise = testAsyncFn(2);
 const wrappedPromise = wrapPromiseForSuspend(promise);
 
+export const ELEMENT_NAME = 'SsrSupabaseConstructor';
+
 export const SsrSupabaseConstructor = (
   { children, queryKeyUniqueSuffix, ...restProps }: SsrSupabaseConstructorProps,
 ) => {
   const { data, error } = useQuery({
     // const { data, error } = useSuspenseQuery({
-    queryKey: ['SsrSupabaseConstructor_' + queryKeyUniqueSuffix],
+    queryKey: [ELEMENT_NAME, queryKeyUniqueSuffix],
     queryFn: () => ssrSupabaseConstructorHelper({ ...restProps }),
     // queryFn: async () => {
     //   await sleepMs(300);

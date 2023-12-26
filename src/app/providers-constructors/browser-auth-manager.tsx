@@ -46,10 +46,12 @@ export type SupabaseBrowserAuthManagerProps = WithChildren & {
   queryKeyUniqueSuffix: string;
 };
 
+export const ELEMENT_NAME = 'SupabaseBrowserAuthManager';
+
 export const SupabaseBrowserAuthManager = (
   { children, queryKeyUniqueSuffix }: SupabaseBrowserAuthManagerProps,
 ) => {
-  console.log('SupabaseBrowserAuthManager rerender');
+  console.debug(`${ELEMENT_NAME} rerender`);
 
   // const ssrSupabaseUser = useSupabaseUser();
   const supabase = useSupabase();
@@ -64,23 +66,23 @@ export const SupabaseBrowserAuthManager = (
      * [onAuthStateChange (SIGNED\_IN event) Fired everytime I change Chrome Tab or refocus on tab . · Issue #7250 · supabase/supabase](https://github.com/supabase/supabase/issues/7250)
      */
     if (JSON.stringify(sessionRef.current) === JSON.stringify(newSession)) {
-      console.debug('SupabaseBrowserAuthManager: no update, the same');
+      console.debug(`${ELEMENT_NAME} : no update, the same`);
       return;
     }
 
-    console.debug('SupabaseBrowserAuthManager: update, new session');
+    console.debug(`${ELEMENT_NAME} : update, new session`);
 
     sessionRef.current = newSession;
     setSession(newSession);
   }, [setSessionRaw]);
 
   const { data, error } = useQuery({
-    queryKey: ['SupabaseBrowserAuthManager_' + queryKeyUniqueSuffix],
+    queryKey: [ELEMENT_NAME, queryKeyUniqueSuffix],
     queryFn: () => createSupabaseSession(supabase),
   });
 
   useEffect(() => {
-    console.log('SupabaseBrowserAuthManager: useEffect on data changed');
+    console.log(`${ELEMENT_NAME}: useEffect on data changed`);
 
     const newSession = data?.data?.session || null;
     if (newSession) {
@@ -91,7 +93,7 @@ export const SupabaseBrowserAuthManager = (
     if (supabase) {
       supabase.auth.onAuthStateChange((event, newSession) => {
         console.log(
-          'SupabaseBrowserAuthManager: App: onAuthStateChange: session:',
+          `{ELEMENT_NAME}: App: onAuthStateChange: session:`,
           newSession,
           event,
         );
