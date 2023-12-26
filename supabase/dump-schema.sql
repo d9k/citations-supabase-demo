@@ -643,7 +643,8 @@ UNION
     "towns"."id",
     "towns"."name",
     "public"."string_limit"(("towns"."name")::character varying, 20) AS "short_name"
-   FROM "public"."towns";
+   FROM "public"."towns"
+  ORDER BY 1, 4;
 
 ALTER TABLE "public"."view_id_name" OWNER TO "postgres";
 
