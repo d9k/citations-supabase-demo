@@ -1,13 +1,13 @@
-import { ComboboxItem, Select } from '@mantine/core';
+import { Select } from '@mantine/core';
 
 // @deno-types="@types/react-data-grid"
 import { RenderEditCellProps } from 'react-data-grid';
 
-export type CellDropdownSelectorItem = ComboboxItem;
+import { SelectorItem } from './types.ts';
 
 export interface CellDropdownSelectorProps<TRow, TSummaryRow = unknown>
   extends RenderEditCellProps<TRow, TSummaryRow> {
-  data: CellDropdownSelectorItem[];
+  data: SelectorItem[];
 }
 
 /* See react-data-grid: src/editors/textEditor.tsx  */
