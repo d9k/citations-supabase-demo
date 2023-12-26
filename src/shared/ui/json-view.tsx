@@ -6,5 +6,5 @@ export type JsonViewProps = {
 };
 
 export const JsonView = ({ data }: JsonViewProps) => (
-  <pre style={{ fontSize: '10px' }}>{json(data)}</pre>
+  <pre style={{ fontSize: '10px', whiteSpace: 'pre-wrap' }}>{json(data)}</pre>
 );

@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { WithQueryKeyUniqueSuffix } from '/~/shared/lib/react/query/key.ts';
-import { RecordAny } from '/~/shared/lib/ts/record-any.ts';
 import { useSupabase } from '/~/shared/providers/supabase/index.ts';
 import { useMemo } from 'react';
 
@@ -11,9 +10,6 @@ export type UseSupabaseQueryIdName = WithQueryKeyUniqueSuffix & {
 };
 
 export const HOOK_NAME = 'UseSupabaseQueryIdName';
-
-//@deno-types="@types/lodash"
-import { map } from 'lodash';
 
 export const useSupabaseQueryIdName = (
   { foreignTablesNames, queryKeyUniqueSuffix }: UseSupabaseQueryIdName,

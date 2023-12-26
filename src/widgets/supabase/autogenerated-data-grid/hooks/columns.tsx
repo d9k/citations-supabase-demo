@@ -21,7 +21,7 @@ export type UseColumnsArgs = {
   columnsNamesRequired: string[];
   foreignidsNames?: IdNameRecord[];
   fieldToForeignTable?: FieldToForeignTable;
-  onRowDelete?: CellDeletableProps<RecordAny>['onRowDelete'];
+  onRowActionDelete?: CellDeletableProps<RecordAny>['onRowDelete'];
 };
 
 //@deno-types="@types/lodash"
@@ -59,7 +59,7 @@ export const useColumns = ({
   columnsNamesRequired,
   fieldToForeignTable = {},
   foreignidsNames = [],
-  onRowDelete,
+  onRowActionDelete,
 }: UseColumnsArgs) => {
   const HOOK_NAME = 'useColumns';
 
@@ -167,7 +167,7 @@ export const useColumns = ({
               <CellDeletable
                 {...renderProps}
                 key={`${fieldName}_cell_foreign_id`}
-                onRowDelete={onRowDelete}
+                onRowDelete={onRowActionDelete}
               />
             ),
           }

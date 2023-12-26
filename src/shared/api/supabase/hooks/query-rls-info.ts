@@ -16,9 +16,6 @@ export type RlsInfoById = { [id: number]: RlsEditForTableRecord };
 
 export const HOOK_NAME = 'useSupabaseQueryRlsInfo';
 
-//@deno-types="@types/lodash"
-import { map } from 'lodash';
-
 export const useSupabaseQueryRlsInfo = (
   { tableName, tableDataIds, queryKeyUniqueSuffix }:
     UseSupabaseQueryRlsInfoArgs,
