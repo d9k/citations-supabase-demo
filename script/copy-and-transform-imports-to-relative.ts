@@ -1,3 +1,12 @@
+/**
+ * TODO deprecate when Ultra builder (mesozoic) will support imports with aliases:
+ * See
+ * - https://github.com/exhibitionist-digital/ultra/issues/290
+ * - https://github.com/deckchairlabs/mesozoic/issues/17
+ *
+ * This script copies sources to separate folder and transforms absolute imports to relative there.
+ * Regex are hardcoded and support only `"/~/": "./src/"` alias
+ */
 import * as dotenv from 'dotenv';
 import { envValueRequire } from '/~/shared/lib/deno/env.ts';
 
@@ -64,8 +73,17 @@ function checkExclude(filename: string, dir: string) {
 
   const fileRelPath = path.relative(projectPath, filePath);
   console.debug('checkExclude:', fileRelPath, filename, dir);
-  const result = /^node_modules$/.test(fileRelPath) ||
-    /^supabase$/.test(fileRelPath);
+  const result = [
+    // TODO proper regex create
+    new RegExp(PROJECT_COPY_WITH_IMPORTS_TRANSFORMED_TO_RELATIVE_PATH),
+    /^\.git$/,
+    /^\.git$/,
+    /^\.storybook$/,
+    /^\.ultra$/,
+    /^node_modules$/,
+    /^supabase$/,
+    /^supabase$/,
+  ].some((rgx) => rgx.test(fileRelPath));
   if (result) {
     console.debug('checkExclude: Skipping');
   }
@@ -77,7 +95,7 @@ wrench.copyDirSyncRecursive(
   PROJECT_COPY_WITH_IMPORTS_TRANSFORMED_TO_RELATIVE_PATH,
   {
     forceDelete: true, // Whether to overwrite existing directory or not
-    excludeHiddenUnix: true, // Whether to copy hidden Unix files or not (preceding .)
+    excludeHiddenUnix: false, // Whether to copy hidden Unix files or not (preceding .)
     preserveFiles: false, // If we're overwriting something and the file already exists, keep the existing
     preserveTimestamps: true, // Preserve the mtime and atime when copying files
     inflateSymlinks: false, // Whether to follow symlinks or not when copying files
@@ -136,7 +154,6 @@ for await (const scriptFileEntry of walkIterator) {
         ? importPathRelativeToScript
         : `./${importPathRelativeToScript}`;
 
-    // return quotedPath;
     return `'${importPathRelativeToScriptStartsWithDot}'`;
   };
 
@@ -145,11 +162,6 @@ for await (const scriptFileEntry of walkIterator) {
       /'(.*)'/,
       replaceQuotedPath,
     );
-
-    // console.debug('  ', fromWithQuotedPath, matches);
-    // fromWithQuotedPath.replace(//);
-
-    // const fromWithQuotedPath =
 
     console.debug('->', transformedString);
 
@@ -171,5 +183,4 @@ for await (const scriptFileEntry of walkIterator) {
   });
 
   Deno.writeTextFileSync(scriptAbsPath, codeLinesWithRelImports);
-  // assert(entry.isFile);
 }
