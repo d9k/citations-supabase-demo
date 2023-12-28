@@ -18,6 +18,8 @@ const PROJECT_COPY_WITH_IMPORTS_TRANSFORMED_TO_RELATIVE_PATH = envValueRequire(
   'PROJECT_COPY_WITH_IMPORTS_TRANSFORMED_TO_RELATIVE_PATH',
 );
 
+import { ReplaceCallback } from '/~/shared/lib/strings/types.ts';
+
 const projectPath = Deno.cwd();
 
 const SCRIPTS_GLOB_ARRAY = ['**/*.ts{,x}', '**/*.js{,x}'];
@@ -114,46 +116,59 @@ for await (const scriptFileEntry of walkIterator) {
 
   const codeLines = Deno.readTextFileSync(scriptFileEntry.path);
 
+  const replaceQuotedPath: ReplaceCallback = (
+    _quotedPath,
+    importPathWithAlias,
+  ) => {
+    console.debug('    ', importPathWithAlias);
+
+    const importPathAbs = importPathWithAlias.replace(/^\/~\//, () => {
+      return aliasSrcAbsPath + '/';
+    });
+
+    const importPathRelativeToScript = path.relative(
+      scriptDirPath,
+      importPathAbs,
+    );
+
+    const importPathRelativeToScriptStartsWithDot =
+      importPathRelativeToScript.match(/^\.\./)
+        ? importPathRelativeToScript
+        : `./${importPathRelativeToScript}`;
+
+    // return quotedPath;
+    return `'${importPathRelativeToScriptStartsWithDot}'`;
+  };
+
+  const transformStringWithQuotedPath = (stringWithQuotedPath: string) => {
+    const transformedString = stringWithQuotedPath.replace(
+      /'(.*)'/,
+      replaceQuotedPath,
+    );
+
+    // console.debug('  ', fromWithQuotedPath, matches);
+    // fromWithQuotedPath.replace(//);
+
+    // const fromWithQuotedPath =
+
+    console.debug('->', transformedString);
+
+    return transformedString;
+  };
+
   const codeLinesWithRelImports = codeLines.replace(
-    /from\s+'\/~\/.*'/gm,
+    /from[\s\n\r]+'\/~\/.*'/gm,
     (fromWithQuotedPath) => {
       console.debug('  ', fromWithQuotedPath);
 
-      const fromWithQuotedRelPath = fromWithQuotedPath.replace(
-        /'(.*)'/,
-        (_quotedPath, importPathWithAlias) => {
-          console.debug('    ', importPathWithAlias);
-
-          const importPathAbs = importPathWithAlias.replace(/^\/~\//, () => {
-            // return './src/';
-            return aliasSrcAbsPath + '/';
-          });
-
-          const importPathRelativeToScript = path.relative(
-            scriptDirPath,
-            importPathAbs,
-          );
-
-          let importPathRelativeToScriptStartsWithDot =
-            importPathRelativeToScript.match(/^\.\./)
-              ? importPathRelativeToScript
-              : `./${importPathRelativeToScript}`;
-
-          // return quotedPath;
-          return `'${importPathRelativeToScriptStartsWithDot}'`;
-        },
-      );
-
-      // console.debug('  ', fromWithQuotedPath, matches);
-      // fromWithQuotedPath.replace(//);
-
-      // const fromWithQuotedPath =
-
-      console.debug('->', fromWithQuotedRelPath);
-
-      return fromWithQuotedRelPath;
+      return transformStringWithQuotedPath(fromWithQuotedPath);
     },
-  );
+    /** async import */
+  ).replace(/import\([\s\n\r]*'\/~\/.*'/gm, (fromWithQuotedPath) => {
+    console.debug('  ', fromWithQuotedPath);
+
+    return transformStringWithQuotedPath(fromWithQuotedPath);
+  });
 
   Deno.writeTextFileSync(scriptAbsPath, codeLinesWithRelImports);
   // assert(entry.isFile);
