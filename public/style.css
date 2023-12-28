@@ -59,7 +59,6 @@ p {
   to {
     transform: rotate(360deg);
   }
-
 }
 
 @keyframes spin {
