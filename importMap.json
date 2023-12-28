@@ -5,6 +5,7 @@
     "esm:/": "https://esm.sh/",
 
     "dotenv": "https://deno.land/std@0.203.0/dotenv/mod.ts",
+    "wrench-js": "https://esm.sh/gh/ryanmcgrath/wrench-js@2cffe4e3f4",
 
     "lodash": "https://cdn.skypack.dev/lodash-es@4.17.21?dts",
     "@types/lodash": "https://cdn.skypack.dev/@types/lodash@v4.14.202?dts",

@@ -2,5 +2,6 @@
 .DS_Store
 .env
 .env.production
+.project-copy-with-imports-transformed-to-relative
 .ultra/
 node_modules/

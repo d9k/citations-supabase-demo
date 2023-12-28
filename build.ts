@@ -12,6 +12,7 @@ builder.ignore([
   './.vscode/**',
   './.github/**',
   './.gitignore',
+  './.project-copy-with-imports-transformed-to-relative/',
   './node_modules/**',
   './script-node/**',
   './src/shared/lib/node/**',

@@ -9,6 +9,7 @@
   "deno.unstable": true,
   "deno.importMap": "./importMap.json",
   "deno.disablePaths": [
+    "./.project-copy-with-imports-transformed-to-relative",
     "./.ultra",
     "./.storybook",
     "./node_modules",

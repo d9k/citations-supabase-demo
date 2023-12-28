@@ -3,6 +3,7 @@
     "dev": "deno run --no-npm -A --no-check --watch ./server.tsx",
     "test": "deno test --no-npm --allow-all",
     "build": "deno run --no-npm -A ./build.ts",
+    "prebuild:copy-and-transform-imports-to-relative": "deno run --no-npm --allow-env --allow-read --allow-write ./script/copy-and-transform-imports-to-relative.ts",
     "start": "ULTRA_MODE=production deno run --no-npm -A --no-remote ./server.js",
     "storybook": "pnpm run storybook",
     "storybook:build": "pnpm run storybook:build",
