@@ -88,6 +88,11 @@ wrench.copyDirSyncRecursive(
 
 const matchScriptsRegexArray = SCRIPTS_GLOB_ARRAY.map(globToRegExp);
 
+const aliasSrcAbsPath = path.join(
+  PROJECT_COPY_WITH_IMPORTS_TRANSFORMED_TO_RELATIVE_PATH,
+  'src',
+);
+
 const walkIterator = fs.walk(
   PROJECT_COPY_WITH_IMPORTS_TRANSFORMED_TO_RELATIVE_PATH,
   {
@@ -95,7 +100,61 @@ const walkIterator = fs.walk(
   },
 );
 
-for await (const entry of walkIterator) {
-  console.log('walk scripts:', entry.path);
+for await (const scriptFileEntry of walkIterator) {
+  const scriptAbsPath = scriptFileEntry.path;
+
+  const scriptRelPath = path.relative(
+    PROJECT_COPY_WITH_IMPORTS_TRANSFORMED_TO_RELATIVE_PATH,
+    scriptAbsPath,
+  );
+
+  const scriptDirPath = path.dirname(scriptAbsPath);
+
+  console.debug('walk scripts:', scriptRelPath, scriptFileEntry.path);
+
+  const codeLines = Deno.readTextFileSync(scriptFileEntry.path);
+
+  const codeLinesWithRelImports = codeLines.replace(
+    /from\s+'\/~\/.*'/gm,
+    (fromWithQuotedPath) => {
+      console.debug('  ', fromWithQuotedPath);
+
+      const fromWithQuotedRelPath = fromWithQuotedPath.replace(
+        /'(.*)'/,
+        (_quotedPath, importPathWithAlias) => {
+          console.debug('    ', importPathWithAlias);
+
+          const importPathAbs = importPathWithAlias.replace(/^\/~\//, () => {
+            // return './src/';
+            return aliasSrcAbsPath + '/';
+          });
+
+          const importPathRelativeToScript = path.relative(
+            scriptDirPath,
+            importPathAbs,
+          );
+
+          let importPathRelativeToScriptStartsWithDot =
+            importPathRelativeToScript.match(/^\.\./)
+              ? importPathRelativeToScript
+              : `./${importPathRelativeToScript}`;
+
+          // return quotedPath;
+          return `'${importPathRelativeToScriptStartsWithDot}'`;
+        },
+      );
+
+      // console.debug('  ', fromWithQuotedPath, matches);
+      // fromWithQuotedPath.replace(//);
+
+      // const fromWithQuotedPath =
+
+      console.debug('->', fromWithQuotedRelPath);
+
+      return fromWithQuotedRelPath;
+    },
+  );
+
+  Deno.writeTextFileSync(scriptAbsPath, codeLinesWithRelImports);
   // assert(entry.isFile);
 }
