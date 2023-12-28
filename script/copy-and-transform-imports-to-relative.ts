@@ -6,8 +6,11 @@ import { envValueRequire } from '/~/shared/lib/deno/env.ts';
 // import { regexCopy } from 'regex-copy';
 
 import * as path from 'std/path';
+import * as fs from 'std/fs';
 
 import wrench from 'wrench-js';
+
+import { globToRegExp } from '/~/shared/lib/fs/globToRegExp.ts';
 
 await dotenv.load({ export: true });
 
@@ -16,6 +19,8 @@ const PROJECT_COPY_WITH_IMPORTS_TRANSFORMED_TO_RELATIVE_PATH = envValueRequire(
 );
 
 const projectPath = Deno.cwd();
+
+const SCRIPTS_GLOB_ARRAY = ['**/*.ts{,x}', '**/*.js{,x}'];
 
 console.log(
   `Copying ${projectPath} to ${PROJECT_COPY_WITH_IMPORTS_TRANSFORMED_TO_RELATIVE_PATH}`,
@@ -80,3 +85,17 @@ wrench.copyDirSyncRecursive(
     exclude: checkExclude, // An exclude filter (either a regexp or a function)
   },
 );
+
+const matchScriptsRegexArray = SCRIPTS_GLOB_ARRAY.map(globToRegExp);
+
+const walkIterator = fs.walk(
+  PROJECT_COPY_WITH_IMPORTS_TRANSFORMED_TO_RELATIVE_PATH,
+  {
+    match: matchScriptsRegexArray,
+  },
+);
+
+for await (const entry of walkIterator) {
+  console.log('walk scripts:', entry.path);
+  // assert(entry.isFile);
+}
