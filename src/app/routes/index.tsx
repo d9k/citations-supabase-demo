@@ -7,7 +7,7 @@ import { PageFrameLayoutProviderContextUpdate } from '/~/shared/providers/layout
 import { PageFrameLayoutContextCreator } from '/~/shared/providers/layout/page-frame/index.tsx';
 
 import { PageFrameLayout } from '/~/pages/layouts/page-frame.tsx';
-import { useUrlParamRetPath } from '/~/shared/lib/react/routing/useUrlParamRetPath.ts';
+import { useQueryParamRetPath } from '/~/shared/lib/react/routing/query-params.ts';
 import { RedirectIfNoLogin } from '/~/pages/routes-helpers/RedirectIfNoLogin.tsx';
 import { useNavigate } from 'react-router-dom';
 import LoginPage from '/~/pages/login/index.tsx';
@@ -23,7 +23,7 @@ const NavbarTables = React.lazy(() => import('/~/pages/navbar/tables.tsx'));
 
 export const AppRoutes = () => {
   const supabaseUser = useSupabaseUser();
-  const retPath = useUrlParamRetPath();
+  const retPath = useQueryParamRetPath();
   const navigate = useNavigate();
   console.log('__TEST__: AppRoutes: supabaseUser:', supabaseUser);
   console.log('__TEST__: AppRoutes: retPath:', retPath);
@@ -66,6 +66,15 @@ export const AppRoutes = () => {
                 </PageFrameLayoutProviderContextUpdate>
               }
               path='table/:name'
+            />
+
+            <Route
+              element={
+                <PageFrameLayoutProviderContextUpdate navbarOpened={false}>
+                  <TablePage />
+                </PageFrameLayoutProviderContextUpdate>
+              }
+              path='table'
             />
 
             <Route

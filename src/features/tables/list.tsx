@@ -7,7 +7,9 @@ export const TablesList = () => {
   console.log('TablesList: schemas:', publicSchema);
 
   const list = Object.entries(publicSchema).map(([tableName, _tableSchema]) => {
-    const href = `/table/${tableName}`;
+    // TODO uncomment after https://github.com/exhibitionist-digital/ultra/issues/291 is fixed
+    // const href = `/table/${tableName}`;
+    const href = `/table?name=${tableName}`;
     const caption = upperFirst(tableName);
 
     return (
