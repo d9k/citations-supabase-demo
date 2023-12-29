@@ -3,6 +3,7 @@
     "dev": "deno run --no-npm -A --no-check --watch ./server.tsx",
     "test": "deno test --no-npm --allow-all",
     "build": "deno run --no-npm -A ./build.ts",
+    "build:with-relative-imports-transform-and-run": "deno run --no-npm -A ./script/build-with-relative-imports-transform-and-run.ts",
     "prebuild:copy-and-transform-imports-to-relative": "deno run --no-npm --allow-env --allow-read --allow-write ./script/copy-and-transform-imports-to-relative.ts",
     "start": "ULTRA_MODE=production deno run --no-npm -A --no-remote ./server.js",
     "storybook": "pnpm run storybook",
@@ -40,13 +41,17 @@
     "lib": ["dom", "dom.iterable", "dom.asynciterable", "deno.ns"]
   },
   "fmt": {
-    "exclude": [".ultra"],
+    "exclude": [".ultra", ".project-copy-with-imports-transformed-to-relative"],
     "indentWidth": 2,
     "proseWrap": "preserve",
     "singleQuote": true
   },
   "lint": {
-    "exclude": [".ultra", "script-node"]
+    "exclude": [
+      ".ultra",
+      ".project-copy-with-imports-transformed-to-relative",
+      "script-node"
+    ]
   },
   "importMap": "./importMap.json",
   "nodeModulesDir": false
