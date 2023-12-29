@@ -17,7 +17,7 @@ export async function runCommandWithPipedOutput(
 
   const commandObj = new Deno.Command(command, {
     args,
-    env: newProcessEnv,
+    env: { ...newProcessEnv, ...(options.env || {}) },
     stdout: 'piped',
     stderr: 'piped',
     ...options,

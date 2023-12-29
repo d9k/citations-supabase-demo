@@ -29,4 +29,4 @@ await runCommandWithPipedOutput('deno', [
 await runCommandWithPipedOutput('deno', [
   'task',
   'start',
-], { cwd: buildOutput });
+], { cwd: buildOutput, env: { ULTRA_LOG_LEVEL: 'DEBUG' } });
