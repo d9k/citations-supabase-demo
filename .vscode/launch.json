@@ -2,7 +2,28 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "db-json-schema-add-descriptions: debug",
+      "name": "builded with-imports-transformed-to-relative (prod, deno)",
+      "request": "launch",
+      "type": "node",
+      "program": "${workspaceFolder}/.project-copy-with-imports-transformed-to-relative/.ultra/server.js",
+      "cwd": "${workspaceFolder}/.project-copy-with-imports-transformed-to-relative/.ultra",
+      "runtimeExecutable": "${env:HOME}/.deno/bin/deno",
+      "env": {
+        "ULTRA_MODE": "production",
+        "ULTRA_LOG_LEVEL": "DEBUG"
+      },
+      "runtimeArgs": [
+        "run",
+        "--no-npm",
+        "--unstable",
+        "--inspect-wait",
+        "--allow-all"
+      ],
+      "args": [],
+      "attachSimplePort": 9229
+    },
+    {
+      "name": "db-json-schema-add-descriptions: debug (tsx)",
       "type": "node",
       "request": "launch",
       "skipFiles": [
@@ -25,7 +46,7 @@
       ]
     },
     {
-      "name": "db-parse-types-to-json-schema: debug",
+      "name": "db-parse-types-to-json-schema: debug (tsx)",
       "type": "node",
       "request": "launch",
       "skipFiles": [
