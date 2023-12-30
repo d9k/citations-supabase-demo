@@ -26,7 +26,9 @@ await runCommandWithPipedOutput('deno', [
   'build',
 ], { cwd: PROJECT_COPY_WITH_IMPORTS_TRANSFORMED_TO_RELATIVE_PATH });
 
-await runCommandWithPipedOutput('deno', [
-  'task',
-  'start',
-], { cwd: buildOutput, env: { ULTRA_LOG_LEVEL: 'DEBUG' } });
+if (Deno.args.includes('--run')) {
+  await runCommandWithPipedOutput('deno', [
+    'task',
+    'start',
+  ], { cwd: buildOutput, env: { ULTRA_LOG_LEVEL: 'DEBUG' } });
+}
