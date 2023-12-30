@@ -93,7 +93,7 @@ export const SupabaseBrowserAuthManager = (
     if (supabase) {
       supabase.auth.onAuthStateChange((event, newSession) => {
         console.log(
-          `{ELEMENT_NAME}: App: onAuthStateChange: session:`,
+          `${ELEMENT_NAME}: App: onAuthStateChange: session:`,
           newSession,
           event,
         );
