@@ -6,7 +6,7 @@ export type BodyProvidersProps = {
   children: ReactNode;
 };
 
-export const BodyProvidersConstructor = ({ children }: BodyProvidersProps) => (
+export const AppProvidersConstructor = ({ children }: BodyProvidersProps) => (
   <ComposeProviders
     providers={[
       // уже есть в server.ts, client.ts

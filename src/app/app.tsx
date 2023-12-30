@@ -1,5 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 
+import { Helmet } from 'react-helmet-async';
 import { AppRoutes } from '/~/app/routes/index.tsx';
 import { Notifications } from '@mantine/notifications';
 
@@ -16,6 +17,11 @@ export default function App({ cache }: AppProps) {
   // );
   return (
     <>
+      {
+        /* <Helmet prioritizeSeoTags>
+        <title>__TEST__</title>
+      </Helmet> */
+      }
       <Notifications />
       <AppRoutes />
     </>

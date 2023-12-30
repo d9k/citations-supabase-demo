@@ -19,10 +19,12 @@ import { Suspense } from 'react';
 import { Spinner } from '/~/shared/ui/spinner.tsx';
 import { SsrSupabaseConstructor } from '/~/app/providers-constructors/supabase-ssr.tsx';
 import { randomRange } from '/~/shared/lib/math/random.ts';
-import AppHtmlWrapper from '/~/app/app-html-wrapper.tsx';
+// import AppHtmlWrapper from '/~/app/app-html-wrapper.tsx';
+import { AppWrapper } from './src/app/app-wrapper.tsx';
 import { SupabaseBrowserAuthManager } from '/~/app/providers-constructors/browser-auth-manager.tsx';
 import RouteAdapter from '/~/shared/lib/react/routing/RouteAdapter.tsx';
 declare const __REACT_QUERY_DEHYDRATED_STATE: unknown;
+// import { BodyTemplate } from './src/widgets/templates/BodyTemplate.tsx.bk';
 
 function ClientApp() {
   return (
@@ -31,7 +33,7 @@ function ClientApp() {
         <FelaRendererProviderConstructor>
           <Hydrate state={__REACT_QUERY_DEHYDRATED_STATE}>
             {/* @ts-ignore 'Router' cannot be used as a JSX component. */}
-            <AppHtmlWrapper>
+            <AppWrapper>
               <Suspense fallback={<Spinner />}>
                 <SupabaseBrowserProviderConstructor
                   anonKey={useEnv('ULTRA_PUBLIC_SUPABASE_ANON_KEY')!}
@@ -66,7 +68,7 @@ function ClientApp() {
                   </SupabaseBrowserAuthManager>
                 </SupabaseBrowserProviderConstructor>
               </Suspense>
-            </AppHtmlWrapper>
+            </AppWrapper>
             {/* </SsrSupabaseConstructor> */}
           </Hydrate>
         </FelaRendererProviderConstructor>
@@ -75,4 +77,10 @@ function ClientApp() {
   );
 }
 
-hydrate(document, <ClientApp />);
+const appElement = document.getElementById('app');
+
+if (!appElement) {
+  throw Error('app element not found');
+}
+
+hydrate(appElement, <ClientApp />);

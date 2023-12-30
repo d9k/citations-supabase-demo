@@ -43,6 +43,8 @@ import RouteAdapter from '/~/shared/lib/react/routing/RouteAdapter.tsx';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { makeMockQueryParamAdapter } from '/~/shared/lib/react/routing/makeMockQueryParamAdapter.tsx';
 
+import { AppWrapper } from './src/app/app-wrapper.tsx';
+
 const { load: loadDotEnv } = dotenv;
 
 const env = await loadDotEnv();
@@ -97,46 +99,51 @@ function ServerApp(
   const SsrMockAdapter = makeMockQueryParamAdapter(requestUrl);
 
   return (
-    <HelmetProvider context={helmetContext}>
-      <QueryClientProvider client={queryClient}>
-        <FelaRendererProviderConstructor>
-          {
-            /* <SupabaseProvider value={supabaseClient}>
-              <SupabaseUserProvider value={supabaseUser}> */
-          }
-          <AppHtmlWrapper>
-            <Suspense fallback={<Spinner />}>
-              <SsrSupabaseConstructor
-                anonKey={ULTRA_PUBLIC_SUPABASE_ANON_KEY}
-                getCookie={getCookie}
-                supabaseUrl={ULTRA_PUBLIC_SUPABASE_URL}
-                queryKeyUniqueSuffix={`${+new Date()}_${
-                  randomRange(0, 100000)
-                }`}
-                supabaseAccessToken={supabaseAccessToken}
-                supabaseRefreshToken={supabaseRefreshToken}
-              >
-                <StaticRouter location={new URL(context.req.url).pathname}>
-                  <QueryParamProvider
-                    // @ts-ignore The expected type comes from property 'adapter' which is declared here on type 'IntrinsicAttributes & QueryParamProviderProps'
-                    // adapter={RouteAdapter}
-                    // adapter={ReactRouter6Adapter}
-                    adapter={SsrMockAdapter}
-                    // location={requestUrl}
+    <AppHtmlWrapper>
+      {
+        /* <SupabaseProvider value={supabaseClient}>
+                <SupabaseUserProvider value={supabaseUser}> */
+      }
+      <div id='app'>
+        <HelmetProvider context={helmetContext}>
+          <QueryClientProvider client={queryClient}>
+            <FelaRendererProviderConstructor>
+              <AppWrapper>
+                <Suspense fallback={<Spinner />}>
+                  <SsrSupabaseConstructor
+                    anonKey={ULTRA_PUBLIC_SUPABASE_ANON_KEY}
+                    getCookie={getCookie}
+                    supabaseUrl={ULTRA_PUBLIC_SUPABASE_URL}
+                    queryKeyUniqueSuffix={`${+new Date()}_${
+                      randomRange(0, 100000)
+                    }`}
+                    supabaseAccessToken={supabaseAccessToken}
+                    supabaseRefreshToken={supabaseRefreshToken}
                   >
-                    <App />
-                  </QueryParamProvider>
-                </StaticRouter>
-              </SsrSupabaseConstructor>
-            </Suspense>
-          </AppHtmlWrapper>
-          {
-            /* </SupabaseUserProvider>
+                    <StaticRouter location={new URL(context.req.url).pathname}>
+                      <QueryParamProvider
+                        // @ts-ignore The expected type comes from property 'adapter' which is declared here on type 'IntrinsicAttributes & QueryParamProviderProps'
+                        // adapter={RouteAdapter}
+                        // adapter={ReactRouter6Adapter}
+                        adapter={SsrMockAdapter}
+                        // location={requestUrl}
+                      >
+                        <App />
+                      </QueryParamProvider>
+                    </StaticRouter>
+                  </SsrSupabaseConstructor>
+                </Suspense>
+              </AppWrapper>
+            </FelaRendererProviderConstructor>
+          </QueryClientProvider>
+        </HelmetProvider>
+      </div>
+      {/* /app */}
+      {
+        /* </SupabaseUserProvider>
               </SupabaseProvider> */
-          }
-        </FelaRendererProviderConstructor>
-      </QueryClientProvider>
-    </HelmetProvider>
+      }
+    </AppHtmlWrapper>
   );
 }
 
