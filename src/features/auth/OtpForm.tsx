@@ -21,6 +21,7 @@ export type OtpFormValues = {
 };
 
 export type OtpFormProps = PaperProps & {
+  id: string;
   demoField?: boolean;
   initialValues?: Partial<OtpFormValues>;
   loading?: boolean;
@@ -50,6 +51,7 @@ type UseFormParamValidateObjectRequired = Required<UseFormParamValidateObject>;
  */
 export function OtpForm(
   {
+    id,
     onOtpLogin,
     initialValues = {},
     loading,
@@ -86,6 +88,7 @@ export function OtpForm(
 
       {/* <form onSubmit={handleSubmit}> */}
       <form
+        id={id}
         onSubmit={form.onSubmit((values: OtpFormValues) => {
           console.log('__TEST__ LoginForm: submit', values);
           onOtpLogin?.(values);
@@ -93,6 +96,7 @@ export function OtpForm(
       >
         <Stack>
           <TextInput
+            id={`${id}__email`}
             required
             size={inputSize}
             placeholder='email'

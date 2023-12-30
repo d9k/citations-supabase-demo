@@ -32,7 +32,11 @@ const LoginPage = () => {
 
   return (
     <PageFrameComponent>
-      <OtpForm onOtpLogin={handleLogin} loading={loading} />
+      <OtpForm
+        id='login-page__otp'
+        onOtpLogin={handleLogin}
+        loading={loading}
+      />
     </PageFrameComponent>
   );
 };
