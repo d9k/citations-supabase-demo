@@ -1,27 +1,21 @@
 import { usePageFrameLayoutComponent } from '/~/shared/providers/layout/page-frame/index.tsx';
+import { PageTitle } from '/~/shared/ui/page-title.tsx';
 
 const HomePage = () => {
   const PageFrameComponent = usePageFrameLayoutComponent();
 
   return (
     <PageFrameComponent>
-      <h1>
-        <span></span>__<span></span>
-      </h1>
+      <PageTitle tabTitle={''}>Citations demo</PageTitle>
       <p>
-        Welcome to{' '}
-        <strong>Ultra</strong>. This is a barebones starter for your web app.
-      </p>
-      <p>
-        Take{' '}
+        Powered with{'  '}
         <a
           href='https://ultrajs.dev/docs'
           target='_blank'
         >
-          this
-        </a>, you may need it where you are going. It will show you how to
-        customize your routing, data fetching, and styling with popular
-        libraries.
+          Ultra
+        </a>{' '}
+        framework
       </p>
     </PageFrameComponent>
   );

@@ -8,6 +8,8 @@ import { publicSchema } from '/~/shared/api/supabase/schemas.ts';
 import { useQueryKeyUniqueSuffix } from '/~/shared/lib/react/query/key.ts';
 import { useRenderOnlyInBrowser } from '/~/shared/lib/react/useRenderOnlyInBrowser.ts';
 
+import { PageTitle } from '/~/shared/ui/page-title.tsx';
+
 import {
   COLUMNS_SHOW_FIRST,
   COLUMNS_SHOW_LAST,
@@ -36,13 +38,15 @@ const TablePage = () => {
   const tableSchema = publicSchema[name];
   // console.debug('__TEST__: TablePage: table schema:', tableSchema);
 
+  const pageTitle = `${startCase(name)} table`;
+
   if (!tableSchema) {
     return <>Error: no schema with dis table</>;
   }
 
   return (
     <PageFrameComponent>
-      <h3>{startCase(name)} table</h3>
+      <PageTitle>{pageTitle}</PageTitle>
 
       {isBrowser
         ? (

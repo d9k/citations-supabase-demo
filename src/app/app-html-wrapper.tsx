@@ -16,7 +16,6 @@ export default function AppHtmlWrapper({ children }: WithChildren) {
   // );
   return (
     <HtmlTemplate
-      title='Ultra'
       addHeaderChildren={
         <>
           <link rel='shortcut icon' href={useAsset('/favicon.ico')} />
