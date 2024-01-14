@@ -7,6 +7,12 @@
       },
       "Returns": "string"
     },
+    "fn_any_type": {
+      "Args": {
+        "r": "Record<string, unknown>"
+      },
+      "Returns": "Record<string, unknown>"
+    },
     "get_claim": {
       "Args": {
         "uid": "string",
@@ -33,6 +39,24 @@
     "is_claims_admin": {
       "Args": "Record<PropertyKey, never>",
       "Returns": "boolean"
+    },
+    "record_fill_created_by": {
+      "Args": {
+        "r": "Record<string, unknown>"
+      },
+      "Returns": "Record<string, unknown>"
+    },
+    "record_fill_updated_at": {
+      "Args": {
+        "r": "Record<string, unknown>"
+      },
+      "Returns": "Record<string, unknown>"
+    },
+    "record_fill_updated_by": {
+      "Args": {
+        "r": "Record<string, unknown>"
+      },
+      "Returns": "Record<string, unknown>"
     },
     "rls_authors_delete": {
       "Args": {
@@ -74,13 +98,13 @@
       },
       "Returns": "boolean"
     },
-    "rls_countries_delete": {
+    "rls_content_item_check_delete": {
       "Args": {
         "record": "unknown"
       },
       "Returns": "boolean"
     },
-    "rls_countries_edit": {
+    "rls_content_item_check_edit": {
       "Args": {
         "record": "unknown"
       },

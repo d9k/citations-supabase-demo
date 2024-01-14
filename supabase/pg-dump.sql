@@ -690,6 +690,25 @@ $$;
 ALTER FUNCTION public.delete_claim(uid uuid, claim text) OWNER TO postgres;
 
 --
+-- Name: fn_any_type(record); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.fn_any_type(r record) RETURNS record
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	t record;
+BEGIN
+  t := r;
+  t.updated_at := NOW();
+	RETURN t;
+END;
+$$;
+
+
+ALTER FUNCTION public.fn_any_type(r record) OWNER TO postgres;
+
+--
 -- Name: get_claim(uuid, text); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -781,6 +800,36 @@ $$;
 
 
 ALTER FUNCTION public.handle_auth_user_new() OWNER TO postgres;
+
+--
+-- Name: handle_content_item_edit(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.handle_content_item_edit() RETURNS trigger
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$
+BEGIN
+  RETURN record_fill_updated_by(record_fill_updated_at(NEW));
+END;
+$$;
+
+
+ALTER FUNCTION public.handle_content_item_edit() OWNER TO postgres;
+
+--
+-- Name: handle_content_item_new(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.handle_content_item_new() RETURNS trigger
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $$
+BEGIN
+  RETURN record_fill_created_by(NEW);
+END;
+$$;
+
+
+ALTER FUNCTION public.handle_content_item_new() OWNER TO postgres;
 
 --
 -- Name: handle_fill_created_by(); Type: FUNCTION; Schema: public; Owner: postgres
@@ -881,6 +930,63 @@ $$;
 
 
 ALTER FUNCTION public.is_claims_admin() OWNER TO postgres;
+
+--
+-- Name: record_fill_created_by(record); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.record_fill_created_by(r record) RETURNS record
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	t record;
+BEGIN
+  t := r;
+  t.created_by := get_my_claim('profile_id');
+	RETURN t;
+END;
+$$;
+
+
+ALTER FUNCTION public.record_fill_created_by(r record) OWNER TO postgres;
+
+--
+-- Name: record_fill_updated_at(record); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.record_fill_updated_at(r record) RETURNS record
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	t record;
+BEGIN
+  t := r;
+  t.updated_at := NOW();
+	RETURN t;
+END;
+$$;
+
+
+ALTER FUNCTION public.record_fill_updated_at(r record) OWNER TO postgres;
+
+--
+-- Name: record_fill_updated_by(record); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.record_fill_updated_by(r record) RETURNS record
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	t record;
+BEGIN
+  t := r;
+  t.updated_by := get_my_claim('profile_id');
+	RETURN t;
+END;
+$$;
+
+
+ALTER FUNCTION public.record_fill_updated_by(r record) OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -1047,67 +1153,54 @@ $$;
 ALTER FUNCTION public.rls_citations_edit(record public.citation) OWNER TO postgres;
 
 --
--- Name: country; Type: TABLE; Schema: public; Owner: postgres
+-- Name: content_item; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.country (
+CREATE TABLE public.content_item (
+    table_name text NOT NULL,
     id bigint NOT NULL,
-    name text DEFAULT ''::text NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    updated_at timestamp with time zone DEFAULT now(),
-    found_year bigint,
-    next_rename_year bigint,
     created_by bigint,
+    updated_at timestamp with time zone,
     updated_by bigint,
-    CONSTRAINT countries_name_check CHECK ((length(name) > 0))
+    published_at timestamp with time zone,
+    published_by bigint,
+    unpublished_at timestamp with time zone,
+    unpublished_by bigint
 );
 
 
-ALTER TABLE public.country OWNER TO postgres;
+ALTER TABLE public.content_item OWNER TO postgres;
 
 --
--- Name: COLUMN country.found_year; Type: COMMENT; Schema: public; Owner: postgres
+-- Name: rls_content_item_check_delete(public.content_item); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-COMMENT ON COLUMN public.country.found_year IS 'minimum found year';
-
-
---
--- Name: COLUMN country.next_rename_year; Type: COMMENT; Schema: public; Owner: postgres
---
-
-COMMENT ON COLUMN public.country.next_rename_year IS 'maximum next rename year';
-
-
---
--- Name: rls_countries_delete(public.country); Type: FUNCTION; Schema: public; Owner: postgres
---
-
-CREATE FUNCTION public.rls_countries_delete(record public.country) RETURNS boolean
+CREATE FUNCTION public.rls_content_item_check_delete(record public.content_item) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    RETURN rls_check_delete_by_created_by(record.created_by);
+	RETURN rls_check_delete_by_created_by(record.created_by);
 END;
 $$;
 
 
-ALTER FUNCTION public.rls_countries_delete(record public.country) OWNER TO postgres;
+ALTER FUNCTION public.rls_content_item_check_delete(record public.content_item) OWNER TO postgres;
 
 --
--- Name: rls_countries_edit(public.country); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_content_item_check_edit(public.content_item); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_countries_edit(record public.country) RETURNS boolean
+CREATE FUNCTION public.rls_content_item_check_edit(record public.content_item) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    RETURN rls_check_edit_by_created_by(record.created_by);
+	RETURN rls_check_edit_by_created_by(record.created_by);
 END;
 $$;
 
 
-ALTER FUNCTION public.rls_countries_edit(record public.country) OWNER TO postgres;
+ALTER FUNCTION public.rls_content_item_check_edit(record public.content_item) OWNER TO postgres;
 
 --
 -- Name: event; Type: TABLE; Schema: public; Owner: postgres
@@ -2071,24 +2164,44 @@ ALTER TABLE public.citation ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY
 
 
 --
--- Name: content_item; Type: TABLE; Schema: public; Owner: postgres
+-- Name: country; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.content_item (
-    table_name text NOT NULL,
-    id bigint NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
+CREATE TABLE public.country (
+    id bigint,
+    name text DEFAULT ''::text NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now(),
+    found_year bigint,
+    next_rename_year bigint,
     created_by bigint,
-    updated_at timestamp with time zone,
     updated_by bigint,
+    table_name text DEFAULT 'country'::text,
     published_at timestamp with time zone,
     published_by bigint,
     unpublished_at timestamp with time zone,
-    unpublished_by bigint
-);
+    unpublished_by bigint,
+    CONSTRAINT countries_name_check CHECK ((length(name) > 0)),
+    CONSTRAINT country_table_name_check CHECK ((table_name = 'country'::text))
+)
+INHERITS (public.content_item);
 
 
-ALTER TABLE public.content_item OWNER TO postgres;
+ALTER TABLE public.country OWNER TO postgres;
+
+--
+-- Name: COLUMN country.found_year; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.country.found_year IS 'minimum found year';
+
+
+--
+-- Name: COLUMN country.next_rename_year; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.country.next_rename_year IS 'maximum next rename year';
+
 
 --
 -- Name: country_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -2220,10 +2333,31 @@ UNION
 ALTER VIEW public.view_id_name OWNER TO postgres;
 
 --
+-- Name: view_rls_content_item; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW public.view_rls_content_item AS
+ SELECT content_item.table_name,
+    content_item.id,
+    public.rls_content_item_check_edit(content_item.*) AS editable,
+    public.rls_content_item_check_delete(content_item.*) AS deletable
+   FROM public.content_item
+  ORDER BY content_item.table_name, content_item.id;
+
+
+ALTER VIEW public.view_rls_content_item OWNER TO postgres;
+
+--
 -- Name: view_rls_edit_for_table; Type: VIEW; Schema: public; Owner: postgres
 --
 
 CREATE VIEW public.view_rls_edit_for_table AS
+ SELECT view_rls_content_item.table_name,
+    view_rls_content_item.id,
+    view_rls_content_item.editable,
+    view_rls_content_item.deletable
+   FROM public.view_rls_content_item
+UNION
  SELECT 'author'::text AS table_name,
     author.id,
     public.rls_authors_edit(author.*) AS editable,
@@ -2235,12 +2369,6 @@ UNION
     public.rls_citations_edit(citation.*) AS editable,
     public.rls_citations_delete(citation.*) AS deletable
    FROM public.citation
-UNION
- SELECT 'country'::text AS table_name,
-    country.id,
-    public.rls_countries_edit(country.*) AS editable,
-    public.rls_countries_delete(country.*) AS deletable
-   FROM public.country
 UNION
  SELECT 'event'::text AS table_name,
     event.id,
@@ -2270,7 +2398,8 @@ UNION
     trust.id,
     public.rls_trusts_edit(trust.*) AS editable,
     public.rls_trusts_edit(trust.*) AS deletable
-   FROM public.trust;
+   FROM public.trust
+  ORDER BY 1, 2;
 
 
 ALTER VIEW public.view_rls_edit_for_table OWNER TO postgres;
@@ -2533,7 +2662,7 @@ COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_co
 00000000-0000-0000-0000-000000000000	e76b244b-6f9e-42fc-b216-5ea74f94bd4c	authenticated	authenticated	gavriillarin263@inbox.lv	$2a$10$W8/g0R7arxlSsdWrn.5hXOqbolOsyQrpCcAKTOEkoIy2Vekr3vgSS	2023-12-09 05:25:02.817+00	\N		2023-12-09 05:24:14.076+00		2023-12-24 13:21:13.896693+00			\N	2023-12-24 13:21:25.863108+00	{"provider": "email", "providers": ["email"], "profile_id": 19}	\N	\N	2023-12-09 05:24:14.065+00	2023-12-24 23:26:51.847117+00	\N	\N			\N		0	\N		\N	f	\N
 00000000-0000-0000-0000-000000000000	ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d	authenticated	authenticated	d9kd9k@gmail.com	$2a$10$Nn9Lq26n.a2r92jcs25UI./rgH5OBb1gV6db5GhX.phqVA//i/Lmy	2023-12-21 14:03:46.059171+00	\N		2023-12-21 13:53:06.021026+00		2023-12-24 23:31:21.017153+00			\N	2023-12-24 23:31:41.685951+00	{"provider": "email", "providers": ["email"], "profile_id": 21, "claim_edit_all_content": 1}	{}	\N	2023-12-21 13:53:06.009726+00	2023-12-25 10:58:20.440871+00	\N	\N			\N		0	\N		\N	f	\N
 00000000-0000-0000-0000-000000000000	727a5d27-4b66-49ea-a2c1-0bccc7b8e2cd	authenticated	authenticated	d9k@ya.tu	$2a$10$OR4GYiMa8vFpk1ywBfPrEeL8yj0TCJxO3joYXdlRezx8Kk6eBjmQ.	\N	\N	45bc98dfe84800707f48a82df0ce417215a7869ba20ba657b46012c1	2023-12-11 20:49:26.158057+00		\N			\N	\N	{"provider": "email", "providers": ["email"], "profile_id": 20}	{}	\N	2023-12-11 20:49:26.145323+00	2023-12-11 20:49:29.413083+00	\N	\N			\N		0	\N		\N	f	\N
-00000000-0000-0000-0000-000000000000	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	authenticated	authenticated	d9k@ya.ru	$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2	2023-11-30 13:20:52.160287+00	\N		2023-11-30 13:19:57.235919+00		2024-01-14 15:27:48.901404+00			\N	2024-01-14 15:28:51.02278+00	{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}	{}	\N	2023-11-30 13:19:57.22183+00	2024-01-14 15:55:15.287754+00	\N	\N			\N		0	\N		\N	f	\N
+00000000-0000-0000-0000-000000000000	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	authenticated	authenticated	d9k@ya.ru	$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2	2023-11-30 13:20:52.160287+00	\N		2023-11-30 13:19:57.235919+00		2024-01-14 22:30:05.036726+00			\N	2024-01-14 22:30:22.168679+00	{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}	{}	\N	2023-11-30 13:19:57.22183+00	2024-01-14 22:58:35.122477+00	\N	\N			\N		0	\N		\N	f	\N
 \.
 
 
@@ -2573,13 +2702,14 @@ COPY public.content_item (table_name, id, created_at, created_by, updated_at, up
 -- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.country (id, name, created_at, updated_at, found_year, next_rename_year, created_by, updated_by) FROM stdin;
-1	Greece 1	2023-11-28 06:50:37.146622+00	2023-11-28 06:50:37.146622+00	-4000	100	\N	\N
-8	Greece	2023-12-21 10:00:36.790762+00	2023-12-21 10:00:36.790762+00	\N	\N	1	\N
-11	China 10	2023-12-21 14:12:45.779946+00	2023-12-21 14:14:11.220697+00	\N	\N	21	1
-12	India	2023-12-24 13:21:46.821053+00	2023-12-24 13:21:46.821053+00	\N	\N	19	\N
-10	Russia	2023-12-21 10:02:21.791404+00	2023-12-26 19:42:07.027739+00	\N	\N	1	1
-7	Arztocka	2023-12-20 15:31:38.442098+00	2023-12-30 17:55:51.389675+00	\N	\N	1	1
+COPY public.country (id, name, created_at, updated_at, found_year, next_rename_year, created_by, updated_by, table_name, published_at, published_by, unpublished_at, unpublished_by) FROM stdin;
+15	Ireland	2024-01-14 23:02:41.877146+00	2024-01-14 23:02:41.877146+00	\N	\N	1	\N	country	\N	\N	\N	\N
+1	Greece 1	2023-11-28 06:50:37.146622+00	2024-01-14 17:54:43.169419+00	-4000	100	\N	\N	country	\N	\N	\N	\N
+11	China 10	2023-12-21 14:12:45.779946+00	2024-01-14 17:54:43.169419+00	\N	\N	21	\N	country	\N	\N	\N	\N
+12	India	2023-12-24 13:21:46.821053+00	2024-01-14 17:54:43.169419+00	\N	\N	19	\N	country	\N	\N	\N	\N
+10	Russia	2023-12-21 10:02:21.791404+00	2024-01-14 17:54:43.169419+00	\N	\N	1	\N	country	\N	\N	\N	\N
+7	Arztocka	2023-12-20 15:31:38.442098+00	2024-01-14 17:54:43.169419+00	\N	\N	1	\N	country	\N	\N	\N	\N
+8	Greece 5	2023-12-21 10:00:36.790762+00	2024-01-14 22:33:25.170627+00	\N	\N	1	1	country	\N	\N	\N	\N
 \.
 
 
@@ -2690,6 +2820,8 @@ COPY supabase_migrations.schema_migrations (version, statements, name) FROM stdi
 20231225000431	{"drop policy \\"RLS: countries: update\\" on \\"public\\".\\"countries\\"","alter table \\"public\\".\\"authors\\" enable row level security","alter table \\"public\\".\\"citations\\" enable row level security","alter table \\"public\\".\\"events\\" enable row level security","alter table \\"public\\".\\"places\\" enable row level security","alter table \\"public\\".\\"towns\\" enable row level security","alter table \\"public\\".\\"towns\\" add constraint \\"towns_name_check\\" CHECK ((length(name) > 0)) not valid","alter table \\"public\\".\\"towns\\" validate constraint \\"towns_name_check\\"","set check_function_bodies = off","CREATE OR REPLACE FUNCTION public.rls_authors_delete(record authors)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_delete_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_authors_edit(record authors)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_edit_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_citations_delete(record citations)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_delete_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_citations_edit(record citations)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_edit_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_events_delete(record events)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_delete_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_events_edit(record events)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_edit_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_places_delete(record places)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_delete_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_places_edit(record places)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_edit_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_towns_delete(record towns)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_delete_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_towns_edit(record towns)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_edit_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.delete_claim(uid uuid, claim text)\n RETURNS text\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\n    BEGIN\n      IF NOT is_claims_admin() THEN\n          RETURN 'error: access denied';\n      ELSE        \n        update auth.users set raw_app_meta_data = \n          raw_app_meta_data - claim where id = uid;\n        return 'OK';\n      END IF;\n    END;\n$function$","CREATE OR REPLACE FUNCTION public.get_my_claim(claim text)\n RETURNS jsonb\n LANGUAGE sql\n STABLE\nAS $function$\n  select \n  \tcoalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb -> 'app_metadata' -> claim, null)\n$function$","CREATE OR REPLACE FUNCTION public.get_my_claims()\n RETURNS jsonb\n LANGUAGE sql\n STABLE\nAS $function$\n  select \n  \tcoalesce(nullif(current_setting('request.jwt.claims', true), '')::jsonb -> 'app_metadata', '{}'::jsonb)::jsonb\n$function$","CREATE OR REPLACE FUNCTION public.is_claims_admin()\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\n  BEGIN\n    IF session_user = 'authenticator' THEN\n      --------------------------------------------\n      -- To disallow any authenticated app users\n      -- from editing claims, delete the following\n      -- block of code and replace it with:\n      -- RETURN FALSE;\n      --------------------------------------------\n      IF extract(epoch from now()) > coalesce((current_setting('request.jwt.claims', true)::jsonb)->>'exp', '0')::numeric THEN\n        return false; -- jwt expired\n      END IF;\n      If current_setting('request.jwt.claims', true)::jsonb->>'role' = 'service_role' THEN\n        RETURN true; -- service role users have admin rights\n      END IF;\n      IF coalesce((current_setting('request.jwt.claims', true)::jsonb)->'app_metadata'->'claims_admin', 'false')::bool THEN\n        return true; -- user has claims_admin set to true\n      ELSE\n        return false; -- user does NOT have claims_admin set to true\n      END IF;\n      --------------------------------------------\n      -- End of block \n      --------------------------------------------\n    ELSE -- not a user session, probably being called from a trigger or something\n      return true;\n    END IF;\n  END;\n$function$","create or replace view \\"public\\".\\"rls_edit_for_table\\" as  SELECT 'profiles'::text AS table_name,\n    profiles.id,\n    rls_profiles_edit(profiles.*) AS editable,\n    false AS deletable\n   FROM profiles\nUNION\n SELECT 'countries'::text AS table_name,\n    countries.id,\n    rls_countries_edit(countries.*) AS editable,\n    rls_countries_delete(countries.*) AS deletable\n   FROM countries\nUNION\n SELECT 'towns'::text AS table_name,\n    towns.id,\n    rls_towns_edit(towns.*) AS editable,\n    rls_towns_delete(towns.*) AS deletable\n   FROM towns","CREATE OR REPLACE FUNCTION public.set_claim(uid uuid, claim text, value jsonb)\n RETURNS text\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO 'public'\nAS $function$\n    BEGIN\n      IF NOT is_claims_admin() THEN\n          RETURN 'error: access denied';\n      ELSE        \n        update auth.users set raw_app_meta_data = \n          raw_app_meta_data || \n            json_build_object(claim, value)::jsonb where id = uid;\n        return 'OK';\n      END IF;\n    END;\n$function$","create policy \\"RLS: authors: delete\\"\non \\"public\\".\\"authors\\"\nas permissive\nfor delete\nto authenticated\nusing (rls_authors_edit(authors.*))","create policy \\"RLS: authors: insert\\"\non \\"public\\".\\"authors\\"\nas permissive\nfor insert\nto authenticated\nwith check (rls_authors_edit(authors.*))","create policy \\"RLS: authors: select\\"\non \\"public\\".\\"authors\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"RLS: authors: update\\"\non \\"public\\".\\"authors\\"\nas permissive\nfor update\nto authenticated\nusing (rls_authors_edit(authors.*))\nwith check (rls_authors_edit(authors.*))","create policy \\"RLS: citations: delete\\"\non \\"public\\".\\"citations\\"\nas permissive\nfor delete\nto authenticated\nusing (rls_citations_edit(citations.*))","create policy \\"RLS: citations: insert\\"\non \\"public\\".\\"citations\\"\nas permissive\nfor insert\nto authenticated\nwith check (rls_citations_edit(citations.*))","create policy \\"RLS: citations: select\\"\non \\"public\\".\\"citations\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"RLS: citations: update\\"\non \\"public\\".\\"citations\\"\nas permissive\nfor update\nto authenticated\nusing (rls_citations_edit(citations.*))\nwith check (rls_citations_edit(citations.*))","create policy \\"RLS: events: delete\\"\non \\"public\\".\\"events\\"\nas permissive\nfor delete\nto authenticated\nusing (rls_events_edit(events.*))","create policy \\"RLS: events: insert\\"\non \\"public\\".\\"events\\"\nas permissive\nfor insert\nto authenticated\nwith check (rls_events_edit(events.*))","create policy \\"RLS: events: select\\"\non \\"public\\".\\"events\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"RLS: events: update\\"\non \\"public\\".\\"events\\"\nas permissive\nfor update\nto authenticated\nusing (rls_events_edit(events.*))\nwith check (rls_events_edit(events.*))","create policy \\"RLS: places: delete\\"\non \\"public\\".\\"places\\"\nas permissive\nfor delete\nto authenticated\nusing (rls_places_edit(places.*))","create policy \\"RLS: places: insert\\"\non \\"public\\".\\"places\\"\nas permissive\nfor insert\nto authenticated\nwith check (rls_places_edit(places.*))","create policy \\"RLS: places: select\\"\non \\"public\\".\\"places\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"RLS: places: update\\"\non \\"public\\".\\"places\\"\nas permissive\nfor update\nto authenticated\nusing (rls_places_edit(places.*))\nwith check (rls_places_edit(places.*))","create policy \\"RLS: towns: delete\\"\non \\"public\\".\\"towns\\"\nas permissive\nfor delete\nto authenticated\nusing (rls_towns_edit(towns.*))","create policy \\"RLS: towns: insert\\"\non \\"public\\".\\"towns\\"\nas permissive\nfor insert\nto authenticated\nwith check (rls_towns_edit(towns.*))","create policy \\"RLS: towns: select\\"\non \\"public\\".\\"towns\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"RLS: towns: update\\"\non \\"public\\".\\"towns\\"\nas permissive\nfor update\nto authenticated\nusing (rls_towns_edit(towns.*))\nwith check (rls_towns_edit(towns.*))","create policy \\"RLS: countries: update\\"\non \\"public\\".\\"countries\\"\nas permissive\nfor update\nto authenticated\nusing (rls_countries_edit(countries.*))\nwith check (rls_countries_edit(countries.*))"}	content_tables_add_rls
 20231225013536	{"drop policy \\"Public profiles are viewable by everyone.\\" on \\"public\\".\\"profiles\\"","drop policy \\"Users can insert their own profile.\\" on \\"public\\".\\"profiles\\"","drop policy \\"Users can update own profile.\\" on \\"public\\".\\"profiles\\"","drop policy \\"Enable read access for all users\\" on \\"public\\".\\"trusts\\"","set check_function_bodies = off","CREATE OR REPLACE FUNCTION public.rls_trusts_edit(record trusts)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    -- RAISE LOG 'rls_profiles_edit: profile %', record.id;\n    RETURN rls_check_edit_by_created_by(record.who, FALSE, 'claim_edit_all_profiles');\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_profiles_edit(record profiles)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    -- RAISE LOG 'rls_profiles_edit: profile %', record.id;\n    RETURN rls_check_edit_by_created_by(record.id, FALSE, 'claim_edit_all_profiles');\nEND;\n$function$","create or replace view \\"public\\".\\"rls_edit_for_table\\" as  SELECT 'authors'::text AS table_name,\n    authors.id,\n    rls_authors_edit(authors.*) AS editable,\n    rls_authors_delete(authors.*) AS deletable\n   FROM authors\nUNION\n SELECT 'citations'::text AS table_name,\n    citations.id,\n    rls_citations_edit(citations.*) AS editable,\n    rls_citations_delete(citations.*) AS deletable\n   FROM citations\nUNION\n SELECT 'countries'::text AS table_name,\n    countries.id,\n    rls_countries_edit(countries.*) AS editable,\n    rls_countries_delete(countries.*) AS deletable\n   FROM countries\nUNION\n SELECT 'events'::text AS table_name,\n    events.id,\n    rls_events_edit(events.*) AS editable,\n    rls_events_delete(events.*) AS deletable\n   FROM events\nUNION\n SELECT 'places'::text AS table_name,\n    places.id,\n    rls_places_edit(places.*) AS editable,\n    rls_places_delete(places.*) AS deletable\n   FROM places\nUNION\n SELECT 'profiles'::text AS table_name,\n    profiles.id,\n    rls_profiles_edit(profiles.*) AS editable,\n    false AS deletable\n   FROM profiles\nUNION\n SELECT 'towns'::text AS table_name,\n    towns.id,\n    rls_towns_edit(towns.*) AS editable,\n    rls_towns_delete(towns.*) AS deletable\n   FROM towns\nUNION\n SELECT 'trusts'::text AS table_name,\n    trusts.id,\n    rls_trusts_edit(trusts.*) AS editable,\n    rls_trusts_edit(trusts.*) AS deletable\n   FROM trusts","create policy \\" RLS: profiles: insert\\"\non \\"public\\".\\"profiles\\"\nas permissive\nfor insert\nto public\nwith check ((auth.uid() = auth_user_id))","create policy \\" RLS: profiles: update\\"\non \\"public\\".\\"profiles\\"\nas permissive\nfor update\nto public\nusing (rls_profiles_edit(profiles.*))","create policy \\"RLS: profiles: select\\"\non \\"public\\".\\"profiles\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"RLS: trusts: delete\\"\non \\"public\\".\\"trusts\\"\nas permissive\nfor delete\nto authenticated\nusing (rls_trusts_edit(trusts.*))","create policy \\"RLS: trusts: insert\\"\non \\"public\\".\\"trusts\\"\nas permissive\nfor insert\nto authenticated\nwith check (rls_trusts_edit(trusts.*))","create policy \\"RLS: trusts: select\\"\non \\"public\\".\\"trusts\\"\nas permissive\nfor select\nto authenticated\nusing (true)","create policy \\"RLS: trusts: update\\"\non \\"public\\".\\"trusts\\"\nas permissive\nfor update\nto authenticated\nusing (rls_trusts_edit(trusts.*))\nwith check (rls_trusts_edit(trusts.*))"}	profiles_tables_add_rls
 20231225224033	{"drop view if exists \\"public\\".\\"rls_edit_for_table\\"","set check_function_bodies = off","CREATE OR REPLACE FUNCTION public.string_limit(s character varying, max_length integer)\n RETURNS character varying\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN CASE WHEN length(s) > max_length\n      THEN substring(s, 1, max_length - 3) || '...'\n      ELSE s\n      END;\nEND;\n$function$","create or replace view \\"public\\".\\"view_id_name\\" as  SELECT 'authors'::text AS table_name,\n    authors.id,\n    authors.lastname_name_patronymic AS name,\n    string_limit((authors.lastname_name_patronymic)::character varying, 20) AS short_name\n   FROM authors\nUNION\n SELECT 'citations'::text AS table_name,\n    citations.id,\n    string_limit((citations.english_text)::character varying, 40) AS name,\n    string_limit((citations.english_text)::character varying, 20) AS short_name\n   FROM citations\nUNION\n SELECT 'countries'::text AS table_name,\n    countries.id,\n    countries.name,\n    string_limit((countries.name)::character varying, 20) AS short_name\n   FROM countries\nUNION\n SELECT 'places'::text AS table_name,\n    places.id,\n    places.name,\n    string_limit((places.name)::character varying, 20) AS short_name\n   FROM places\nUNION\n SELECT 'profiles'::text AS table_name,\n    profiles.id,\n    (((profiles.full_name || ' ('::text) || profiles.username) || ')'::text) AS name,\n    profiles.username AS short_name\n   FROM profiles\nUNION\n SELECT 'towns'::text AS table_name,\n    towns.id,\n    towns.name,\n    string_limit((towns.name)::character varying, 20) AS short_name\n   FROM towns","create or replace view \\"public\\".\\"view_rls_edit_for_table\\" as  SELECT 'authors'::text AS table_name,\n    authors.id,\n    rls_authors_edit(authors.*) AS editable,\n    rls_authors_delete(authors.*) AS deletable\n   FROM authors\nUNION\n SELECT 'citations'::text AS table_name,\n    citations.id,\n    rls_citations_edit(citations.*) AS editable,\n    rls_citations_delete(citations.*) AS deletable\n   FROM citations\nUNION\n SELECT 'countries'::text AS table_name,\n    countries.id,\n    rls_countries_edit(countries.*) AS editable,\n    rls_countries_delete(countries.*) AS deletable\n   FROM countries\nUNION\n SELECT 'events'::text AS table_name,\n    events.id,\n    rls_events_edit(events.*) AS editable,\n    rls_events_delete(events.*) AS deletable\n   FROM events\nUNION\n SELECT 'places'::text AS table_name,\n    places.id,\n    rls_places_edit(places.*) AS editable,\n    rls_places_delete(places.*) AS deletable\n   FROM places\nUNION\n SELECT 'profiles'::text AS table_name,\n    profiles.id,\n    rls_profiles_edit(profiles.*) AS editable,\n    false AS deletable\n   FROM profiles\nUNION\n SELECT 'towns'::text AS table_name,\n    towns.id,\n    rls_towns_edit(towns.*) AS editable,\n    rls_towns_delete(towns.*) AS deletable\n   FROM towns\nUNION\n SELECT 'trusts'::text AS table_name,\n    trusts.id,\n    rls_trusts_edit(trusts.*) AS editable,\n    rls_trusts_edit(trusts.*) AS deletable\n   FROM trusts"}	view_id_name
+20240114152304	{"drop trigger if exists \\"on_authors_edit_fill_update\\" on \\"public\\".\\"authors\\"","drop trigger if exists \\"on_authors_new_fill_created_by\\" on \\"public\\".\\"authors\\"","drop trigger if exists \\"on_citations_edit_fill_update\\" on \\"public\\".\\"citations\\"","drop trigger if exists \\"on_citations_new_fill_created_by\\" on \\"public\\".\\"citations\\"","drop trigger if exists \\"on_country_edit_fill_update\\" on \\"public\\".\\"countries\\"","drop trigger if exists \\"on_country_new_fill_created_by\\" on \\"public\\".\\"countries\\"","drop trigger if exists \\"on_events_edit_fill_update\\" on \\"public\\".\\"events\\"","drop trigger if exists \\"on_events_new_fill_created_by\\" on \\"public\\".\\"events\\"","drop trigger if exists \\"on_places_edit_fill_update\\" on \\"public\\".\\"places\\"","drop trigger if exists \\"on_places_new_fill_created_by\\" on \\"public\\".\\"places\\"","drop trigger if exists \\"on_public_profiles_new\\" on \\"public\\".\\"profiles\\"","drop trigger if exists \\"on_towns_edit_fill_update\\" on \\"public\\".\\"towns\\"","drop trigger if exists \\"on_towns_new_fill_created_by\\" on \\"public\\".\\"towns\\"","drop policy \\"RLS: authors: delete\\" on \\"public\\".\\"authors\\"","drop policy \\"RLS: authors: insert\\" on \\"public\\".\\"authors\\"","drop policy \\"RLS: authors: select\\" on \\"public\\".\\"authors\\"","drop policy \\"RLS: authors: update\\" on \\"public\\".\\"authors\\"","drop policy \\"RLS: citations: delete\\" on \\"public\\".\\"citations\\"","drop policy \\"RLS: citations: insert\\" on \\"public\\".\\"citations\\"","drop policy \\"RLS: citations: select\\" on \\"public\\".\\"citations\\"","drop policy \\"RLS: citations: update\\" on \\"public\\".\\"citations\\"","drop policy \\"RLS: countries: delete\\" on \\"public\\".\\"countries\\"","drop policy \\"RLS: countries: insert\\" on \\"public\\".\\"countries\\"","drop policy \\"RLS: countries: select\\" on \\"public\\".\\"countries\\"","drop policy \\"RLS: countries: update\\" on \\"public\\".\\"countries\\"","drop policy \\"RLS: events: delete\\" on \\"public\\".\\"events\\"","drop policy \\"RLS: events: insert\\" on \\"public\\".\\"events\\"","drop policy \\"RLS: events: select\\" on \\"public\\".\\"events\\"","drop policy \\"RLS: events: update\\" on \\"public\\".\\"events\\"","drop policy \\"RLS: places: delete\\" on \\"public\\".\\"places\\"","drop policy \\"RLS: places: insert\\" on \\"public\\".\\"places\\"","drop policy \\"RLS: places: select\\" on \\"public\\".\\"places\\"","drop policy \\"RLS: places: update\\" on \\"public\\".\\"places\\"","drop policy \\" RLS: profiles: insert\\" on \\"public\\".\\"profiles\\"","drop policy \\" RLS: profiles: update\\" on \\"public\\".\\"profiles\\"","drop policy \\"RLS: profiles: select\\" on \\"public\\".\\"profiles\\"","drop policy \\"RLS: towns: delete\\" on \\"public\\".\\"towns\\"","drop policy \\"RLS: towns: insert\\" on \\"public\\".\\"towns\\"","drop policy \\"RLS: towns: select\\" on \\"public\\".\\"towns\\"","drop policy \\"RLS: towns: update\\" on \\"public\\".\\"towns\\"","drop policy \\"RLS: trusts: delete\\" on \\"public\\".\\"trusts\\"","drop policy \\"RLS: trusts: insert\\" on \\"public\\".\\"trusts\\"","drop policy \\"RLS: trusts: select\\" on \\"public\\".\\"trusts\\"","drop policy \\"RLS: trusts: update\\" on \\"public\\".\\"trusts\\"","alter table \\"public\\".\\"authors\\" drop constraint \\"authors_birth_town_fkey\\"","alter table \\"public\\".\\"authors\\" drop constraint \\"authors_created_by_fkey\\"","alter table \\"public\\".\\"authors\\" drop constraint \\"authors_updated_by_fkey\\"","alter table \\"public\\".\\"citations\\" drop constraint \\"citations_author_id_fkey\\"","alter table \\"public\\".\\"citations\\" drop constraint \\"citations_created_by_fkey\\"","alter table \\"public\\".\\"citations\\" drop constraint \\"citations_event_id_fkey\\"","alter table \\"public\\".\\"citations\\" drop constraint \\"citations_place_id_fkey\\"","alter table \\"public\\".\\"citations\\" drop constraint \\"citations_updated_by_fkey\\"","alter table \\"public\\".\\"countries\\" drop constraint \\"countries_created_by_fkey\\"","alter table \\"public\\".\\"countries\\" drop constraint \\"countries_name_check\\"","alter table \\"public\\".\\"countries\\" drop constraint \\"countries_name_key\\"","alter table \\"public\\".\\"countries\\" drop constraint \\"countries_updated_by_fkey\\"","alter table \\"public\\".\\"events\\" drop constraint \\"events_created_by_fkey\\"","alter table \\"public\\".\\"events\\" drop constraint \\"events_place_id_fkey\\"","alter table \\"public\\".\\"events\\" drop constraint \\"events_updated_by_fkey\\"","alter table \\"public\\".\\"places\\" drop constraint \\"places_created_by_fkey\\"","alter table \\"public\\".\\"places\\" drop constraint \\"places_town_id_fkey\\"","alter table \\"public\\".\\"places\\" drop constraint \\"places_updated_by_fkey\\"","alter table \\"public\\".\\"profiles\\" drop constraint \\"profiles_id_fkey\\"","alter table \\"public\\".\\"profiles\\" drop constraint \\"profiles_username_key\\"","alter table \\"public\\".\\"profiles\\" drop constraint \\"username_length\\"","alter table \\"public\\".\\"towns\\" drop constraint \\"towns_country_id_fkey\\"","alter table \\"public\\".\\"towns\\" drop constraint \\"towns_created_by_fkey\\"","alter table \\"public\\".\\"towns\\" drop constraint \\"towns_name_check\\"","alter table \\"public\\".\\"towns\\" drop constraint \\"towns_updated_by_fkey\\"","drop function if exists \\"public\\".\\"rls_profiles_edit\\"(records profiles[])","drop view if exists \\"public\\".\\"view_id_name\\"","drop view if exists \\"public\\".\\"view_rls_edit_for_table\\"","drop function if exists \\"public\\".\\"rls_authors_delete\\"(record authors)","drop function if exists \\"public\\".\\"rls_authors_edit\\"(record authors)","drop function if exists \\"public\\".\\"rls_citations_delete\\"(record citations)","drop function if exists \\"public\\".\\"rls_citations_edit\\"(record citations)","drop function if exists \\"public\\".\\"rls_countries_delete\\"(record countries)","drop function if exists \\"public\\".\\"rls_countries_edit\\"(record countries)","drop function if exists \\"public\\".\\"rls_events_delete\\"(record events)","drop function if exists \\"public\\".\\"rls_events_edit\\"(record events)","drop function if exists \\"public\\".\\"rls_places_delete\\"(record places)","drop function if exists \\"public\\".\\"rls_places_edit\\"(record places)","drop function if exists \\"public\\".\\"rls_profiles_edit\\"(record profiles)","drop function if exists \\"public\\".\\"rls_towns_delete\\"(record towns)","drop function if exists \\"public\\".\\"rls_towns_edit\\"(record towns)","drop function if exists \\"public\\".\\"rls_trusts_edit\\"(record trusts)","alter table \\"public\\".\\"authors\\" drop constraint \\"author_pkey\\"","alter table \\"public\\".\\"citations\\" drop constraint \\"citations_pkey\\"","alter table \\"public\\".\\"countries\\" drop constraint \\"country_pkey\\"","alter table \\"public\\".\\"events\\" drop constraint \\"event_pkey\\"","alter table \\"public\\".\\"places\\" drop constraint \\"place_pkey\\"","alter table \\"public\\".\\"profiles\\" drop constraint \\"profiles_pkey\\"","alter table \\"public\\".\\"towns\\" drop constraint \\"town_pkey\\"","alter table \\"public\\".\\"trusts\\" drop constraint \\"trusts_pkey\\"","drop index if exists \\"public\\".\\"author_pkey\\"","drop index if exists \\"public\\".\\"citations_pkey\\"","drop index if exists \\"public\\".\\"countries_name_key\\"","drop index if exists \\"public\\".\\"country_pkey\\"","drop index if exists \\"public\\".\\"event_pkey\\"","drop index if exists \\"public\\".\\"place_pkey\\"","drop index if exists \\"public\\".\\"profiles_pkey\\"","drop index if exists \\"public\\".\\"profiles_username_key\\"","drop index if exists \\"public\\".\\"town_pkey\\"","drop index if exists \\"public\\".\\"trusts_pkey\\"","drop table \\"public\\".\\"authors\\"","drop table \\"public\\".\\"citations\\"","drop table \\"public\\".\\"countries\\"","drop table \\"public\\".\\"events\\"","drop table \\"public\\".\\"places\\"","drop table \\"public\\".\\"profiles\\"","drop table \\"public\\".\\"towns\\"","drop table \\"public\\".\\"trusts\\"","create table \\"public\\".\\"author\\" (\n    \\"id\\" bigint generated by default as identity not null,\n    \\"lastname_name_patronymic\\" text not null,\n    \\"created_at\\" timestamp with time zone not null default now(),\n    \\"birth_year\\" bigint,\n    \\"death_year\\" bigint,\n    \\"approximate_years\\" boolean not null default false,\n    \\"updated_at\\" timestamp with time zone not null default now(),\n    \\"birth_town\\" bigint,\n    \\"created_by\\" bigint,\n    \\"updated_by\\" bigint\n)","alter table \\"public\\".\\"author\\" enable row level security","create table \\"public\\".\\"citation\\" (\n    \\"id\\" bigint generated by default as identity not null,\n    \\"english_text\\" text,\n    \\"author_id\\" bigint not null,\n    \\"year\\" bigint,\n    \\"created_at\\" timestamp with time zone not null default now(),\n    \\"updated_at\\" timestamp without time zone not null default now(),\n    \\"original_language_text\\" text,\n    \\"place_id\\" bigint,\n    \\"event_id\\" bigint,\n    \\"created_by\\" bigint,\n    \\"updated_by\\" bigint\n)","alter table \\"public\\".\\"citation\\" enable row level security","create table \\"public\\".\\"content_item\\" (\n    \\"table_name\\" text not null,\n    \\"id\\" bigint not null,\n    \\"created_at\\" timestamp with time zone not null default now(),\n    \\"created_by\\" bigint,\n    \\"updated_at\\" timestamp with time zone,\n    \\"updated_by\\" bigint,\n    \\"published_at\\" timestamp with time zone,\n    \\"published_by\\" bigint,\n    \\"unpublished_at\\" timestamp with time zone,\n    \\"unpublished_by\\" bigint\n)","create table \\"public\\".\\"country\\" (\n    \\"id\\" bigint generated by default as identity not null,\n    \\"name\\" text not null default ''::text,\n    \\"created_at\\" timestamp with time zone not null default now(),\n    \\"updated_at\\" timestamp with time zone default now(),\n    \\"found_year\\" bigint,\n    \\"next_rename_year\\" bigint,\n    \\"created_by\\" bigint,\n    \\"updated_by\\" bigint\n)","alter table \\"public\\".\\"country\\" enable row level security","create table \\"public\\".\\"event\\" (\n    \\"id\\" bigint generated by default as identity not null,\n    \\"name\\" text not null,\n    \\"created_at\\" timestamp with time zone not null default now(),\n    \\"updated_at\\" timestamp with time zone not null default now(),\n    \\"start_year\\" bigint not null,\n    \\"start_month\\" smallint not null,\n    \\"end_year\\" bigint,\n    \\"end_month\\" smallint,\n    \\"place_id\\" bigint,\n    \\"created_by\\" bigint,\n    \\"updated_by\\" bigint\n)","alter table \\"public\\".\\"event\\" enable row level security","create table \\"public\\".\\"place\\" (\n    \\"id\\" bigint generated by default as identity not null,\n    \\"name\\" text not null default 'in'::text,\n    \\"created_at\\" timestamp with time zone not null default now(),\n    \\"updated_at\\" timestamp with time zone not null default now(),\n    \\"town_id\\" bigint not null,\n    \\"created_by\\" bigint,\n    \\"updated_by\\" bigint\n)","alter table \\"public\\".\\"place\\" enable row level security","create table \\"public\\".\\"profile\\" (\n    \\"auth_user_id\\" uuid not null,\n    \\"updated_at\\" timestamp with time zone,\n    \\"username\\" text,\n    \\"full_name\\" text,\n    \\"avatar_url\\" text,\n    \\"website\\" text,\n    \\"id\\" bigint generated by default as identity not null,\n    \\"created_at\\" timestamp with time zone default now()\n)","alter table \\"public\\".\\"profile\\" enable row level security","create table \\"public\\".\\"town\\" (\n    \\"id\\" bigint generated by default as identity not null,\n    \\"name\\" text not null,\n    \\"created_at\\" timestamp with time zone not null default now(),\n    \\"updated_at\\" timestamp with time zone not null default now(),\n    \\"country_id\\" bigint not null,\n    \\"created_by\\" bigint,\n    \\"updated_by\\" bigint\n)","alter table \\"public\\".\\"town\\" enable row level security","create table \\"public\\".\\"trust\\" (\n    \\"id\\" bigint generated by default as identity not null,\n    \\"who\\" bigint not null,\n    \\"trusts_whom\\" bigint not null,\n    \\"end_at\\" timestamp with time zone not null default (now() + '1 day'::interval)\n)","alter table \\"public\\".\\"trust\\" enable row level security","CREATE UNIQUE INDEX content_item_pkey ON public.content_item USING btree (table_name, id)","CREATE UNIQUE INDEX author_pkey ON public.author USING btree (id)","CREATE UNIQUE INDEX citations_pkey ON public.citation USING btree (id)","CREATE UNIQUE INDEX countries_name_key ON public.country USING btree (name)","CREATE UNIQUE INDEX country_pkey ON public.country USING btree (id)","CREATE UNIQUE INDEX event_pkey ON public.event USING btree (id)","CREATE UNIQUE INDEX place_pkey ON public.place USING btree (id)","CREATE UNIQUE INDEX profiles_pkey ON public.profile USING btree (id)","CREATE UNIQUE INDEX profiles_username_key ON public.profile USING btree (username)","CREATE UNIQUE INDEX town_pkey ON public.town USING btree (id)","CREATE UNIQUE INDEX trusts_pkey ON public.trust USING btree (id)","alter table \\"public\\".\\"author\\" add constraint \\"author_pkey\\" PRIMARY KEY using index \\"author_pkey\\"","alter table \\"public\\".\\"citation\\" add constraint \\"citations_pkey\\" PRIMARY KEY using index \\"citations_pkey\\"","alter table \\"public\\".\\"content_item\\" add constraint \\"content_item_pkey\\" PRIMARY KEY using index \\"content_item_pkey\\"","alter table \\"public\\".\\"country\\" add constraint \\"country_pkey\\" PRIMARY KEY using index \\"country_pkey\\"","alter table \\"public\\".\\"event\\" add constraint \\"event_pkey\\" PRIMARY KEY using index \\"event_pkey\\"","alter table \\"public\\".\\"place\\" add constraint \\"place_pkey\\" PRIMARY KEY using index \\"place_pkey\\"","alter table \\"public\\".\\"profile\\" add constraint \\"profiles_pkey\\" PRIMARY KEY using index \\"profiles_pkey\\"","alter table \\"public\\".\\"town\\" add constraint \\"town_pkey\\" PRIMARY KEY using index \\"town_pkey\\"","alter table \\"public\\".\\"trust\\" add constraint \\"trusts_pkey\\" PRIMARY KEY using index \\"trusts_pkey\\"","alter table \\"public\\".\\"author\\" add constraint \\"author_birth_town_fkey\\" FOREIGN KEY (birth_town) REFERENCES town(id) ON UPDATE CASCADE not valid","alter table \\"public\\".\\"author\\" validate constraint \\"author_birth_town_fkey\\"","alter table \\"public\\".\\"author\\" add constraint \\"author_created_by_fkey\\" FOREIGN KEY (created_by) REFERENCES profile(id) ON UPDATE CASCADE ON DELETE RESTRICT not valid","alter table \\"public\\".\\"author\\" validate constraint \\"author_created_by_fkey\\"","alter table \\"public\\".\\"author\\" add constraint \\"author_updated_by_fkey\\" FOREIGN KEY (updated_by) REFERENCES profile(id) ON UPDATE CASCADE ON DELETE RESTRICT not valid","alter table \\"public\\".\\"author\\" validate constraint \\"author_updated_by_fkey\\"","alter table \\"public\\".\\"citation\\" add constraint \\"citation_author_id_fkey\\" FOREIGN KEY (author_id) REFERENCES author(id) ON UPDATE CASCADE not valid","alter table \\"public\\".\\"citation\\" validate constraint \\"citation_author_id_fkey\\"","alter table \\"public\\".\\"citation\\" add constraint \\"citation_created_by_fkey\\" FOREIGN KEY (created_by) REFERENCES profile(id) ON UPDATE CASCADE ON DELETE RESTRICT not valid","alter table \\"public\\".\\"citation\\" validate constraint \\"citation_created_by_fkey\\"","alter table \\"public\\".\\"citation\\" add constraint \\"citation_event_id_fkey\\" FOREIGN KEY (event_id) REFERENCES event(id) ON UPDATE CASCADE not valid","alter table \\"public\\".\\"citation\\" validate constraint \\"citation_event_id_fkey\\"","alter table \\"public\\".\\"citation\\" add constraint \\"citation_place_id_fkey\\" FOREIGN KEY (place_id) REFERENCES place(id) not valid","alter table \\"public\\".\\"citation\\" validate constraint \\"citation_place_id_fkey\\"","alter table \\"public\\".\\"citation\\" add constraint \\"citation_updated_by_fkey\\" FOREIGN KEY (updated_by) REFERENCES profile(id) ON UPDATE CASCADE ON DELETE RESTRICT not valid","alter table \\"public\\".\\"citation\\" validate constraint \\"citation_updated_by_fkey\\"","alter table \\"public\\".\\"country\\" add constraint \\"countries_name_check\\" CHECK ((length(name) > 0)) not valid","alter table \\"public\\".\\"country\\" validate constraint \\"countries_name_check\\"","alter table \\"public\\".\\"country\\" add constraint \\"countries_name_key\\" UNIQUE using index \\"countries_name_key\\"","alter table \\"public\\".\\"country\\" add constraint \\"country_created_by_fkey\\" FOREIGN KEY (created_by) REFERENCES profile(id) ON UPDATE CASCADE ON DELETE RESTRICT not valid","alter table \\"public\\".\\"country\\" validate constraint \\"country_created_by_fkey\\"","alter table \\"public\\".\\"country\\" add constraint \\"country_updated_by_fkey\\" FOREIGN KEY (updated_by) REFERENCES profile(id) ON UPDATE CASCADE ON DELETE RESTRICT not valid","alter table \\"public\\".\\"country\\" validate constraint \\"country_updated_by_fkey\\"","alter table \\"public\\".\\"event\\" add constraint \\"event_created_by_fkey\\" FOREIGN KEY (created_by) REFERENCES profile(id) ON UPDATE CASCADE ON DELETE RESTRICT not valid","alter table \\"public\\".\\"event\\" validate constraint \\"event_created_by_fkey\\"","alter table \\"public\\".\\"event\\" add constraint \\"event_place_id_fkey\\" FOREIGN KEY (place_id) REFERENCES place(id) ON UPDATE CASCADE not valid","alter table \\"public\\".\\"event\\" validate constraint \\"event_place_id_fkey\\"","alter table \\"public\\".\\"event\\" add constraint \\"event_updated_by_fkey\\" FOREIGN KEY (updated_by) REFERENCES profile(id) ON UPDATE CASCADE ON DELETE RESTRICT not valid","alter table \\"public\\".\\"event\\" validate constraint \\"event_updated_by_fkey\\"","alter table \\"public\\".\\"place\\" add constraint \\"place_created_by_fkey\\" FOREIGN KEY (created_by) REFERENCES profile(id) ON UPDATE CASCADE ON DELETE RESTRICT not valid","alter table \\"public\\".\\"place\\" validate constraint \\"place_created_by_fkey\\"","alter table \\"public\\".\\"place\\" add constraint \\"place_town_id_fkey\\" FOREIGN KEY (town_id) REFERENCES town(id) ON UPDATE CASCADE not valid","alter table \\"public\\".\\"place\\" validate constraint \\"place_town_id_fkey\\"","alter table \\"public\\".\\"place\\" add constraint \\"place_updated_by_fkey\\" FOREIGN KEY (updated_by) REFERENCES profile(id) ON UPDATE CASCADE ON DELETE RESTRICT not valid","alter table \\"public\\".\\"place\\" validate constraint \\"place_updated_by_fkey\\"","alter table \\"public\\".\\"profile\\" add constraint \\"profile_auth_user_id_fkey\\" FOREIGN KEY (auth_user_id) REFERENCES auth.users(id) ON DELETE CASCADE not valid","alter table \\"public\\".\\"profile\\" validate constraint \\"profile_auth_user_id_fkey\\"","alter table \\"public\\".\\"profile\\" add constraint \\"profiles_username_key\\" UNIQUE using index \\"profiles_username_key\\"","alter table \\"public\\".\\"profile\\" add constraint \\"username_length\\" CHECK ((char_length(username) >= 3)) not valid","alter table \\"public\\".\\"profile\\" validate constraint \\"username_length\\"","alter table \\"public\\".\\"town\\" add constraint \\"town_country_id_fkey\\" FOREIGN KEY (country_id) REFERENCES country(id) ON UPDATE CASCADE not valid","alter table \\"public\\".\\"town\\" validate constraint \\"town_country_id_fkey\\"","alter table \\"public\\".\\"town\\" add constraint \\"town_created_by_fkey\\" FOREIGN KEY (created_by) REFERENCES profile(id) ON UPDATE CASCADE ON DELETE RESTRICT not valid","alter table \\"public\\".\\"town\\" validate constraint \\"town_created_by_fkey\\"","alter table \\"public\\".\\"town\\" add constraint \\"town_updated_by_fkey\\" FOREIGN KEY (updated_by) REFERENCES profile(id) ON UPDATE CASCADE ON DELETE RESTRICT not valid","alter table \\"public\\".\\"town\\" validate constraint \\"town_updated_by_fkey\\"","alter table \\"public\\".\\"town\\" add constraint \\"towns_name_check\\" CHECK ((length(name) > 0)) not valid","alter table \\"public\\".\\"town\\" validate constraint \\"towns_name_check\\"","set check_function_bodies = off","CREATE OR REPLACE FUNCTION public.rls_authors_delete(record author)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_delete_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_authors_edit(record author)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_edit_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_citations_delete(record citation)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_delete_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_citations_edit(record citation)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_edit_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_countries_delete(record country)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_delete_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_countries_edit(record country)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_edit_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_events_delete(record event)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_delete_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_events_edit(record event)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_edit_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_places_delete(record place)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_delete_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_places_edit(record place)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_edit_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_profiles_edit(record profile)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    -- RAISE LOG 'rls_profiles_edit: profile %', record.id;\n    RETURN rls_check_edit_by_created_by(record.id, FALSE, 'claim_edit_all_profiles');\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_profiles_edit(records profile[])\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nDECLARE\n    t profiles;\nBEGIN\n  FOREACH t IN ARRAY records LOOP\n    RAISE LOG 'rls_profiles_edit: profiles %', t.id;\n    RETURN TRUE;\n  END LOOP;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_towns_delete(record town)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_delete_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_towns_edit(record town)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN rls_check_edit_by_created_by(record.created_by);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_trusts_edit(record trust)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    -- RAISE LOG 'rls_profiles_edit: profile %', record.id;\n    RETURN rls_check_edit_by_created_by(record.who, FALSE, 'claim_edit_all_profiles');\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.handle_auth_user_new()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\nBEGIN\n  INSERT INTO public.profile (auth_user_id, full_name, avatar_url)\n\t  VALUES (\n\t\t  NEW.id,\n\t\t  NEW.raw_user_meta_data->>'full_name',\n\t\t  NEW.raw_user_meta_data->>'avatar_url'\n\t  );\n  RETURN NEW;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.rls_check_edit_by_created_by(created_by bigint, allow_trust boolean DEFAULT true, claim_check character varying DEFAULT 'claim_edit_all_content'::character varying)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nDECLARE\n\tprofile_id int8;\nBEGIN\n  profile_id := get_my_claim('profile_id')::int;\n\t-- RAISE WARNING 'rls_check_by_created_by: created_by: %, profile_id: %', created_by, profile_id;\n\t-- RETURN TRUE;\n\tRETURN get_my_claim(claim_check)::varchar::boolean\n\t    OR (profile_id = created_by)\n\t   \tOR (\n\t\t\t\tallow_trust AND ((\n\t\t\t\t\tSELECT TRUE\n\t\t\t\t\tFROM trust\n\t\t\t\t\tWHERE NOW() < trust.end_at\n\t\t\t\t\tAND created_by = trust.who\n\t\t\t\t\t\tAND profile_id = trust.trusts_whom\n\t\t\t\t))\n\t\t\t);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.string_limit(s character varying, max_length integer)\n RETURNS character varying\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN CASE WHEN length(s) > max_length \n      THEN substring(s, 1, max_length - 3) || '...' \n      ELSE s\n      END;\nEND;\n$function$","create or replace view \\"public\\".\\"view_id_name\\" as  SELECT 'author'::text AS table_name,\n    author.id,\n    author.lastname_name_patronymic AS name,\n    string_limit((author.lastname_name_patronymic)::character varying, 20) AS short_name\n   FROM author\nUNION\n SELECT 'citation'::text AS table_name,\n    citation.id,\n    string_limit((citation.english_text)::character varying, 40) AS name,\n    string_limit((citation.english_text)::character varying, 20) AS short_name\n   FROM citation\nUNION\n SELECT 'country'::text AS table_name,\n    country.id,\n    country.name,\n    string_limit((country.name)::character varying, 20) AS short_name\n   FROM country\nUNION\n SELECT 'place'::text AS table_name,\n    place.id,\n    place.name,\n    string_limit((place.name)::character varying, 20) AS short_name\n   FROM place\nUNION\n SELECT 'profile'::text AS table_name,\n    profile.id,\n    (((profile.full_name || ' ('::text) || profile.username) || ')'::text) AS name,\n    profile.username AS short_name\n   FROM profile\nUNION\n SELECT 'town'::text AS table_name,\n    town.id,\n    town.name,\n    string_limit((town.name)::character varying, 20) AS short_name\n   FROM town\n  ORDER BY 1, 4","create or replace view \\"public\\".\\"view_rls_edit_for_table\\" as  SELECT 'authors'::text AS table_name,\n    author.id,\n    rls_authors_edit(author.*) AS editable,\n    rls_authors_delete(author.*) AS deletable\n   FROM author\nUNION\n SELECT 'citations'::text AS table_name,\n    citation.id,\n    rls_citations_edit(citation.*) AS editable,\n    rls_citations_delete(citation.*) AS deletable\n   FROM citation\nUNION\n SELECT 'countries'::text AS table_name,\n    country.id,\n    rls_countries_edit(country.*) AS editable,\n    rls_countries_delete(country.*) AS deletable\n   FROM country\nUNION\n SELECT 'events'::text AS table_name,\n    event.id,\n    rls_events_edit(event.*) AS editable,\n    rls_events_delete(event.*) AS deletable\n   FROM event\nUNION\n SELECT 'places'::text AS table_name,\n    place.id,\n    rls_places_edit(place.*) AS editable,\n    rls_places_delete(place.*) AS deletable\n   FROM place\nUNION\n SELECT 'profiles'::text AS table_name,\n    profile.id,\n    rls_profiles_edit(profile.*) AS editable,\n    false AS deletable\n   FROM profile\nUNION\n SELECT 'towns'::text AS table_name,\n    town.id,\n    rls_towns_edit(town.*) AS editable,\n    rls_towns_delete(town.*) AS deletable\n   FROM town\nUNION\n SELECT 'trusts'::text AS table_name,\n    trust.id,\n    rls_trusts_edit(trust.*) AS editable,\n    rls_trusts_edit(trust.*) AS deletable\n   FROM trust","create policy \\"RLS: authors: delete\\"\non \\"public\\".\\"author\\"\nas permissive\nfor delete\nto authenticated\nusing (rls_authors_edit(author.*))","create policy \\"RLS: authors: insert\\"\non \\"public\\".\\"author\\"\nas permissive\nfor insert\nto authenticated\nwith check (rls_authors_edit(author.*))","create policy \\"RLS: authors: select\\"\non \\"public\\".\\"author\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"RLS: authors: update\\"\non \\"public\\".\\"author\\"\nas permissive\nfor update\nto authenticated\nusing (rls_authors_edit(author.*))\nwith check (rls_authors_edit(author.*))","create policy \\"RLS: citations: delete\\"\non \\"public\\".\\"citation\\"\nas permissive\nfor delete\nto authenticated\nusing (rls_citations_edit(citation.*))","create policy \\"RLS: citations: insert\\"\non \\"public\\".\\"citation\\"\nas permissive\nfor insert\nto authenticated\nwith check (rls_citations_edit(citation.*))","create policy \\"RLS: citations: select\\"\non \\"public\\".\\"citation\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"RLS: citations: update\\"\non \\"public\\".\\"citation\\"\nas permissive\nfor update\nto authenticated\nusing (rls_citations_edit(citation.*))\nwith check (rls_citations_edit(citation.*))","create policy \\"RLS: countries: delete\\"\non \\"public\\".\\"country\\"\nas permissive\nfor delete\nto authenticated\nusing (rls_countries_delete(country.*))","create policy \\"RLS: countries: insert\\"\non \\"public\\".\\"country\\"\nas permissive\nfor insert\nto authenticated\nwith check (rls_countries_edit(country.*))","create policy \\"RLS: countries: select\\"\non \\"public\\".\\"country\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"RLS: countries: update\\"\non \\"public\\".\\"country\\"\nas permissive\nfor update\nto authenticated\nusing (rls_countries_edit(country.*))\nwith check (rls_countries_edit(country.*))","create policy \\"RLS: events: delete\\"\non \\"public\\".\\"event\\"\nas permissive\nfor delete\nto authenticated\nusing (rls_events_edit(event.*))","create policy \\"RLS: events: insert\\"\non \\"public\\".\\"event\\"\nas permissive\nfor insert\nto authenticated\nwith check (rls_events_edit(event.*))","create policy \\"RLS: events: select\\"\non \\"public\\".\\"event\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"RLS: events: update\\"\non \\"public\\".\\"event\\"\nas permissive\nfor update\nto authenticated\nusing (rls_events_edit(event.*))\nwith check (rls_events_edit(event.*))","create policy \\"RLS: places: delete\\"\non \\"public\\".\\"place\\"\nas permissive\nfor delete\nto authenticated\nusing (rls_places_edit(place.*))","create policy \\"RLS: places: insert\\"\non \\"public\\".\\"place\\"\nas permissive\nfor insert\nto authenticated\nwith check (rls_places_edit(place.*))","create policy \\"RLS: places: select\\"\non \\"public\\".\\"place\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"RLS: places: update\\"\non \\"public\\".\\"place\\"\nas permissive\nfor update\nto authenticated\nusing (rls_places_edit(place.*))\nwith check (rls_places_edit(place.*))","create policy \\" RLS: profiles: insert\\"\non \\"public\\".\\"profile\\"\nas permissive\nfor insert\nto public\nwith check ((auth.uid() = auth_user_id))","create policy \\" RLS: profiles: update\\"\non \\"public\\".\\"profile\\"\nas permissive\nfor update\nto public\nusing (rls_profiles_edit(profile.*))","create policy \\"RLS: profiles: select\\"\non \\"public\\".\\"profile\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"RLS: towns: delete\\"\non \\"public\\".\\"town\\"\nas permissive\nfor delete\nto authenticated\nusing (rls_towns_edit(town.*))","create policy \\"RLS: towns: insert\\"\non \\"public\\".\\"town\\"\nas permissive\nfor insert\nto authenticated\nwith check (rls_towns_edit(town.*))","create policy \\"RLS: towns: select\\"\non \\"public\\".\\"town\\"\nas permissive\nfor select\nto public\nusing (true)","create policy \\"RLS: towns: update\\"\non \\"public\\".\\"town\\"\nas permissive\nfor update\nto authenticated\nusing (rls_towns_edit(town.*))\nwith check (rls_towns_edit(town.*))","create policy \\"RLS: trusts: delete\\"\non \\"public\\".\\"trust\\"\nas permissive\nfor delete\nto authenticated\nusing (rls_trusts_edit(trust.*))","create policy \\"RLS: trusts: insert\\"\non \\"public\\".\\"trust\\"\nas permissive\nfor insert\nto authenticated\nwith check (rls_trusts_edit(trust.*))","create policy \\"RLS: trusts: select\\"\non \\"public\\".\\"trust\\"\nas permissive\nfor select\nto authenticated\nusing (true)","create policy \\"RLS: trusts: update\\"\non \\"public\\".\\"trust\\"\nas permissive\nfor update\nto authenticated\nusing (rls_trusts_edit(trust.*))\nwith check (rls_trusts_edit(trust.*))","CREATE TRIGGER on_authors_edit_fill_update BEFORE UPDATE ON public.author FOR EACH ROW EXECUTE FUNCTION handle_fill_updated()","CREATE TRIGGER on_authors_new_fill_created_by BEFORE INSERT ON public.author FOR EACH ROW EXECUTE FUNCTION handle_fill_created_by()","CREATE TRIGGER on_citations_edit_fill_update BEFORE UPDATE ON public.citation FOR EACH ROW EXECUTE FUNCTION handle_fill_updated()","CREATE TRIGGER on_citations_new_fill_created_by BEFORE INSERT ON public.citation FOR EACH ROW EXECUTE FUNCTION handle_fill_created_by()","CREATE TRIGGER on_country_edit_fill_update BEFORE UPDATE ON public.country FOR EACH ROW EXECUTE FUNCTION handle_fill_updated()","CREATE TRIGGER on_country_new_fill_created_by BEFORE INSERT ON public.country FOR EACH ROW EXECUTE FUNCTION handle_fill_created_by()","CREATE TRIGGER on_events_edit_fill_update BEFORE UPDATE ON public.event FOR EACH ROW EXECUTE FUNCTION handle_fill_updated()","CREATE TRIGGER on_events_new_fill_created_by BEFORE INSERT ON public.event FOR EACH ROW EXECUTE FUNCTION handle_fill_created_by()","CREATE TRIGGER on_places_edit_fill_update BEFORE UPDATE ON public.place FOR EACH ROW EXECUTE FUNCTION handle_fill_updated()","CREATE TRIGGER on_places_new_fill_created_by BEFORE INSERT ON public.place FOR EACH ROW EXECUTE FUNCTION handle_fill_created_by()","CREATE TRIGGER on_public_profile_new AFTER INSERT ON public.profile FOR EACH ROW EXECUTE FUNCTION handle_public_profile_new()","CREATE TRIGGER on_towns_edit_fill_update BEFORE UPDATE ON public.town FOR EACH ROW EXECUTE FUNCTION handle_fill_updated()","CREATE TRIGGER on_towns_new_fill_created_by BEFORE INSERT ON public.town FOR EACH ROW EXECUTE FUNCTION handle_fill_created_by()"}	data_loss_rename_singular_and_content_item
+20240114160552	{"create or replace view \\"public\\".\\"view_rls_edit_for_table\\" as  SELECT 'author'::text AS table_name,\n    author.id,\n    rls_authors_edit(author.*) AS editable,\n    rls_authors_delete(author.*) AS deletable\n   FROM author\nUNION\n SELECT 'citation'::text AS table_name,\n    citation.id,\n    rls_citations_edit(citation.*) AS editable,\n    rls_citations_delete(citation.*) AS deletable\n   FROM citation\nUNION\n SELECT 'country'::text AS table_name,\n    country.id,\n    rls_countries_edit(country.*) AS editable,\n    rls_countries_delete(country.*) AS deletable\n   FROM country\nUNION\n SELECT 'event'::text AS table_name,\n    event.id,\n    rls_events_edit(event.*) AS editable,\n    rls_events_delete(event.*) AS deletable\n   FROM event\nUNION\n SELECT 'place'::text AS table_name,\n    place.id,\n    rls_places_edit(place.*) AS editable,\n    rls_places_delete(place.*) AS deletable\n   FROM place\nUNION\n SELECT 'profile'::text AS table_name,\n    profile.id,\n    rls_profiles_edit(profile.*) AS editable,\n    false AS deletable\n   FROM profile\nUNION\n SELECT 'town'::text AS table_name,\n    town.id,\n    rls_towns_edit(town.*) AS editable,\n    rls_towns_delete(town.*) AS deletable\n   FROM town\nUNION\n SELECT 'trust'::text AS table_name,\n    trust.id,\n    rls_trusts_edit(trust.*) AS editable,\n    rls_trusts_edit(trust.*) AS deletable\n   FROM trust"}	view_rls_edit_for_table_fix_after_rename
 \.
 
 
@@ -2705,7 +2837,7 @@ COPY vault.secrets (id, name, description, secret, key_id, nonce, created_at, up
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 1212, true);
+SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 1231, true);
 
 
 --
@@ -2733,7 +2865,7 @@ SELECT pg_catalog.setval('public.citations_id_seq', 1, false);
 -- Name: country_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.country_id_seq', 12, true);
+SELECT pg_catalog.setval('public.country_id_seq', 15, true);
 
 
 --
@@ -3361,10 +3493,17 @@ CREATE TRIGGER on_citations_new_fill_created_by BEFORE INSERT ON public.citation
 
 
 --
--- Name: country on_country_edit_fill_update; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: country on_country_edit; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER on_country_edit_fill_update BEFORE UPDATE ON public.country FOR EACH ROW EXECUTE FUNCTION public.handle_fill_updated();
+CREATE TRIGGER on_country_edit BEFORE UPDATE ON public.country FOR EACH ROW EXECUTE FUNCTION public.handle_content_item_edit();
+
+
+--
+-- Name: country on_country_new; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER on_country_new BEFORE UPDATE ON public.country FOR EACH ROW EXECUTE FUNCTION public.handle_content_item_new();
 
 
 --
@@ -3749,31 +3888,38 @@ CREATE POLICY "RLS: citations: update" ON public.citation FOR UPDATE TO authenti
 
 
 --
--- Name: country RLS: countries: delete; Type: POLICY; Schema: public; Owner: postgres
+-- Name: content_item RLS: content_item: select; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: countries: delete" ON public.country FOR DELETE TO authenticated USING (public.rls_countries_delete(country.*));
-
-
---
--- Name: country RLS: countries: insert; Type: POLICY; Schema: public; Owner: postgres
---
-
-CREATE POLICY "RLS: countries: insert" ON public.country FOR INSERT TO authenticated WITH CHECK (public.rls_countries_edit(country.*));
+CREATE POLICY "RLS: content_item: select" ON public.content_item FOR SELECT USING (true);
 
 
 --
--- Name: country RLS: countries: select; Type: POLICY; Schema: public; Owner: postgres
+-- Name: country RLS: country: delete; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: countries: select" ON public.country FOR SELECT USING (true);
+CREATE POLICY "RLS: country: delete" ON public.country FOR DELETE TO authenticated USING (public.rls_content_item_check_delete((country.*)::public.content_item));
 
 
 --
--- Name: country RLS: countries: update; Type: POLICY; Schema: public; Owner: postgres
+-- Name: country RLS: country: insert; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: countries: update" ON public.country FOR UPDATE TO authenticated USING (public.rls_countries_edit(country.*)) WITH CHECK (public.rls_countries_edit(country.*));
+CREATE POLICY "RLS: country: insert" ON public.country FOR INSERT TO authenticated WITH CHECK (public.rls_content_item_check_edit((country.*)::public.content_item));
+
+
+--
+-- Name: country RLS: country: select; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY "RLS: country: select" ON public.country FOR SELECT USING (true);
+
+
+--
+-- Name: country RLS: country: update; Type: POLICY; Schema: public; Owner: postgres
+--
+
+CREATE POLICY "RLS: country: update" ON public.country FOR UPDATE TO authenticated USING (public.rls_content_item_check_edit((country.*)::public.content_item)) WITH CHECK (public.rls_content_item_check_edit((country.*)::public.content_item));
 
 
 --
@@ -3906,6 +4052,12 @@ ALTER TABLE public.author ENABLE ROW LEVEL SECURITY;
 --
 
 ALTER TABLE public.citation ENABLE ROW LEVEL SECURITY;
+
+--
+-- Name: content_item; Type: ROW SECURITY; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.content_item ENABLE ROW LEVEL SECURITY;
 
 --
 -- Name: country; Type: ROW SECURITY; Schema: public; Owner: postgres
@@ -4623,6 +4775,15 @@ GRANT ALL ON FUNCTION public.delete_claim(uid uuid, claim text) TO service_role;
 
 
 --
+-- Name: FUNCTION fn_any_type(r record); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.fn_any_type(r record) TO anon;
+GRANT ALL ON FUNCTION public.fn_any_type(r record) TO authenticated;
+GRANT ALL ON FUNCTION public.fn_any_type(r record) TO service_role;
+
+
+--
 -- Name: FUNCTION get_claim(uid uuid, claim text); Type: ACL; Schema: public; Owner: postgres
 --
 
@@ -4668,6 +4829,24 @@ GRANT ALL ON FUNCTION public.handle_auth_user_new() TO service_role;
 
 
 --
+-- Name: FUNCTION handle_content_item_edit(); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.handle_content_item_edit() TO anon;
+GRANT ALL ON FUNCTION public.handle_content_item_edit() TO authenticated;
+GRANT ALL ON FUNCTION public.handle_content_item_edit() TO service_role;
+
+
+--
+-- Name: FUNCTION handle_content_item_new(); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.handle_content_item_new() TO anon;
+GRANT ALL ON FUNCTION public.handle_content_item_new() TO authenticated;
+GRANT ALL ON FUNCTION public.handle_content_item_new() TO service_role;
+
+
+--
 -- Name: FUNCTION handle_fill_created_by(); Type: ACL; Schema: public; Owner: postgres
 --
 
@@ -4701,6 +4880,33 @@ GRANT ALL ON FUNCTION public.handle_public_profile_new() TO service_role;
 GRANT ALL ON FUNCTION public.is_claims_admin() TO anon;
 GRANT ALL ON FUNCTION public.is_claims_admin() TO authenticated;
 GRANT ALL ON FUNCTION public.is_claims_admin() TO service_role;
+
+
+--
+-- Name: FUNCTION record_fill_created_by(r record); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.record_fill_created_by(r record) TO anon;
+GRANT ALL ON FUNCTION public.record_fill_created_by(r record) TO authenticated;
+GRANT ALL ON FUNCTION public.record_fill_created_by(r record) TO service_role;
+
+
+--
+-- Name: FUNCTION record_fill_updated_at(r record); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.record_fill_updated_at(r record) TO anon;
+GRANT ALL ON FUNCTION public.record_fill_updated_at(r record) TO authenticated;
+GRANT ALL ON FUNCTION public.record_fill_updated_at(r record) TO service_role;
+
+
+--
+-- Name: FUNCTION record_fill_updated_by(r record); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.record_fill_updated_by(r record) TO anon;
+GRANT ALL ON FUNCTION public.record_fill_updated_by(r record) TO authenticated;
+GRANT ALL ON FUNCTION public.record_fill_updated_by(r record) TO service_role;
 
 
 --
@@ -4776,30 +4982,30 @@ GRANT ALL ON FUNCTION public.rls_citations_edit(record public.citation) TO servi
 
 
 --
--- Name: TABLE country; Type: ACL; Schema: public; Owner: postgres
+-- Name: TABLE content_item; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON TABLE public.country TO anon;
-GRANT ALL ON TABLE public.country TO authenticated;
-GRANT ALL ON TABLE public.country TO service_role;
-
-
---
--- Name: FUNCTION rls_countries_delete(record public.country); Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON FUNCTION public.rls_countries_delete(record public.country) TO anon;
-GRANT ALL ON FUNCTION public.rls_countries_delete(record public.country) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_countries_delete(record public.country) TO service_role;
+GRANT ALL ON TABLE public.content_item TO anon;
+GRANT ALL ON TABLE public.content_item TO authenticated;
+GRANT ALL ON TABLE public.content_item TO service_role;
 
 
 --
--- Name: FUNCTION rls_countries_edit(record public.country); Type: ACL; Schema: public; Owner: postgres
+-- Name: FUNCTION rls_content_item_check_delete(record public.content_item); Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON FUNCTION public.rls_countries_edit(record public.country) TO anon;
-GRANT ALL ON FUNCTION public.rls_countries_edit(record public.country) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_countries_edit(record public.country) TO service_role;
+GRANT ALL ON FUNCTION public.rls_content_item_check_delete(record public.content_item) TO anon;
+GRANT ALL ON FUNCTION public.rls_content_item_check_delete(record public.content_item) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_content_item_check_delete(record public.content_item) TO service_role;
+
+
+--
+-- Name: FUNCTION rls_content_item_check_edit(record public.content_item); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.rls_content_item_check_edit(record public.content_item) TO anon;
+GRANT ALL ON FUNCTION public.rls_content_item_check_edit(record public.content_item) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_content_item_check_edit(record public.content_item) TO service_role;
 
 
 --
@@ -5200,12 +5406,12 @@ GRANT ALL ON SEQUENCE public.citations_id_seq TO service_role;
 
 
 --
--- Name: TABLE content_item; Type: ACL; Schema: public; Owner: postgres
+-- Name: TABLE country; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON TABLE public.content_item TO anon;
-GRANT ALL ON TABLE public.content_item TO authenticated;
-GRANT ALL ON TABLE public.content_item TO service_role;
+GRANT ALL ON TABLE public.country TO anon;
+GRANT ALL ON TABLE public.country TO authenticated;
+GRANT ALL ON TABLE public.country TO service_role;
 
 
 --
@@ -5269,6 +5475,15 @@ GRANT ALL ON SEQUENCE public.trusts_id_seq TO service_role;
 GRANT ALL ON TABLE public.view_id_name TO anon;
 GRANT ALL ON TABLE public.view_id_name TO authenticated;
 GRANT ALL ON TABLE public.view_id_name TO service_role;
+
+
+--
+-- Name: TABLE view_rls_content_item; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.view_rls_content_item TO anon;
+GRANT ALL ON TABLE public.view_rls_content_item TO authenticated;
+GRANT ALL ON TABLE public.view_rls_content_item TO service_role;
 
 
 --

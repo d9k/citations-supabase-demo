@@ -220,6 +220,11 @@ export interface Database {
           id: number
           name: string
           next_rename_year: number | null
+          published_at: string | null
+          published_by: number | null
+          table_name: string
+          unpublished_at: string | null
+          unpublished_by: number | null
           updated_at: string | null
           updated_by: number | null
         }
@@ -230,6 +235,11 @@ export interface Database {
           id?: number
           name?: string
           next_rename_year?: number | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string | null
           updated_by?: number | null
         }
@@ -240,6 +250,11 @@ export interface Database {
           id?: number
           name?: string
           next_rename_year?: number | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string | null
           updated_by?: number | null
         }
@@ -501,6 +516,27 @@ export interface Database {
         }
         Relationships: []
       }
+      view_rls_content_item: {
+        Row: {
+          deletable: boolean | null
+          editable: boolean | null
+          id: number | null
+          table_name: string | null
+        }
+        Insert: {
+          deletable?: never
+          editable?: never
+          id?: number | null
+          table_name?: string | null
+        }
+        Update: {
+          deletable?: never
+          editable?: never
+          id?: number | null
+          table_name?: string | null
+        }
+        Relationships: []
+      }
       view_rls_edit_for_table: {
         Row: {
           deletable: boolean | null
@@ -518,6 +554,12 @@ export interface Database {
           claim: string
         }
         Returns: string
+      }
+      fn_any_type: {
+        Args: {
+          r: Record<string, unknown>
+        }
+        Returns: Record<string, unknown>
       }
       get_claim: {
         Args: {
@@ -545,6 +587,24 @@ export interface Database {
       is_claims_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      record_fill_created_by: {
+        Args: {
+          r: Record<string, unknown>
+        }
+        Returns: Record<string, unknown>
+      }
+      record_fill_updated_at: {
+        Args: {
+          r: Record<string, unknown>
+        }
+        Returns: Record<string, unknown>
+      }
+      record_fill_updated_by: {
+        Args: {
+          r: Record<string, unknown>
+        }
+        Returns: Record<string, unknown>
       }
       rls_authors_delete: {
         Args: {
@@ -586,13 +646,13 @@ export interface Database {
         }
         Returns: boolean
       }
-      rls_countries_delete: {
+      rls_content_item_check_delete: {
         Args: {
           record: unknown
         }
         Returns: boolean
       }
-      rls_countries_edit: {
+      rls_content_item_check_edit: {
         Args: {
           record: unknown
         }

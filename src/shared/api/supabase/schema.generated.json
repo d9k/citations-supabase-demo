@@ -250,6 +250,31 @@
         "type": "number",
         "description": "maximum next rename year"
       },
+      "published_at": {
+        "name": "published_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "published_by": {
+        "name": "published_by",
+        "nullable": true,
+        "type": "number"
+      },
+      "table_name": {
+        "name": "table_name",
+        "nullable": false,
+        "type": "string"
+      },
+      "unpublished_at": {
+        "name": "unpublished_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_by": {
+        "name": "unpublished_by",
+        "nullable": true,
+        "type": "number"
+      },
       "updated_at": {
         "name": "updated_at",
         "nullable": true,
