@@ -22,3 +22,5 @@ export const COLUMNS_SHOW_LAST = [
   'updated_at',
   COLUMN_NAME_DELETABLE,
 ];
+
+export const TABLES_HIDDEN = ['content_item'];

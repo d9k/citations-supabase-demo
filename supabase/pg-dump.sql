@@ -769,7 +769,7 @@ CREATE FUNCTION public.handle_auth_user_new() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
     AS $$
 BEGIN
-  INSERT INTO public.profiles (auth_user_id, full_name, avatar_url)
+  INSERT INTO public.profile (auth_user_id, full_name, avatar_url)
 	  VALUES (
 		  NEW.id,
 		  NEW.raw_user_meta_data->>'full_name',
@@ -887,10 +887,10 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: authors; Type: TABLE; Schema: public; Owner: postgres
+-- Name: author; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.authors (
+CREATE TABLE public.author (
     id bigint NOT NULL,
     lastname_name_patronymic text NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -904,27 +904,27 @@ CREATE TABLE public.authors (
 );
 
 
-ALTER TABLE public.authors OWNER TO postgres;
+ALTER TABLE public.author OWNER TO postgres;
 
 --
--- Name: COLUMN authors.lastname_name_patronymic; Type: COMMENT; Schema: public; Owner: postgres
+-- Name: COLUMN author.lastname_name_patronymic; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON COLUMN public.authors.lastname_name_patronymic IS 'separated by spaces';
-
-
---
--- Name: COLUMN authors.birth_town; Type: COMMENT; Schema: public; Owner: postgres
---
-
-COMMENT ON COLUMN public.authors.birth_town IS 'town of birth (test description)';
+COMMENT ON COLUMN public.author.lastname_name_patronymic IS 'separated by spaces';
 
 
 --
--- Name: rls_authors_delete(public.authors); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: COLUMN author.birth_town; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_authors_delete(record public.authors) RETURNS boolean
+COMMENT ON COLUMN public.author.birth_town IS 'town of birth (test description)';
+
+
+--
+-- Name: rls_authors_delete(public.author); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.rls_authors_delete(record public.author) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -933,13 +933,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_authors_delete(record public.authors) OWNER TO postgres;
+ALTER FUNCTION public.rls_authors_delete(record public.author) OWNER TO postgres;
 
 --
--- Name: rls_authors_edit(public.authors); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_authors_edit(public.author); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_authors_edit(record public.authors) RETURNS boolean
+CREATE FUNCTION public.rls_authors_edit(record public.author) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -948,7 +948,7 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_authors_edit(record public.authors) OWNER TO postgres;
+ALTER FUNCTION public.rls_authors_edit(record public.author) OWNER TO postgres;
 
 --
 -- Name: rls_check_delete_by_created_by(bigint, boolean, character varying); Type: FUNCTION; Schema: public; Owner: postgres
@@ -983,10 +983,10 @@ BEGIN
 	   	OR (
 				allow_trust AND ((
 					SELECT TRUE
-					FROM trusts
-					WHERE NOW() < trusts.end_at
-					AND created_by = trusts.who
-						AND profile_id = trusts.trusts_whom
+					FROM trust
+					WHERE NOW() < trust.end_at
+					AND created_by = trust.who
+						AND profile_id = trust.trusts_whom
 				))
 			);
 END;
@@ -996,10 +996,10 @@ $$;
 ALTER FUNCTION public.rls_check_edit_by_created_by(created_by bigint, allow_trust boolean, claim_check character varying) OWNER TO postgres;
 
 --
--- Name: citations; Type: TABLE; Schema: public; Owner: postgres
+-- Name: citation; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.citations (
+CREATE TABLE public.citation (
     id bigint NOT NULL,
     english_text text,
     author_id bigint NOT NULL,
@@ -1014,13 +1014,13 @@ CREATE TABLE public.citations (
 );
 
 
-ALTER TABLE public.citations OWNER TO postgres;
+ALTER TABLE public.citation OWNER TO postgres;
 
 --
--- Name: rls_citations_delete(public.citations); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_citations_delete(public.citation); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_citations_delete(record public.citations) RETURNS boolean
+CREATE FUNCTION public.rls_citations_delete(record public.citation) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1029,13 +1029,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_citations_delete(record public.citations) OWNER TO postgres;
+ALTER FUNCTION public.rls_citations_delete(record public.citation) OWNER TO postgres;
 
 --
--- Name: rls_citations_edit(public.citations); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_citations_edit(public.citation); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_citations_edit(record public.citations) RETURNS boolean
+CREATE FUNCTION public.rls_citations_edit(record public.citation) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1044,13 +1044,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_citations_edit(record public.citations) OWNER TO postgres;
+ALTER FUNCTION public.rls_citations_edit(record public.citation) OWNER TO postgres;
 
 --
--- Name: countries; Type: TABLE; Schema: public; Owner: postgres
+-- Name: country; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.countries (
+CREATE TABLE public.country (
     id bigint NOT NULL,
     name text DEFAULT ''::text NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -1063,27 +1063,27 @@ CREATE TABLE public.countries (
 );
 
 
-ALTER TABLE public.countries OWNER TO postgres;
+ALTER TABLE public.country OWNER TO postgres;
 
 --
--- Name: COLUMN countries.found_year; Type: COMMENT; Schema: public; Owner: postgres
+-- Name: COLUMN country.found_year; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-COMMENT ON COLUMN public.countries.found_year IS 'minimum found year';
-
-
---
--- Name: COLUMN countries.next_rename_year; Type: COMMENT; Schema: public; Owner: postgres
---
-
-COMMENT ON COLUMN public.countries.next_rename_year IS 'maximum next rename year';
+COMMENT ON COLUMN public.country.found_year IS 'minimum found year';
 
 
 --
--- Name: rls_countries_delete(public.countries); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: COLUMN country.next_rename_year; Type: COMMENT; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_countries_delete(record public.countries) RETURNS boolean
+COMMENT ON COLUMN public.country.next_rename_year IS 'maximum next rename year';
+
+
+--
+-- Name: rls_countries_delete(public.country); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.rls_countries_delete(record public.country) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1092,13 +1092,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_countries_delete(record public.countries) OWNER TO postgres;
+ALTER FUNCTION public.rls_countries_delete(record public.country) OWNER TO postgres;
 
 --
--- Name: rls_countries_edit(public.countries); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_countries_edit(public.country); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_countries_edit(record public.countries) RETURNS boolean
+CREATE FUNCTION public.rls_countries_edit(record public.country) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1107,13 +1107,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_countries_edit(record public.countries) OWNER TO postgres;
+ALTER FUNCTION public.rls_countries_edit(record public.country) OWNER TO postgres;
 
 --
--- Name: events; Type: TABLE; Schema: public; Owner: postgres
+-- Name: event; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.events (
+CREATE TABLE public.event (
     id bigint NOT NULL,
     name text NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -1128,13 +1128,13 @@ CREATE TABLE public.events (
 );
 
 
-ALTER TABLE public.events OWNER TO postgres;
+ALTER TABLE public.event OWNER TO postgres;
 
 --
--- Name: rls_events_delete(public.events); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_events_delete(public.event); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_events_delete(record public.events) RETURNS boolean
+CREATE FUNCTION public.rls_events_delete(record public.event) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1143,13 +1143,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_events_delete(record public.events) OWNER TO postgres;
+ALTER FUNCTION public.rls_events_delete(record public.event) OWNER TO postgres;
 
 --
--- Name: rls_events_edit(public.events); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_events_edit(public.event); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_events_edit(record public.events) RETURNS boolean
+CREATE FUNCTION public.rls_events_edit(record public.event) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1158,13 +1158,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_events_edit(record public.events) OWNER TO postgres;
+ALTER FUNCTION public.rls_events_edit(record public.event) OWNER TO postgres;
 
 --
--- Name: places; Type: TABLE; Schema: public; Owner: postgres
+-- Name: place; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.places (
+CREATE TABLE public.place (
     id bigint NOT NULL,
     name text DEFAULT 'in'::text NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -1175,13 +1175,13 @@ CREATE TABLE public.places (
 );
 
 
-ALTER TABLE public.places OWNER TO postgres;
+ALTER TABLE public.place OWNER TO postgres;
 
 --
--- Name: rls_places_delete(public.places); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_places_delete(public.place); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_places_delete(record public.places) RETURNS boolean
+CREATE FUNCTION public.rls_places_delete(record public.place) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1190,13 +1190,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_places_delete(record public.places) OWNER TO postgres;
+ALTER FUNCTION public.rls_places_delete(record public.place) OWNER TO postgres;
 
 --
--- Name: rls_places_edit(public.places); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_places_edit(public.place); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_places_edit(record public.places) RETURNS boolean
+CREATE FUNCTION public.rls_places_edit(record public.place) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1205,13 +1205,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_places_edit(record public.places) OWNER TO postgres;
+ALTER FUNCTION public.rls_places_edit(record public.place) OWNER TO postgres;
 
 --
--- Name: profiles; Type: TABLE; Schema: public; Owner: postgres
+-- Name: profile; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.profiles (
+CREATE TABLE public.profile (
     auth_user_id uuid NOT NULL,
     updated_at timestamp with time zone,
     username text,
@@ -1224,13 +1224,13 @@ CREATE TABLE public.profiles (
 );
 
 
-ALTER TABLE public.profiles OWNER TO postgres;
+ALTER TABLE public.profile OWNER TO postgres;
 
 --
--- Name: rls_profiles_edit(public.profiles[]); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_profiles_edit(public.profile[]); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_profiles_edit(records public.profiles[]) RETURNS boolean
+CREATE FUNCTION public.rls_profiles_edit(records public.profile[]) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 DECLARE
@@ -1244,13 +1244,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_profiles_edit(records public.profiles[]) OWNER TO postgres;
+ALTER FUNCTION public.rls_profiles_edit(records public.profile[]) OWNER TO postgres;
 
 --
--- Name: rls_profiles_edit(public.profiles); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_profiles_edit(public.profile); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_profiles_edit(record public.profiles) RETURNS boolean
+CREATE FUNCTION public.rls_profiles_edit(record public.profile) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1260,13 +1260,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_profiles_edit(record public.profiles) OWNER TO postgres;
+ALTER FUNCTION public.rls_profiles_edit(record public.profile) OWNER TO postgres;
 
 --
--- Name: towns; Type: TABLE; Schema: public; Owner: postgres
+-- Name: town; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.towns (
+CREATE TABLE public.town (
     id bigint NOT NULL,
     name text NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -1278,13 +1278,13 @@ CREATE TABLE public.towns (
 );
 
 
-ALTER TABLE public.towns OWNER TO postgres;
+ALTER TABLE public.town OWNER TO postgres;
 
 --
--- Name: rls_towns_delete(public.towns); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_towns_delete(public.town); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_towns_delete(record public.towns) RETURNS boolean
+CREATE FUNCTION public.rls_towns_delete(record public.town) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1293,13 +1293,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_towns_delete(record public.towns) OWNER TO postgres;
+ALTER FUNCTION public.rls_towns_delete(record public.town) OWNER TO postgres;
 
 --
--- Name: rls_towns_edit(public.towns); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_towns_edit(public.town); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_towns_edit(record public.towns) RETURNS boolean
+CREATE FUNCTION public.rls_towns_edit(record public.town) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1308,13 +1308,13 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_towns_edit(record public.towns) OWNER TO postgres;
+ALTER FUNCTION public.rls_towns_edit(record public.town) OWNER TO postgres;
 
 --
--- Name: trusts; Type: TABLE; Schema: public; Owner: postgres
+-- Name: trust; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.trusts (
+CREATE TABLE public.trust (
     id bigint NOT NULL,
     who bigint NOT NULL,
     trusts_whom bigint NOT NULL,
@@ -1322,13 +1322,13 @@ CREATE TABLE public.trusts (
 );
 
 
-ALTER TABLE public.trusts OWNER TO postgres;
+ALTER TABLE public.trust OWNER TO postgres;
 
 --
--- Name: rls_trusts_edit(public.trusts); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: rls_trusts_edit(public.trust); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.rls_trusts_edit(record public.trusts) RETURNS boolean
+CREATE FUNCTION public.rls_trusts_edit(record public.trust) RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -1338,7 +1338,7 @@ END;
 $$;
 
 
-ALTER FUNCTION public.rls_trusts_edit(record public.trusts) OWNER TO postgres;
+ALTER FUNCTION public.rls_trusts_edit(record public.trust) OWNER TO postgres;
 
 --
 -- Name: set_claim(uuid, text, jsonb); Type: FUNCTION; Schema: public; Owner: postgres
@@ -2046,7 +2046,7 @@ COMMENT ON COLUMN auth.users.is_sso_user IS 'Auth: Set this column to true when 
 -- Name: author_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.authors ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+ALTER TABLE public.author ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME public.author_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -2060,7 +2060,7 @@ ALTER TABLE public.authors ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY 
 -- Name: citations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.citations ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+ALTER TABLE public.citation ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME public.citations_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -2071,10 +2071,30 @@ ALTER TABLE public.citations ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTIT
 
 
 --
+-- Name: content_item; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.content_item (
+    table_name text NOT NULL,
+    id bigint NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_by bigint,
+    updated_at timestamp with time zone,
+    updated_by bigint,
+    published_at timestamp with time zone,
+    published_by bigint,
+    unpublished_at timestamp with time zone,
+    unpublished_by bigint
+);
+
+
+ALTER TABLE public.content_item OWNER TO postgres;
+
+--
 -- Name: country_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.countries ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+ALTER TABLE public.country ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME public.country_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -2088,7 +2108,7 @@ ALTER TABLE public.countries ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTIT
 -- Name: event_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.events ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+ALTER TABLE public.event ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME public.event_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -2102,7 +2122,7 @@ ALTER TABLE public.events ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
 -- Name: place_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.places ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+ALTER TABLE public.place ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME public.place_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -2116,7 +2136,7 @@ ALTER TABLE public.places ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
 -- Name: profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.profiles ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+ALTER TABLE public.profile ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME public.profiles_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -2130,7 +2150,7 @@ ALTER TABLE public.profiles ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY
 -- Name: town_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.towns ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+ALTER TABLE public.town ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME public.town_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -2144,7 +2164,7 @@ ALTER TABLE public.towns ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
 -- Name: trusts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.trusts ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+ALTER TABLE public.trust ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME public.trusts_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -2159,41 +2179,41 @@ ALTER TABLE public.trusts ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
 --
 
 CREATE VIEW public.view_id_name AS
- SELECT 'authors'::text AS table_name,
-    authors.id,
-    authors.lastname_name_patronymic AS name,
-    public.string_limit((authors.lastname_name_patronymic)::character varying, 20) AS short_name
-   FROM public.authors
+ SELECT 'author'::text AS table_name,
+    author.id,
+    author.lastname_name_patronymic AS name,
+    public.string_limit((author.lastname_name_patronymic)::character varying, 20) AS short_name
+   FROM public.author
 UNION
- SELECT 'citations'::text AS table_name,
-    citations.id,
-    public.string_limit((citations.english_text)::character varying, 40) AS name,
-    public.string_limit((citations.english_text)::character varying, 20) AS short_name
-   FROM public.citations
+ SELECT 'citation'::text AS table_name,
+    citation.id,
+    public.string_limit((citation.english_text)::character varying, 40) AS name,
+    public.string_limit((citation.english_text)::character varying, 20) AS short_name
+   FROM public.citation
 UNION
- SELECT 'countries'::text AS table_name,
-    countries.id,
-    countries.name,
-    public.string_limit((countries.name)::character varying, 20) AS short_name
-   FROM public.countries
+ SELECT 'country'::text AS table_name,
+    country.id,
+    country.name,
+    public.string_limit((country.name)::character varying, 20) AS short_name
+   FROM public.country
 UNION
- SELECT 'places'::text AS table_name,
-    places.id,
-    places.name,
-    public.string_limit((places.name)::character varying, 20) AS short_name
-   FROM public.places
+ SELECT 'place'::text AS table_name,
+    place.id,
+    place.name,
+    public.string_limit((place.name)::character varying, 20) AS short_name
+   FROM public.place
 UNION
- SELECT 'profiles'::text AS table_name,
-    profiles.id,
-    (((profiles.full_name || ' ('::text) || profiles.username) || ')'::text) AS name,
-    profiles.username AS short_name
-   FROM public.profiles
+ SELECT 'profile'::text AS table_name,
+    profile.id,
+    (((profile.full_name || ' ('::text) || profile.username) || ')'::text) AS name,
+    profile.username AS short_name
+   FROM public.profile
 UNION
- SELECT 'towns'::text AS table_name,
-    towns.id,
-    towns.name,
-    public.string_limit((towns.name)::character varying, 20) AS short_name
-   FROM public.towns
+ SELECT 'town'::text AS table_name,
+    town.id,
+    town.name,
+    public.string_limit((town.name)::character varying, 20) AS short_name
+   FROM public.town
   ORDER BY 1, 4;
 
 
@@ -2204,53 +2224,53 @@ ALTER VIEW public.view_id_name OWNER TO postgres;
 --
 
 CREATE VIEW public.view_rls_edit_for_table AS
- SELECT 'authors'::text AS table_name,
-    authors.id,
-    public.rls_authors_edit(authors.*) AS editable,
-    public.rls_authors_delete(authors.*) AS deletable
-   FROM public.authors
+ SELECT 'author'::text AS table_name,
+    author.id,
+    public.rls_authors_edit(author.*) AS editable,
+    public.rls_authors_delete(author.*) AS deletable
+   FROM public.author
 UNION
- SELECT 'citations'::text AS table_name,
-    citations.id,
-    public.rls_citations_edit(citations.*) AS editable,
-    public.rls_citations_delete(citations.*) AS deletable
-   FROM public.citations
+ SELECT 'citation'::text AS table_name,
+    citation.id,
+    public.rls_citations_edit(citation.*) AS editable,
+    public.rls_citations_delete(citation.*) AS deletable
+   FROM public.citation
 UNION
- SELECT 'countries'::text AS table_name,
-    countries.id,
-    public.rls_countries_edit(countries.*) AS editable,
-    public.rls_countries_delete(countries.*) AS deletable
-   FROM public.countries
+ SELECT 'country'::text AS table_name,
+    country.id,
+    public.rls_countries_edit(country.*) AS editable,
+    public.rls_countries_delete(country.*) AS deletable
+   FROM public.country
 UNION
- SELECT 'events'::text AS table_name,
-    events.id,
-    public.rls_events_edit(events.*) AS editable,
-    public.rls_events_delete(events.*) AS deletable
-   FROM public.events
+ SELECT 'event'::text AS table_name,
+    event.id,
+    public.rls_events_edit(event.*) AS editable,
+    public.rls_events_delete(event.*) AS deletable
+   FROM public.event
 UNION
- SELECT 'places'::text AS table_name,
-    places.id,
-    public.rls_places_edit(places.*) AS editable,
-    public.rls_places_delete(places.*) AS deletable
-   FROM public.places
+ SELECT 'place'::text AS table_name,
+    place.id,
+    public.rls_places_edit(place.*) AS editable,
+    public.rls_places_delete(place.*) AS deletable
+   FROM public.place
 UNION
- SELECT 'profiles'::text AS table_name,
-    profiles.id,
-    public.rls_profiles_edit(profiles.*) AS editable,
+ SELECT 'profile'::text AS table_name,
+    profile.id,
+    public.rls_profiles_edit(profile.*) AS editable,
     false AS deletable
-   FROM public.profiles
+   FROM public.profile
 UNION
- SELECT 'towns'::text AS table_name,
-    towns.id,
-    public.rls_towns_edit(towns.*) AS editable,
-    public.rls_towns_delete(towns.*) AS deletable
-   FROM public.towns
+ SELECT 'town'::text AS table_name,
+    town.id,
+    public.rls_towns_edit(town.*) AS editable,
+    public.rls_towns_delete(town.*) AS deletable
+   FROM public.town
 UNION
- SELECT 'trusts'::text AS table_name,
-    trusts.id,
-    public.rls_trusts_edit(trusts.*) AS editable,
-    public.rls_trusts_edit(trusts.*) AS deletable
-   FROM public.trusts;
+ SELECT 'trust'::text AS table_name,
+    trust.id,
+    public.rls_trusts_edit(trust.*) AS editable,
+    public.rls_trusts_edit(trust.*) AS deletable
+   FROM public.trust;
 
 
 ALTER VIEW public.view_rls_edit_for_table OWNER TO postgres;
@@ -2511,9 +2531,9 @@ COPY auth.sso_providers (id, resource_id, created_at, updated_at) FROM stdin;
 
 COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, invited_at, confirmation_token, confirmation_sent_at, recovery_token, recovery_sent_at, email_change_token_new, email_change, email_change_sent_at, last_sign_in_at, raw_app_meta_data, raw_user_meta_data, is_super_admin, created_at, updated_at, phone, phone_confirmed_at, phone_change, phone_change_token, phone_change_sent_at, email_change_token_current, email_change_confirm_status, banned_until, reauthentication_token, reauthentication_sent_at, is_sso_user, deleted_at) FROM stdin;
 00000000-0000-0000-0000-000000000000	e76b244b-6f9e-42fc-b216-5ea74f94bd4c	authenticated	authenticated	gavriillarin263@inbox.lv	$2a$10$W8/g0R7arxlSsdWrn.5hXOqbolOsyQrpCcAKTOEkoIy2Vekr3vgSS	2023-12-09 05:25:02.817+00	\N		2023-12-09 05:24:14.076+00		2023-12-24 13:21:13.896693+00			\N	2023-12-24 13:21:25.863108+00	{"provider": "email", "providers": ["email"], "profile_id": 19}	\N	\N	2023-12-09 05:24:14.065+00	2023-12-24 23:26:51.847117+00	\N	\N			\N		0	\N		\N	f	\N
-00000000-0000-0000-0000-000000000000	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	authenticated	authenticated	d9k@ya.ru	$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2	2023-11-30 13:20:52.160287+00	\N		2023-11-30 13:19:57.235919+00		2023-12-25 01:30:19.771787+00			\N	2023-12-25 01:30:31.922428+00	{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}	{}	\N	2023-11-30 13:19:57.22183+00	2023-12-26 04:15:40.256842+00	\N	\N			\N		0	\N		\N	f	\N
 00000000-0000-0000-0000-000000000000	ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d	authenticated	authenticated	d9kd9k@gmail.com	$2a$10$Nn9Lq26n.a2r92jcs25UI./rgH5OBb1gV6db5GhX.phqVA//i/Lmy	2023-12-21 14:03:46.059171+00	\N		2023-12-21 13:53:06.021026+00		2023-12-24 23:31:21.017153+00			\N	2023-12-24 23:31:41.685951+00	{"provider": "email", "providers": ["email"], "profile_id": 21, "claim_edit_all_content": 1}	{}	\N	2023-12-21 13:53:06.009726+00	2023-12-25 10:58:20.440871+00	\N	\N			\N		0	\N		\N	f	\N
 00000000-0000-0000-0000-000000000000	727a5d27-4b66-49ea-a2c1-0bccc7b8e2cd	authenticated	authenticated	d9k@ya.tu	$2a$10$OR4GYiMa8vFpk1ywBfPrEeL8yj0TCJxO3joYXdlRezx8Kk6eBjmQ.	\N	\N	45bc98dfe84800707f48a82df0ce417215a7869ba20ba657b46012c1	2023-12-11 20:49:26.158057+00		\N			\N	\N	{"provider": "email", "providers": ["email"], "profile_id": 20}	{}	\N	2023-12-11 20:49:26.145323+00	2023-12-11 20:49:29.413083+00	\N	\N			\N		0	\N		\N	f	\N
+00000000-0000-0000-0000-000000000000	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	authenticated	authenticated	d9k@ya.ru	$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2	2023-11-30 13:20:52.160287+00	\N		2023-11-30 13:19:57.235919+00		2024-01-14 15:27:48.901404+00			\N	2024-01-14 15:28:51.02278+00	{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}	{}	\N	2023-11-30 13:19:57.22183+00	2024-01-14 15:55:15.287754+00	\N	\N			\N		0	\N		\N	f	\N
 \.
 
 
@@ -2526,56 +2546,64 @@ COPY pgsodium.key (id, status, created, expires, key_type, key_id, key_context, 
 
 
 --
--- Data for Name: authors; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: author; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.authors (id, lastname_name_patronymic, created_at, birth_year, death_year, approximate_years, updated_at, birth_town, created_by, updated_by) FROM stdin;
+COPY public.author (id, lastname_name_patronymic, created_at, birth_year, death_year, approximate_years, updated_at, birth_town, created_by, updated_by) FROM stdin;
 \.
 
 
 --
--- Data for Name: citations; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: citation; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.citations (id, english_text, author_id, year, created_at, updated_at, original_language_text, place_id, event_id, created_by, updated_by) FROM stdin;
+COPY public.citation (id, english_text, author_id, year, created_at, updated_at, original_language_text, place_id, event_id, created_by, updated_by) FROM stdin;
 \.
 
 
 --
--- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: content_item; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.countries (id, name, created_at, updated_at, found_year, next_rename_year, created_by, updated_by) FROM stdin;
+COPY public.content_item (table_name, id, created_at, created_by, updated_at, updated_by, published_at, published_by, unpublished_at, unpublished_by) FROM stdin;
+\.
+
+
+--
+-- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.country (id, name, created_at, updated_at, found_year, next_rename_year, created_by, updated_by) FROM stdin;
 1	Greece 1	2023-11-28 06:50:37.146622+00	2023-11-28 06:50:37.146622+00	-4000	100	\N	\N
 8	Greece	2023-12-21 10:00:36.790762+00	2023-12-21 10:00:36.790762+00	\N	\N	1	\N
-10	Russia	2023-12-21 10:02:21.791404+00	2023-12-21 10:02:21.791404+00	\N	\N	1	\N
 11	China 10	2023-12-21 14:12:45.779946+00	2023-12-21 14:14:11.220697+00	\N	\N	21	1
 12	India	2023-12-24 13:21:46.821053+00	2023-12-24 13:21:46.821053+00	\N	\N	19	\N
-7	Arztocka	2023-12-20 15:31:38.442098+00	2023-12-24 23:44:15.988928+00	\N	\N	1	1
+10	Russia	2023-12-21 10:02:21.791404+00	2023-12-26 19:42:07.027739+00	\N	\N	1	1
+7	Arztocka	2023-12-20 15:31:38.442098+00	2023-12-30 17:55:51.389675+00	\N	\N	1	1
 \.
 
 
 --
--- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: event; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.events (id, name, created_at, updated_at, start_year, start_month, end_year, end_month, place_id, created_by, updated_by) FROM stdin;
+COPY public.event (id, name, created_at, updated_at, start_year, start_month, end_year, end_month, place_id, created_by, updated_by) FROM stdin;
 \.
 
 
 --
--- Data for Name: places; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: place; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.places (id, name, created_at, updated_at, town_id, created_by, updated_by) FROM stdin;
+COPY public.place (id, name, created_at, updated_at, town_id, created_by, updated_by) FROM stdin;
 \.
 
 
 --
--- Data for Name: profiles; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: profile; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.profiles (auth_user_id, updated_at, username, full_name, avatar_url, website, id, created_at) FROM stdin;
+COPY public.profile (auth_user_id, updated_at, username, full_name, avatar_url, website, id, created_at) FROM stdin;
 e76b244b-6f9e-42fc-b216-5ea74f94bd4c	\N	gavriillarin263	\N	\N	\N	19	2023-12-24 19:26:15.651828+00
 b5f563a3-b794-49d0-a0e3-dbf9fffd2321	\N	d9k	y66y6y6767	\N	\N	1	2023-12-24 19:26:15.651828+00
 ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d	\N	d9kd9k	D9kD9k	\N	\N	21	2023-12-24 19:26:15.651828+00
@@ -2584,20 +2612,20 @@ ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d	\N	d9kd9k	D9kD9k	\N	\N	21	2023-12-24 19:26:
 
 
 --
--- Data for Name: towns; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: town; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.towns (id, name, created_at, updated_at, country_id, created_by, updated_by) FROM stdin;
+COPY public.town (id, name, created_at, updated_at, country_id, created_by, updated_by) FROM stdin;
 8	Moscow	2023-12-24 23:14:18.601477+00	2023-12-24 23:53:06.468419+00	10	\N	21
 10	Lipetsk	2023-12-24 23:36:11.73928+00	2023-12-26 04:07:48.785688+00	10	1	1
 \.
 
 
 --
--- Data for Name: trusts; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: trust; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.trusts (id, who, trusts_whom, end_at) FROM stdin;
+COPY public.trust (id, who, trusts_whom, end_at) FROM stdin;
 7	21	1	2023-12-29 00:00:00+00
 \.
 
@@ -2677,7 +2705,7 @@ COPY vault.secrets (id, name, description, secret, key_id, nonce, created_at, up
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 855, true);
+SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 1212, true);
 
 
 --
@@ -2733,7 +2761,7 @@ SELECT pg_catalog.setval('public.profiles_id_seq', 21, true);
 -- Name: town_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.town_id_seq', 10, true);
+SELECT pg_catalog.setval('public.town_id_seq', 11, true);
 
 
 --
@@ -2904,82 +2932,90 @@ ALTER TABLE ONLY auth.users
 
 
 --
--- Name: authors author_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: author author_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.authors
+ALTER TABLE ONLY public.author
     ADD CONSTRAINT author_pkey PRIMARY KEY (id);
 
 
 --
--- Name: citations citations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: citation citations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.citations
+ALTER TABLE ONLY public.citation
     ADD CONSTRAINT citations_pkey PRIMARY KEY (id);
 
 
 --
--- Name: countries countries_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: content_item content_item_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.countries
+ALTER TABLE ONLY public.content_item
+    ADD CONSTRAINT content_item_pkey PRIMARY KEY (table_name, id);
+
+
+--
+-- Name: country countries_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.country
     ADD CONSTRAINT countries_name_key UNIQUE (name);
 
 
 --
--- Name: countries country_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: country country_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.countries
+ALTER TABLE ONLY public.country
     ADD CONSTRAINT country_pkey PRIMARY KEY (id);
 
 
 --
--- Name: events event_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: event event_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.events
+ALTER TABLE ONLY public.event
     ADD CONSTRAINT event_pkey PRIMARY KEY (id);
 
 
 --
--- Name: places place_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: place place_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.places
+ALTER TABLE ONLY public.place
     ADD CONSTRAINT place_pkey PRIMARY KEY (id);
 
 
 --
--- Name: profiles profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: profile profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.profiles
+ALTER TABLE ONLY public.profile
     ADD CONSTRAINT profiles_pkey PRIMARY KEY (id);
 
 
 --
--- Name: profiles profiles_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: profile profiles_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.profiles
+ALTER TABLE ONLY public.profile
     ADD CONSTRAINT profiles_username_key UNIQUE (username);
 
 
 --
--- Name: towns town_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: town town_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.towns
+ALTER TABLE ONLY public.town
     ADD CONSTRAINT town_pkey PRIMARY KEY (id);
 
 
 --
--- Name: trusts trusts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: trust trusts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.trusts
+ALTER TABLE ONLY public.trust
     ADD CONSTRAINT trusts_pkey PRIMARY KEY (id);
 
 
@@ -3297,94 +3333,94 @@ CREATE TRIGGER on_auth_user_new AFTER INSERT ON auth.users FOR EACH ROW EXECUTE 
 
 
 --
--- Name: authors on_authors_edit_fill_update; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: author on_authors_edit_fill_update; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER on_authors_edit_fill_update BEFORE UPDATE ON public.authors FOR EACH ROW EXECUTE FUNCTION public.handle_fill_updated();
-
-
---
--- Name: authors on_authors_new_fill_created_by; Type: TRIGGER; Schema: public; Owner: postgres
---
-
-CREATE TRIGGER on_authors_new_fill_created_by BEFORE INSERT ON public.authors FOR EACH ROW EXECUTE FUNCTION public.handle_fill_created_by();
+CREATE TRIGGER on_authors_edit_fill_update BEFORE UPDATE ON public.author FOR EACH ROW EXECUTE FUNCTION public.handle_fill_updated();
 
 
 --
--- Name: citations on_citations_edit_fill_update; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: author on_authors_new_fill_created_by; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER on_citations_edit_fill_update BEFORE UPDATE ON public.citations FOR EACH ROW EXECUTE FUNCTION public.handle_fill_updated();
-
-
---
--- Name: citations on_citations_new_fill_created_by; Type: TRIGGER; Schema: public; Owner: postgres
---
-
-CREATE TRIGGER on_citations_new_fill_created_by BEFORE INSERT ON public.citations FOR EACH ROW EXECUTE FUNCTION public.handle_fill_created_by();
+CREATE TRIGGER on_authors_new_fill_created_by BEFORE INSERT ON public.author FOR EACH ROW EXECUTE FUNCTION public.handle_fill_created_by();
 
 
 --
--- Name: countries on_country_edit_fill_update; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: citation on_citations_edit_fill_update; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER on_country_edit_fill_update BEFORE UPDATE ON public.countries FOR EACH ROW EXECUTE FUNCTION public.handle_fill_updated();
-
-
---
--- Name: countries on_country_new_fill_created_by; Type: TRIGGER; Schema: public; Owner: postgres
---
-
-CREATE TRIGGER on_country_new_fill_created_by BEFORE INSERT ON public.countries FOR EACH ROW EXECUTE FUNCTION public.handle_fill_created_by();
+CREATE TRIGGER on_citations_edit_fill_update BEFORE UPDATE ON public.citation FOR EACH ROW EXECUTE FUNCTION public.handle_fill_updated();
 
 
 --
--- Name: events on_events_edit_fill_update; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: citation on_citations_new_fill_created_by; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER on_events_edit_fill_update BEFORE UPDATE ON public.events FOR EACH ROW EXECUTE FUNCTION public.handle_fill_updated();
-
-
---
--- Name: events on_events_new_fill_created_by; Type: TRIGGER; Schema: public; Owner: postgres
---
-
-CREATE TRIGGER on_events_new_fill_created_by BEFORE INSERT ON public.events FOR EACH ROW EXECUTE FUNCTION public.handle_fill_created_by();
+CREATE TRIGGER on_citations_new_fill_created_by BEFORE INSERT ON public.citation FOR EACH ROW EXECUTE FUNCTION public.handle_fill_created_by();
 
 
 --
--- Name: places on_places_edit_fill_update; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: country on_country_edit_fill_update; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER on_places_edit_fill_update BEFORE UPDATE ON public.places FOR EACH ROW EXECUTE FUNCTION public.handle_fill_updated();
-
-
---
--- Name: places on_places_new_fill_created_by; Type: TRIGGER; Schema: public; Owner: postgres
---
-
-CREATE TRIGGER on_places_new_fill_created_by BEFORE INSERT ON public.places FOR EACH ROW EXECUTE FUNCTION public.handle_fill_created_by();
+CREATE TRIGGER on_country_edit_fill_update BEFORE UPDATE ON public.country FOR EACH ROW EXECUTE FUNCTION public.handle_fill_updated();
 
 
 --
--- Name: profiles on_public_profiles_new; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: country on_country_new_fill_created_by; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER on_public_profiles_new AFTER INSERT ON public.profiles FOR EACH ROW EXECUTE FUNCTION public.handle_public_profile_new();
-
-
---
--- Name: towns on_towns_edit_fill_update; Type: TRIGGER; Schema: public; Owner: postgres
---
-
-CREATE TRIGGER on_towns_edit_fill_update BEFORE UPDATE ON public.towns FOR EACH ROW EXECUTE FUNCTION public.handle_fill_updated();
+CREATE TRIGGER on_country_new_fill_created_by BEFORE INSERT ON public.country FOR EACH ROW EXECUTE FUNCTION public.handle_fill_created_by();
 
 
 --
--- Name: towns on_towns_new_fill_created_by; Type: TRIGGER; Schema: public; Owner: postgres
+-- Name: event on_events_edit_fill_update; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
-CREATE TRIGGER on_towns_new_fill_created_by BEFORE INSERT ON public.towns FOR EACH ROW EXECUTE FUNCTION public.handle_fill_created_by();
+CREATE TRIGGER on_events_edit_fill_update BEFORE UPDATE ON public.event FOR EACH ROW EXECUTE FUNCTION public.handle_fill_updated();
+
+
+--
+-- Name: event on_events_new_fill_created_by; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER on_events_new_fill_created_by BEFORE INSERT ON public.event FOR EACH ROW EXECUTE FUNCTION public.handle_fill_created_by();
+
+
+--
+-- Name: place on_places_edit_fill_update; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER on_places_edit_fill_update BEFORE UPDATE ON public.place FOR EACH ROW EXECUTE FUNCTION public.handle_fill_updated();
+
+
+--
+-- Name: place on_places_new_fill_created_by; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER on_places_new_fill_created_by BEFORE INSERT ON public.place FOR EACH ROW EXECUTE FUNCTION public.handle_fill_created_by();
+
+
+--
+-- Name: profile on_public_profile_new; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER on_public_profile_new AFTER INSERT ON public.profile FOR EACH ROW EXECUTE FUNCTION public.handle_public_profile_new();
+
+
+--
+-- Name: town on_towns_edit_fill_update; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER on_towns_edit_fill_update BEFORE UPDATE ON public.town FOR EACH ROW EXECUTE FUNCTION public.handle_fill_updated();
+
+
+--
+-- Name: town on_towns_new_fill_created_by; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER on_towns_new_fill_created_by BEFORE INSERT ON public.town FOR EACH ROW EXECUTE FUNCTION public.handle_fill_created_by();
 
 
 --
@@ -3475,163 +3511,163 @@ ALTER TABLE ONLY auth.sso_domains
 
 
 --
--- Name: authors authors_birth_town_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: author author_birth_town_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.authors
-    ADD CONSTRAINT authors_birth_town_fkey FOREIGN KEY (birth_town) REFERENCES public.towns(id) ON UPDATE CASCADE;
-
-
---
--- Name: authors authors_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.authors
-    ADD CONSTRAINT authors_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+ALTER TABLE ONLY public.author
+    ADD CONSTRAINT author_birth_town_fkey FOREIGN KEY (birth_town) REFERENCES public.town(id) ON UPDATE CASCADE;
 
 
 --
--- Name: authors authors_updated_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: author author_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.authors
-    ADD CONSTRAINT authors_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: citations citations_author_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.citations
-    ADD CONSTRAINT citations_author_id_fkey FOREIGN KEY (author_id) REFERENCES public.authors(id) ON UPDATE CASCADE;
+ALTER TABLE ONLY public.author
+    ADD CONSTRAINT author_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
--- Name: citations citations_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: author author_updated_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.citations
-    ADD CONSTRAINT citations_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: citations citations_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.citations
-    ADD CONSTRAINT citations_event_id_fkey FOREIGN KEY (event_id) REFERENCES public.events(id) ON UPDATE CASCADE;
+ALTER TABLE ONLY public.author
+    ADD CONSTRAINT author_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
--- Name: citations citations_place_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: citation citation_author_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.citations
-    ADD CONSTRAINT citations_place_id_fkey FOREIGN KEY (place_id) REFERENCES public.places(id);
-
-
---
--- Name: citations citations_updated_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.citations
-    ADD CONSTRAINT citations_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+ALTER TABLE ONLY public.citation
+    ADD CONSTRAINT citation_author_id_fkey FOREIGN KEY (author_id) REFERENCES public.author(id) ON UPDATE CASCADE;
 
 
 --
--- Name: countries countries_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: citation citation_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.countries
-    ADD CONSTRAINT countries_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: countries countries_updated_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.countries
-    ADD CONSTRAINT countries_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+ALTER TABLE ONLY public.citation
+    ADD CONSTRAINT citation_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
--- Name: events events_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: citation citation_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.events
-    ADD CONSTRAINT events_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: events events_place_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.events
-    ADD CONSTRAINT events_place_id_fkey FOREIGN KEY (place_id) REFERENCES public.places(id) ON UPDATE CASCADE;
+ALTER TABLE ONLY public.citation
+    ADD CONSTRAINT citation_event_id_fkey FOREIGN KEY (event_id) REFERENCES public.event(id) ON UPDATE CASCADE;
 
 
 --
--- Name: events events_updated_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: citation citation_place_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.events
-    ADD CONSTRAINT events_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE RESTRICT;
-
-
---
--- Name: places places_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.places
-    ADD CONSTRAINT places_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+ALTER TABLE ONLY public.citation
+    ADD CONSTRAINT citation_place_id_fkey FOREIGN KEY (place_id) REFERENCES public.place(id);
 
 
 --
--- Name: places places_town_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: citation citation_updated_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.places
-    ADD CONSTRAINT places_town_id_fkey FOREIGN KEY (town_id) REFERENCES public.towns(id) ON UPDATE CASCADE;
-
-
---
--- Name: places places_updated_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.places
-    ADD CONSTRAINT places_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+ALTER TABLE ONLY public.citation
+    ADD CONSTRAINT citation_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
--- Name: profiles profiles_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: country country_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.profiles
-    ADD CONSTRAINT profiles_id_fkey FOREIGN KEY (auth_user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
-
-
---
--- Name: towns towns_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.towns
-    ADD CONSTRAINT towns_country_id_fkey FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE;
+ALTER TABLE ONLY public.country
+    ADD CONSTRAINT country_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
--- Name: towns towns_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: country country_updated_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.towns
-    ADD CONSTRAINT towns_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+ALTER TABLE ONLY public.country
+    ADD CONSTRAINT country_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
--- Name: towns towns_updated_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: event event_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.towns
-    ADD CONSTRAINT towns_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES public.profiles(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+ALTER TABLE ONLY public.event
+    ADD CONSTRAINT event_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: event event_place_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.event
+    ADD CONSTRAINT event_place_id_fkey FOREIGN KEY (place_id) REFERENCES public.place(id) ON UPDATE CASCADE;
+
+
+--
+-- Name: event event_updated_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.event
+    ADD CONSTRAINT event_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: place place_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.place
+    ADD CONSTRAINT place_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: place place_town_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.place
+    ADD CONSTRAINT place_town_id_fkey FOREIGN KEY (town_id) REFERENCES public.town(id) ON UPDATE CASCADE;
+
+
+--
+-- Name: place place_updated_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.place
+    ADD CONSTRAINT place_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: profile profile_auth_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.profile
+    ADD CONSTRAINT profile_auth_user_id_fkey FOREIGN KEY (auth_user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: town town_country_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.town
+    ADD CONSTRAINT town_country_id_fkey FOREIGN KEY (country_id) REFERENCES public.country(id) ON UPDATE CASCADE;
+
+
+--
+-- Name: town town_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.town
+    ADD CONSTRAINT town_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: town town_updated_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.town
+    ADD CONSTRAINT town_updated_by_fkey FOREIGN KEY (updated_by) REFERENCES public.profile(id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
@@ -3643,269 +3679,269 @@ ALTER TABLE ONLY storage.objects
 
 
 --
--- Name: profiles  RLS: profiles: insert; Type: POLICY; Schema: public; Owner: postgres
+-- Name: profile  RLS: profiles: insert; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY " RLS: profiles: insert" ON public.profiles FOR INSERT WITH CHECK ((auth.uid() = auth_user_id));
+CREATE POLICY " RLS: profiles: insert" ON public.profile FOR INSERT WITH CHECK ((auth.uid() = auth_user_id));
 
 
 --
--- Name: profiles  RLS: profiles: update; Type: POLICY; Schema: public; Owner: postgres
+-- Name: profile  RLS: profiles: update; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY " RLS: profiles: update" ON public.profiles FOR UPDATE USING (public.rls_profiles_edit(profiles.*));
+CREATE POLICY " RLS: profiles: update" ON public.profile FOR UPDATE USING (public.rls_profiles_edit(profile.*));
 
 
 --
--- Name: authors RLS: authors: delete; Type: POLICY; Schema: public; Owner: postgres
+-- Name: author RLS: authors: delete; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: authors: delete" ON public.authors FOR DELETE TO authenticated USING (public.rls_authors_edit(authors.*));
+CREATE POLICY "RLS: authors: delete" ON public.author FOR DELETE TO authenticated USING (public.rls_authors_edit(author.*));
 
 
 --
--- Name: authors RLS: authors: insert; Type: POLICY; Schema: public; Owner: postgres
+-- Name: author RLS: authors: insert; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: authors: insert" ON public.authors FOR INSERT TO authenticated WITH CHECK (public.rls_authors_edit(authors.*));
+CREATE POLICY "RLS: authors: insert" ON public.author FOR INSERT TO authenticated WITH CHECK (public.rls_authors_edit(author.*));
 
 
 --
--- Name: authors RLS: authors: select; Type: POLICY; Schema: public; Owner: postgres
+-- Name: author RLS: authors: select; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: authors: select" ON public.authors FOR SELECT USING (true);
+CREATE POLICY "RLS: authors: select" ON public.author FOR SELECT USING (true);
 
 
 --
--- Name: authors RLS: authors: update; Type: POLICY; Schema: public; Owner: postgres
+-- Name: author RLS: authors: update; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: authors: update" ON public.authors FOR UPDATE TO authenticated USING (public.rls_authors_edit(authors.*)) WITH CHECK (public.rls_authors_edit(authors.*));
+CREATE POLICY "RLS: authors: update" ON public.author FOR UPDATE TO authenticated USING (public.rls_authors_edit(author.*)) WITH CHECK (public.rls_authors_edit(author.*));
 
 
 --
--- Name: citations RLS: citations: delete; Type: POLICY; Schema: public; Owner: postgres
+-- Name: citation RLS: citations: delete; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: citations: delete" ON public.citations FOR DELETE TO authenticated USING (public.rls_citations_edit(citations.*));
+CREATE POLICY "RLS: citations: delete" ON public.citation FOR DELETE TO authenticated USING (public.rls_citations_edit(citation.*));
 
 
 --
--- Name: citations RLS: citations: insert; Type: POLICY; Schema: public; Owner: postgres
+-- Name: citation RLS: citations: insert; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: citations: insert" ON public.citations FOR INSERT TO authenticated WITH CHECK (public.rls_citations_edit(citations.*));
+CREATE POLICY "RLS: citations: insert" ON public.citation FOR INSERT TO authenticated WITH CHECK (public.rls_citations_edit(citation.*));
 
 
 --
--- Name: citations RLS: citations: select; Type: POLICY; Schema: public; Owner: postgres
+-- Name: citation RLS: citations: select; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: citations: select" ON public.citations FOR SELECT USING (true);
+CREATE POLICY "RLS: citations: select" ON public.citation FOR SELECT USING (true);
 
 
 --
--- Name: citations RLS: citations: update; Type: POLICY; Schema: public; Owner: postgres
+-- Name: citation RLS: citations: update; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: citations: update" ON public.citations FOR UPDATE TO authenticated USING (public.rls_citations_edit(citations.*)) WITH CHECK (public.rls_citations_edit(citations.*));
+CREATE POLICY "RLS: citations: update" ON public.citation FOR UPDATE TO authenticated USING (public.rls_citations_edit(citation.*)) WITH CHECK (public.rls_citations_edit(citation.*));
 
 
 --
--- Name: countries RLS: countries: delete; Type: POLICY; Schema: public; Owner: postgres
+-- Name: country RLS: countries: delete; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: countries: delete" ON public.countries FOR DELETE TO authenticated USING (public.rls_countries_delete(countries.*));
+CREATE POLICY "RLS: countries: delete" ON public.country FOR DELETE TO authenticated USING (public.rls_countries_delete(country.*));
 
 
 --
--- Name: countries RLS: countries: insert; Type: POLICY; Schema: public; Owner: postgres
+-- Name: country RLS: countries: insert; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: countries: insert" ON public.countries FOR INSERT TO authenticated WITH CHECK (public.rls_countries_edit(countries.*));
+CREATE POLICY "RLS: countries: insert" ON public.country FOR INSERT TO authenticated WITH CHECK (public.rls_countries_edit(country.*));
 
 
 --
--- Name: countries RLS: countries: select; Type: POLICY; Schema: public; Owner: postgres
+-- Name: country RLS: countries: select; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: countries: select" ON public.countries FOR SELECT USING (true);
+CREATE POLICY "RLS: countries: select" ON public.country FOR SELECT USING (true);
 
 
 --
--- Name: countries RLS: countries: update; Type: POLICY; Schema: public; Owner: postgres
+-- Name: country RLS: countries: update; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: countries: update" ON public.countries FOR UPDATE TO authenticated USING (public.rls_countries_edit(countries.*)) WITH CHECK (public.rls_countries_edit(countries.*));
+CREATE POLICY "RLS: countries: update" ON public.country FOR UPDATE TO authenticated USING (public.rls_countries_edit(country.*)) WITH CHECK (public.rls_countries_edit(country.*));
 
 
 --
--- Name: events RLS: events: delete; Type: POLICY; Schema: public; Owner: postgres
+-- Name: event RLS: events: delete; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: events: delete" ON public.events FOR DELETE TO authenticated USING (public.rls_events_edit(events.*));
+CREATE POLICY "RLS: events: delete" ON public.event FOR DELETE TO authenticated USING (public.rls_events_edit(event.*));
 
 
 --
--- Name: events RLS: events: insert; Type: POLICY; Schema: public; Owner: postgres
+-- Name: event RLS: events: insert; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: events: insert" ON public.events FOR INSERT TO authenticated WITH CHECK (public.rls_events_edit(events.*));
+CREATE POLICY "RLS: events: insert" ON public.event FOR INSERT TO authenticated WITH CHECK (public.rls_events_edit(event.*));
 
 
 --
--- Name: events RLS: events: select; Type: POLICY; Schema: public; Owner: postgres
+-- Name: event RLS: events: select; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: events: select" ON public.events FOR SELECT USING (true);
+CREATE POLICY "RLS: events: select" ON public.event FOR SELECT USING (true);
 
 
 --
--- Name: events RLS: events: update; Type: POLICY; Schema: public; Owner: postgres
+-- Name: event RLS: events: update; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: events: update" ON public.events FOR UPDATE TO authenticated USING (public.rls_events_edit(events.*)) WITH CHECK (public.rls_events_edit(events.*));
+CREATE POLICY "RLS: events: update" ON public.event FOR UPDATE TO authenticated USING (public.rls_events_edit(event.*)) WITH CHECK (public.rls_events_edit(event.*));
 
 
 --
--- Name: places RLS: places: delete; Type: POLICY; Schema: public; Owner: postgres
+-- Name: place RLS: places: delete; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: places: delete" ON public.places FOR DELETE TO authenticated USING (public.rls_places_edit(places.*));
+CREATE POLICY "RLS: places: delete" ON public.place FOR DELETE TO authenticated USING (public.rls_places_edit(place.*));
 
 
 --
--- Name: places RLS: places: insert; Type: POLICY; Schema: public; Owner: postgres
+-- Name: place RLS: places: insert; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: places: insert" ON public.places FOR INSERT TO authenticated WITH CHECK (public.rls_places_edit(places.*));
+CREATE POLICY "RLS: places: insert" ON public.place FOR INSERT TO authenticated WITH CHECK (public.rls_places_edit(place.*));
 
 
 --
--- Name: places RLS: places: select; Type: POLICY; Schema: public; Owner: postgres
+-- Name: place RLS: places: select; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: places: select" ON public.places FOR SELECT USING (true);
+CREATE POLICY "RLS: places: select" ON public.place FOR SELECT USING (true);
 
 
 --
--- Name: places RLS: places: update; Type: POLICY; Schema: public; Owner: postgres
+-- Name: place RLS: places: update; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: places: update" ON public.places FOR UPDATE TO authenticated USING (public.rls_places_edit(places.*)) WITH CHECK (public.rls_places_edit(places.*));
+CREATE POLICY "RLS: places: update" ON public.place FOR UPDATE TO authenticated USING (public.rls_places_edit(place.*)) WITH CHECK (public.rls_places_edit(place.*));
 
 
 --
--- Name: profiles RLS: profiles: select; Type: POLICY; Schema: public; Owner: postgres
+-- Name: profile RLS: profiles: select; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: profiles: select" ON public.profiles FOR SELECT USING (true);
+CREATE POLICY "RLS: profiles: select" ON public.profile FOR SELECT USING (true);
 
 
 --
--- Name: towns RLS: towns: delete; Type: POLICY; Schema: public; Owner: postgres
+-- Name: town RLS: towns: delete; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: towns: delete" ON public.towns FOR DELETE TO authenticated USING (public.rls_towns_edit(towns.*));
+CREATE POLICY "RLS: towns: delete" ON public.town FOR DELETE TO authenticated USING (public.rls_towns_edit(town.*));
 
 
 --
--- Name: towns RLS: towns: insert; Type: POLICY; Schema: public; Owner: postgres
+-- Name: town RLS: towns: insert; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: towns: insert" ON public.towns FOR INSERT TO authenticated WITH CHECK (public.rls_towns_edit(towns.*));
+CREATE POLICY "RLS: towns: insert" ON public.town FOR INSERT TO authenticated WITH CHECK (public.rls_towns_edit(town.*));
 
 
 --
--- Name: towns RLS: towns: select; Type: POLICY; Schema: public; Owner: postgres
+-- Name: town RLS: towns: select; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: towns: select" ON public.towns FOR SELECT USING (true);
+CREATE POLICY "RLS: towns: select" ON public.town FOR SELECT USING (true);
 
 
 --
--- Name: towns RLS: towns: update; Type: POLICY; Schema: public; Owner: postgres
+-- Name: town RLS: towns: update; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: towns: update" ON public.towns FOR UPDATE TO authenticated USING (public.rls_towns_edit(towns.*)) WITH CHECK (public.rls_towns_edit(towns.*));
+CREATE POLICY "RLS: towns: update" ON public.town FOR UPDATE TO authenticated USING (public.rls_towns_edit(town.*)) WITH CHECK (public.rls_towns_edit(town.*));
 
 
 --
--- Name: trusts RLS: trusts: delete; Type: POLICY; Schema: public; Owner: postgres
+-- Name: trust RLS: trusts: delete; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: trusts: delete" ON public.trusts FOR DELETE TO authenticated USING (public.rls_trusts_edit(trusts.*));
+CREATE POLICY "RLS: trusts: delete" ON public.trust FOR DELETE TO authenticated USING (public.rls_trusts_edit(trust.*));
 
 
 --
--- Name: trusts RLS: trusts: insert; Type: POLICY; Schema: public; Owner: postgres
+-- Name: trust RLS: trusts: insert; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: trusts: insert" ON public.trusts FOR INSERT TO authenticated WITH CHECK (public.rls_trusts_edit(trusts.*));
+CREATE POLICY "RLS: trusts: insert" ON public.trust FOR INSERT TO authenticated WITH CHECK (public.rls_trusts_edit(trust.*));
 
 
 --
--- Name: trusts RLS: trusts: select; Type: POLICY; Schema: public; Owner: postgres
+-- Name: trust RLS: trusts: select; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: trusts: select" ON public.trusts FOR SELECT TO authenticated USING (true);
+CREATE POLICY "RLS: trusts: select" ON public.trust FOR SELECT TO authenticated USING (true);
 
 
 --
--- Name: trusts RLS: trusts: update; Type: POLICY; Schema: public; Owner: postgres
+-- Name: trust RLS: trusts: update; Type: POLICY; Schema: public; Owner: postgres
 --
 
-CREATE POLICY "RLS: trusts: update" ON public.trusts FOR UPDATE TO authenticated USING (public.rls_trusts_edit(trusts.*)) WITH CHECK (public.rls_trusts_edit(trusts.*));
+CREATE POLICY "RLS: trusts: update" ON public.trust FOR UPDATE TO authenticated USING (public.rls_trusts_edit(trust.*)) WITH CHECK (public.rls_trusts_edit(trust.*));
 
 
 --
--- Name: authors; Type: ROW SECURITY; Schema: public; Owner: postgres
+-- Name: author; Type: ROW SECURITY; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.authors ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.author ENABLE ROW LEVEL SECURITY;
 
 --
--- Name: citations; Type: ROW SECURITY; Schema: public; Owner: postgres
+-- Name: citation; Type: ROW SECURITY; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.citations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.citation ENABLE ROW LEVEL SECURITY;
 
 --
--- Name: countries; Type: ROW SECURITY; Schema: public; Owner: postgres
+-- Name: country; Type: ROW SECURITY; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.countries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.country ENABLE ROW LEVEL SECURITY;
 
 --
--- Name: events; Type: ROW SECURITY; Schema: public; Owner: postgres
+-- Name: event; Type: ROW SECURITY; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.event ENABLE ROW LEVEL SECURITY;
 
 --
--- Name: places; Type: ROW SECURITY; Schema: public; Owner: postgres
+-- Name: place; Type: ROW SECURITY; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.places ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.place ENABLE ROW LEVEL SECURITY;
 
 --
--- Name: profiles; Type: ROW SECURITY; Schema: public; Owner: postgres
+-- Name: profile; Type: ROW SECURITY; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.profile ENABLE ROW LEVEL SECURITY;
 
 --
--- Name: towns; Type: ROW SECURITY; Schema: public; Owner: postgres
+-- Name: town; Type: ROW SECURITY; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.towns ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.town ENABLE ROW LEVEL SECURITY;
 
 --
--- Name: trusts; Type: ROW SECURITY; Schema: public; Owner: postgres
+-- Name: trust; Type: ROW SECURITY; Schema: public; Owner: postgres
 --
 
-ALTER TABLE public.trusts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.trust ENABLE ROW LEVEL SECURITY;
 
 --
 -- Name: objects Anyone can upload an avatar.; Type: POLICY; Schema: storage; Owner: supabase_storage_admin
@@ -4668,30 +4704,30 @@ GRANT ALL ON FUNCTION public.is_claims_admin() TO service_role;
 
 
 --
--- Name: TABLE authors; Type: ACL; Schema: public; Owner: postgres
+-- Name: TABLE author; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON TABLE public.authors TO anon;
-GRANT ALL ON TABLE public.authors TO authenticated;
-GRANT ALL ON TABLE public.authors TO service_role;
-
-
---
--- Name: FUNCTION rls_authors_delete(record public.authors); Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON FUNCTION public.rls_authors_delete(record public.authors) TO anon;
-GRANT ALL ON FUNCTION public.rls_authors_delete(record public.authors) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_authors_delete(record public.authors) TO service_role;
+GRANT ALL ON TABLE public.author TO anon;
+GRANT ALL ON TABLE public.author TO authenticated;
+GRANT ALL ON TABLE public.author TO service_role;
 
 
 --
--- Name: FUNCTION rls_authors_edit(record public.authors); Type: ACL; Schema: public; Owner: postgres
+-- Name: FUNCTION rls_authors_delete(record public.author); Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON FUNCTION public.rls_authors_edit(record public.authors) TO anon;
-GRANT ALL ON FUNCTION public.rls_authors_edit(record public.authors) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_authors_edit(record public.authors) TO service_role;
+GRANT ALL ON FUNCTION public.rls_authors_delete(record public.author) TO anon;
+GRANT ALL ON FUNCTION public.rls_authors_delete(record public.author) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_authors_delete(record public.author) TO service_role;
+
+
+--
+-- Name: FUNCTION rls_authors_edit(record public.author); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.rls_authors_edit(record public.author) TO anon;
+GRANT ALL ON FUNCTION public.rls_authors_edit(record public.author) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_authors_edit(record public.author) TO service_role;
 
 
 --
@@ -4713,183 +4749,183 @@ GRANT ALL ON FUNCTION public.rls_check_edit_by_created_by(created_by bigint, all
 
 
 --
--- Name: TABLE citations; Type: ACL; Schema: public; Owner: postgres
+-- Name: TABLE citation; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON TABLE public.citations TO anon;
-GRANT ALL ON TABLE public.citations TO authenticated;
-GRANT ALL ON TABLE public.citations TO service_role;
-
-
---
--- Name: FUNCTION rls_citations_delete(record public.citations); Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON FUNCTION public.rls_citations_delete(record public.citations) TO anon;
-GRANT ALL ON FUNCTION public.rls_citations_delete(record public.citations) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_citations_delete(record public.citations) TO service_role;
+GRANT ALL ON TABLE public.citation TO anon;
+GRANT ALL ON TABLE public.citation TO authenticated;
+GRANT ALL ON TABLE public.citation TO service_role;
 
 
 --
--- Name: FUNCTION rls_citations_edit(record public.citations); Type: ACL; Schema: public; Owner: postgres
+-- Name: FUNCTION rls_citations_delete(record public.citation); Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON FUNCTION public.rls_citations_edit(record public.citations) TO anon;
-GRANT ALL ON FUNCTION public.rls_citations_edit(record public.citations) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_citations_edit(record public.citations) TO service_role;
-
-
---
--- Name: TABLE countries; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON TABLE public.countries TO anon;
-GRANT ALL ON TABLE public.countries TO authenticated;
-GRANT ALL ON TABLE public.countries TO service_role;
+GRANT ALL ON FUNCTION public.rls_citations_delete(record public.citation) TO anon;
+GRANT ALL ON FUNCTION public.rls_citations_delete(record public.citation) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_citations_delete(record public.citation) TO service_role;
 
 
 --
--- Name: FUNCTION rls_countries_delete(record public.countries); Type: ACL; Schema: public; Owner: postgres
+-- Name: FUNCTION rls_citations_edit(record public.citation); Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON FUNCTION public.rls_countries_delete(record public.countries) TO anon;
-GRANT ALL ON FUNCTION public.rls_countries_delete(record public.countries) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_countries_delete(record public.countries) TO service_role;
-
-
---
--- Name: FUNCTION rls_countries_edit(record public.countries); Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON FUNCTION public.rls_countries_edit(record public.countries) TO anon;
-GRANT ALL ON FUNCTION public.rls_countries_edit(record public.countries) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_countries_edit(record public.countries) TO service_role;
+GRANT ALL ON FUNCTION public.rls_citations_edit(record public.citation) TO anon;
+GRANT ALL ON FUNCTION public.rls_citations_edit(record public.citation) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_citations_edit(record public.citation) TO service_role;
 
 
 --
--- Name: TABLE events; Type: ACL; Schema: public; Owner: postgres
+-- Name: TABLE country; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON TABLE public.events TO anon;
-GRANT ALL ON TABLE public.events TO authenticated;
-GRANT ALL ON TABLE public.events TO service_role;
-
-
---
--- Name: FUNCTION rls_events_delete(record public.events); Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON FUNCTION public.rls_events_delete(record public.events) TO anon;
-GRANT ALL ON FUNCTION public.rls_events_delete(record public.events) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_events_delete(record public.events) TO service_role;
+GRANT ALL ON TABLE public.country TO anon;
+GRANT ALL ON TABLE public.country TO authenticated;
+GRANT ALL ON TABLE public.country TO service_role;
 
 
 --
--- Name: FUNCTION rls_events_edit(record public.events); Type: ACL; Schema: public; Owner: postgres
+-- Name: FUNCTION rls_countries_delete(record public.country); Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON FUNCTION public.rls_events_edit(record public.events) TO anon;
-GRANT ALL ON FUNCTION public.rls_events_edit(record public.events) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_events_edit(record public.events) TO service_role;
-
-
---
--- Name: TABLE places; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON TABLE public.places TO anon;
-GRANT ALL ON TABLE public.places TO authenticated;
-GRANT ALL ON TABLE public.places TO service_role;
+GRANT ALL ON FUNCTION public.rls_countries_delete(record public.country) TO anon;
+GRANT ALL ON FUNCTION public.rls_countries_delete(record public.country) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_countries_delete(record public.country) TO service_role;
 
 
 --
--- Name: FUNCTION rls_places_delete(record public.places); Type: ACL; Schema: public; Owner: postgres
+-- Name: FUNCTION rls_countries_edit(record public.country); Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON FUNCTION public.rls_places_delete(record public.places) TO anon;
-GRANT ALL ON FUNCTION public.rls_places_delete(record public.places) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_places_delete(record public.places) TO service_role;
-
-
---
--- Name: FUNCTION rls_places_edit(record public.places); Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON FUNCTION public.rls_places_edit(record public.places) TO anon;
-GRANT ALL ON FUNCTION public.rls_places_edit(record public.places) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_places_edit(record public.places) TO service_role;
+GRANT ALL ON FUNCTION public.rls_countries_edit(record public.country) TO anon;
+GRANT ALL ON FUNCTION public.rls_countries_edit(record public.country) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_countries_edit(record public.country) TO service_role;
 
 
 --
--- Name: TABLE profiles; Type: ACL; Schema: public; Owner: postgres
+-- Name: TABLE event; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON TABLE public.profiles TO anon;
-GRANT ALL ON TABLE public.profiles TO authenticated;
-GRANT ALL ON TABLE public.profiles TO service_role;
-
-
---
--- Name: FUNCTION rls_profiles_edit(records public.profiles[]); Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON FUNCTION public.rls_profiles_edit(records public.profiles[]) TO anon;
-GRANT ALL ON FUNCTION public.rls_profiles_edit(records public.profiles[]) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_profiles_edit(records public.profiles[]) TO service_role;
+GRANT ALL ON TABLE public.event TO anon;
+GRANT ALL ON TABLE public.event TO authenticated;
+GRANT ALL ON TABLE public.event TO service_role;
 
 
 --
--- Name: FUNCTION rls_profiles_edit(record public.profiles); Type: ACL; Schema: public; Owner: postgres
+-- Name: FUNCTION rls_events_delete(record public.event); Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON FUNCTION public.rls_profiles_edit(record public.profiles) TO anon;
-GRANT ALL ON FUNCTION public.rls_profiles_edit(record public.profiles) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_profiles_edit(record public.profiles) TO service_role;
-
-
---
--- Name: TABLE towns; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON TABLE public.towns TO anon;
-GRANT ALL ON TABLE public.towns TO authenticated;
-GRANT ALL ON TABLE public.towns TO service_role;
+GRANT ALL ON FUNCTION public.rls_events_delete(record public.event) TO anon;
+GRANT ALL ON FUNCTION public.rls_events_delete(record public.event) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_events_delete(record public.event) TO service_role;
 
 
 --
--- Name: FUNCTION rls_towns_delete(record public.towns); Type: ACL; Schema: public; Owner: postgres
+-- Name: FUNCTION rls_events_edit(record public.event); Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON FUNCTION public.rls_towns_delete(record public.towns) TO anon;
-GRANT ALL ON FUNCTION public.rls_towns_delete(record public.towns) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_towns_delete(record public.towns) TO service_role;
-
-
---
--- Name: FUNCTION rls_towns_edit(record public.towns); Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON FUNCTION public.rls_towns_edit(record public.towns) TO anon;
-GRANT ALL ON FUNCTION public.rls_towns_edit(record public.towns) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_towns_edit(record public.towns) TO service_role;
+GRANT ALL ON FUNCTION public.rls_events_edit(record public.event) TO anon;
+GRANT ALL ON FUNCTION public.rls_events_edit(record public.event) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_events_edit(record public.event) TO service_role;
 
 
 --
--- Name: TABLE trusts; Type: ACL; Schema: public; Owner: postgres
+-- Name: TABLE place; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON TABLE public.trusts TO anon;
-GRANT ALL ON TABLE public.trusts TO authenticated;
-GRANT ALL ON TABLE public.trusts TO service_role;
+GRANT ALL ON TABLE public.place TO anon;
+GRANT ALL ON TABLE public.place TO authenticated;
+GRANT ALL ON TABLE public.place TO service_role;
 
 
 --
--- Name: FUNCTION rls_trusts_edit(record public.trusts); Type: ACL; Schema: public; Owner: postgres
+-- Name: FUNCTION rls_places_delete(record public.place); Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON FUNCTION public.rls_trusts_edit(record public.trusts) TO anon;
-GRANT ALL ON FUNCTION public.rls_trusts_edit(record public.trusts) TO authenticated;
-GRANT ALL ON FUNCTION public.rls_trusts_edit(record public.trusts) TO service_role;
+GRANT ALL ON FUNCTION public.rls_places_delete(record public.place) TO anon;
+GRANT ALL ON FUNCTION public.rls_places_delete(record public.place) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_places_delete(record public.place) TO service_role;
+
+
+--
+-- Name: FUNCTION rls_places_edit(record public.place); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.rls_places_edit(record public.place) TO anon;
+GRANT ALL ON FUNCTION public.rls_places_edit(record public.place) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_places_edit(record public.place) TO service_role;
+
+
+--
+-- Name: TABLE profile; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.profile TO anon;
+GRANT ALL ON TABLE public.profile TO authenticated;
+GRANT ALL ON TABLE public.profile TO service_role;
+
+
+--
+-- Name: FUNCTION rls_profiles_edit(records public.profile[]); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.rls_profiles_edit(records public.profile[]) TO anon;
+GRANT ALL ON FUNCTION public.rls_profiles_edit(records public.profile[]) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_profiles_edit(records public.profile[]) TO service_role;
+
+
+--
+-- Name: FUNCTION rls_profiles_edit(record public.profile); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.rls_profiles_edit(record public.profile) TO anon;
+GRANT ALL ON FUNCTION public.rls_profiles_edit(record public.profile) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_profiles_edit(record public.profile) TO service_role;
+
+
+--
+-- Name: TABLE town; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.town TO anon;
+GRANT ALL ON TABLE public.town TO authenticated;
+GRANT ALL ON TABLE public.town TO service_role;
+
+
+--
+-- Name: FUNCTION rls_towns_delete(record public.town); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.rls_towns_delete(record public.town) TO anon;
+GRANT ALL ON FUNCTION public.rls_towns_delete(record public.town) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_towns_delete(record public.town) TO service_role;
+
+
+--
+-- Name: FUNCTION rls_towns_edit(record public.town); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.rls_towns_edit(record public.town) TO anon;
+GRANT ALL ON FUNCTION public.rls_towns_edit(record public.town) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_towns_edit(record public.town) TO service_role;
+
+
+--
+-- Name: TABLE trust; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.trust TO anon;
+GRANT ALL ON TABLE public.trust TO authenticated;
+GRANT ALL ON TABLE public.trust TO service_role;
+
+
+--
+-- Name: FUNCTION rls_trusts_edit(record public.trust); Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON FUNCTION public.rls_trusts_edit(record public.trust) TO anon;
+GRANT ALL ON FUNCTION public.rls_trusts_edit(record public.trust) TO authenticated;
+GRANT ALL ON FUNCTION public.rls_trusts_edit(record public.trust) TO service_role;
 
 
 --
@@ -5161,6 +5197,15 @@ GRANT ALL ON SEQUENCE public.author_id_seq TO service_role;
 GRANT ALL ON SEQUENCE public.citations_id_seq TO anon;
 GRANT ALL ON SEQUENCE public.citations_id_seq TO authenticated;
 GRANT ALL ON SEQUENCE public.citations_id_seq TO service_role;
+
+
+--
+-- Name: TABLE content_item; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.content_item TO anon;
+GRANT ALL ON TABLE public.content_item TO authenticated;
+GRANT ALL ON TABLE public.content_item TO service_role;
 
 
 --
