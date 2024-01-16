@@ -23,6 +23,26 @@
       "attachSimplePort": 9229
     },
     {
+      "name": "dev server (deno)",
+      "request": "launch",
+      "type": "node",
+      "program": "${workspaceFolder}/server.tsx",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "${env:HOME}/.deno/bin/deno",
+      "env": {
+        "ULTRA_LOG_LEVEL": "DEBUG"
+      },
+      "runtimeArgs": [
+        "run",
+        "--no-npm",
+        "--unstable",
+        "--inspect-wait",
+        "--allow-all"
+      ],
+      "args": [],
+      "attachSimplePort": 9229
+    },
+    {
       "name": "db-json-schema-add-descriptions: debug (tsx)",
       "type": "node",
       "request": "launch",

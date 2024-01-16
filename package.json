@@ -16,7 +16,7 @@
     "db:gen:json-schema-add-descriptions": "tsx script-node/db-json-schema-add-descriptions.ts",
     "db:gen:typescript": "env-cmd --use-shell \"supabase gen types typescript --linked > \\$SUPABASE_GENERATED_TYPES_PATH\"",
     "db:migrations": "env-cmd -x supabase migration list",
-    "db:migrations:create:from-remote": "env-cmd -x supabase db pull --schema auth,public,extensions && pnpm run db:migrations"
+    "db:migrations:create:from-remote": "pnpm run db:migrations && env-cmd -x supabase db pull --schema auth,public,extensions && pnpm run db:migrations"
   },
   "dependencies": {
     "@mantine/core": "7.1.2",

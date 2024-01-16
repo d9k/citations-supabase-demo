@@ -561,6 +561,20 @@ export interface Database {
         }
         Returns: undefined
       }
+      content_item_publish: {
+        Args: {
+          _table_name: string
+          _id: number
+        }
+        Returns: undefined
+      }
+      content_item_unpublish: {
+        Args: {
+          _table_name: string
+          _id: number
+        }
+        Returns: undefined
+      }
       delete_claim: {
         Args: {
           uid: string
@@ -605,6 +619,14 @@ export interface Database {
         Returns: Json
       }
       is_claims_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      permission_publish_check: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      permission_publish_get: {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }

@@ -47,17 +47,19 @@ CREATE OR REPLACE FUNCTION "public"."content_item_edit_protect_generated_fields"
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
-
   PERFORM protect_generated_field_from_change(new.id, old.id, 'id');
   PERFORM protect_generated_field_from_change(new.table_name, old.table_name, 'table_name');
   PERFORM protect_generated_field_from_change(new.created_at, old.created_at, 'created_at');
   PERFORM protect_generated_field_from_change(new.created_by, old.created_by, 'created_by');
   PERFORM protect_generated_field_from_change(new.updated_at, old.updated_at, 'updated_at');
   PERFORM protect_generated_field_from_change(new.updated_by, old.updated_by, 'updated_by');
-  PERFORM protect_generated_field_from_change(new.published_at, old.published_at, 'published_at');
-  PERFORM protect_generated_field_from_change(new.published_by, old.published_by, 'published_by');  
-  PERFORM protect_generated_field_from_change(new.unpublished_at, old.unpublished_at, 'unpublished_at');  
-  PERFORM protect_generated_field_from_change(new.unpublished_by, old.unpublished_by, 'unpublished_by');  
+
+  IF NOT permission_publish_get() THEN
+    PERFORM protect_generated_field_from_change(new.published_at, old.published_at, 'published_at');
+    PERFORM protect_generated_field_from_change(new.published_by, old.published_by, 'published_by');  
+    PERFORM protect_generated_field_from_change(new.unpublished_at, old.unpublished_at, 'unpublished_at');  
+    PERFORM protect_generated_field_from_change(new.unpublished_by, old.unpublished_by, 'unpublished_by');  
+  END IF;
 END;
 $$;
 
@@ -80,6 +82,47 @@ END;
 $$;
 
 ALTER FUNCTION "public"."content_item_new_protect_generated_fields"("new" "public"."content_item") OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."content_item_publish"("_table_name" "text", "_id" integer) RETURNS "void"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $_$
+BEGIN
+  -- also is checked in before update trigger in content_item_edit_protect_generated_fields()
+  PERFORM permission_publish_check();
+
+  -- SET session_replication_role = replica;
+
+  UPDATE content_item
+  SET published_at = NOW(),
+      published_by = get_my_claim('profile_id')::int,
+      unpublished_at = NULL,
+      unpublished_by = NULL
+  WHERE table_name = _table_name 
+    AND id = _id;
+  -- FORMAT('UPDATE %I VALUES ($1,$2)'::text ,v_partition_name) using NEW.id,NEW.datetime;
+
+  -- SET session_replication_role = origin;
+END;
+$_$;
+
+ALTER FUNCTION "public"."content_item_publish"("_table_name" "text", "_id" integer) OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."content_item_unpublish"("_table_name" "text", "_id" integer) RETURNS "void"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+BEGIN
+  -- also is checked in before update trigger in content_item_edit_protect_generated_fields()
+  PERFORM permission_publish_check();
+
+  UPDATE content_item
+  SET unpublished_at = NOW(),
+      unpublished_by = get_my_claim('profile_id')::int
+  WHERE table_name = _table_name 
+    AND id = _id;
+END;
+$$;
+
+ALTER FUNCTION "public"."content_item_unpublish"("_table_name" "text", "_id" integer) OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."delete_claim"("uid" "uuid", "claim" "text") RETURNS "text"
     LANGUAGE "plpgsql" SECURITY DEFINER
@@ -313,6 +356,28 @@ CREATE OR REPLACE FUNCTION "public"."is_claims_admin"() RETURNS boolean
 $$;
 
 ALTER FUNCTION "public"."is_claims_admin"() OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."permission_publish_check"() RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+  IF NOT permission_publish_get() THEN
+    RAISE EXCEPTION 'Publish permission required';
+  END IF;
+END;
+$$;
+
+ALTER FUNCTION "public"."permission_publish_check"() OWNER TO "postgres";
+
+CREATE OR REPLACE FUNCTION "public"."permission_publish_get"() RETURNS boolean
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+  RETURN get_my_claim('claim_publish')::varchar::boolean OR is_claims_admin();
+END;
+$$;
+
+ALTER FUNCTION "public"."permission_publish_get"() OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."protect_generated_field_from_change"("a" "anyelement", "b" "anyelement", "variable_name" "text") RETURNS "void"
     LANGUAGE "plpgsql"
@@ -1125,6 +1190,14 @@ GRANT ALL ON FUNCTION "public"."content_item_new_protect_generated_fields"("new"
 GRANT ALL ON FUNCTION "public"."content_item_new_protect_generated_fields"("new" "public"."content_item") TO "authenticated";
 GRANT ALL ON FUNCTION "public"."content_item_new_protect_generated_fields"("new" "public"."content_item") TO "service_role";
 
+GRANT ALL ON FUNCTION "public"."content_item_publish"("_table_name" "text", "_id" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."content_item_publish"("_table_name" "text", "_id" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."content_item_publish"("_table_name" "text", "_id" integer) TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."content_item_unpublish"("_table_name" "text", "_id" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."content_item_unpublish"("_table_name" "text", "_id" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."content_item_unpublish"("_table_name" "text", "_id" integer) TO "service_role";
+
 GRANT ALL ON FUNCTION "public"."delete_claim"("uid" "uuid", "claim" "text") TO "anon";
 GRANT ALL ON FUNCTION "public"."delete_claim"("uid" "uuid", "claim" "text") TO "authenticated";
 GRANT ALL ON FUNCTION "public"."delete_claim"("uid" "uuid", "claim" "text") TO "service_role";
@@ -1180,6 +1253,14 @@ GRANT ALL ON FUNCTION "public"."handle_public_profile_new"() TO "service_role";
 GRANT ALL ON FUNCTION "public"."is_claims_admin"() TO "anon";
 GRANT ALL ON FUNCTION "public"."is_claims_admin"() TO "authenticated";
 GRANT ALL ON FUNCTION "public"."is_claims_admin"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."permission_publish_check"() TO "anon";
+GRANT ALL ON FUNCTION "public"."permission_publish_check"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."permission_publish_check"() TO "service_role";
+
+GRANT ALL ON FUNCTION "public"."permission_publish_get"() TO "anon";
+GRANT ALL ON FUNCTION "public"."permission_publish_get"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."permission_publish_get"() TO "service_role";
 
 GRANT ALL ON FUNCTION "public"."protect_generated_field_from_change"("a" "anyelement", "b" "anyelement", "variable_name" "text") TO "anon";
 GRANT ALL ON FUNCTION "public"."protect_generated_field_from_change"("a" "anyelement", "b" "anyelement", "variable_name" "text") TO "authenticated";
