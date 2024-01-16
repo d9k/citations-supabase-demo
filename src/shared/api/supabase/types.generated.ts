@@ -548,12 +548,32 @@ export interface Database {
       }
     }
     Functions: {
+      content_item_edit_protect_generated_fields: {
+        Args: {
+          new: unknown
+          old: unknown
+        }
+        Returns: undefined
+      }
+      content_item_new_protect_generated_fields: {
+        Args: {
+          new: unknown
+        }
+        Returns: undefined
+      }
       delete_claim: {
         Args: {
           uid: string
           claim: string
         }
         Returns: string
+      }
+      equal_or_both_null: {
+        Args: {
+          a: unknown
+          b: unknown
+        }
+        Returns: boolean
       }
       fn_any_type: {
         Args: {
@@ -587,6 +607,21 @@ export interface Database {
       is_claims_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      protect_generated_field_from_change: {
+        Args: {
+          a: unknown
+          b: unknown
+          variable_name: string
+        }
+        Returns: undefined
+      }
+      protect_generated_field_from_init: {
+        Args: {
+          a: unknown
+          variable_name: string
+        }
+        Returns: undefined
       }
       record_fill_created_by: {
         Args: {

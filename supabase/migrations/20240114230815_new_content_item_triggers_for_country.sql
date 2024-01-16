@@ -14,19 +14,15 @@ drop function if exists "public"."rls_countries_delete"(record country);
 
 drop function if exists "public"."rls_countries_edit"(record country);
 
-alter table "public"."country" inherit "public"."content_item"
-
 alter table "public"."content_item" enable row level security;
 
-alter table "public"."country" drop column "created_at";
+-- alter table "public"."country" drop column "created_at";
 
-alter table "public"."country" drop column "created_by";
+-- alter table "public"."country" drop column "created_by";
 
-alter table "public"."country" drop column "id";
+-- alter table "public"."country" drop column "updated_at";
 
-alter table "public"."country" drop column "updated_at";
-
-alter table "public"."country" drop column "updated_by";
+-- alter table "public"."country" drop column "updated_by";
 
 alter table "public"."country" add column "published_at" timestamp with time zone;
 
@@ -37,6 +33,8 @@ alter table "public"."country" add column "table_name" text not null default 'co
 alter table "public"."country" add column "unpublished_at" timestamp with time zone;
 
 alter table "public"."country" add column "unpublished_by" bigint;
+
+alter table "public"."country" inherit "public"."content_item";
 
 alter table "public"."country" add constraint "country_table_name_check" CHECK ((table_name = 'country'::text)) not valid;
 
@@ -155,8 +153,8 @@ CREATE OR REPLACE FUNCTION public.string_limit(s character varying, max_length i
  LANGUAGE plpgsql
 AS $function$
 BEGIN
-    RETURN CASE WHEN length(s) > max_length 
-      THEN substring(s, 1, max_length - 3) || '...' 
+    RETURN CASE WHEN length(s) > max_length
+      THEN substring(s, 1, max_length - 3) || '...'
       ELSE s
       END;
 END;
