@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { IdNameRecord } from '../../../../shared/api/supabase/types/records.types.ts';
+import { IdNameRecord } from '/~/shared/api/supabase/types/records.types.ts';
 import { FieldToForeignTable } from '/~/shared/api/supabase/hooks/foreign-tables.ts';
 
 import { COLUMN_NAME_DELETABLE } from '/~/shared/api/supabase/const.ts';
