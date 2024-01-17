@@ -2,7 +2,8 @@ drop view if exists "public"."view_id_name";
 
 alter table "public"."content_item" add column "published" boolean generated always as (((published_at IS NOT NULL) AND (unpublished_at IS NULL))) stored;
 
-alter table "public"."country" add column "published" boolean generated always as (((published_at IS NOT NULL) AND (unpublished_at IS NULL))) stored;
+-- -- ERROR: column "published" of relation "country" already exists (SQLSTATE 42701)
+-- alter table "public"."country" add column "published" boolean generated always as (((published_at IS NOT NULL) AND (unpublished_at IS NULL))) stored;
 
 set check_function_bodies = off;
 

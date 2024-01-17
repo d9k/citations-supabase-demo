@@ -1126,7 +1126,9 @@ CREATE POLICY "RLS: country: delete" ON "public"."country" FOR DELETE TO "authen
 
 CREATE POLICY "RLS: country: insert" ON "public"."country" FOR INSERT TO "authenticated" WITH CHECK ("public"."rls_content_item_check_edit"(("country".*)::"public"."content_item"));
 
-CREATE POLICY "RLS: country: select" ON "public"."country" FOR SELECT USING (true);
+CREATE POLICY "RLS: country: select" ON "public"."country" FOR SELECT TO "authenticated" USING (true);
+
+CREATE POLICY "RLS: country: select (guest)" ON "public"."country" FOR SELECT TO "anon" USING ("published");
 
 CREATE POLICY "RLS: country: update" ON "public"."country" FOR UPDATE TO "authenticated" USING ("public"."rls_content_item_check_edit"(("country".*)::"public"."content_item")) WITH CHECK ("public"."rls_content_item_check_edit"(("country".*)::"public"."content_item"));
 

@@ -22,16 +22,16 @@ export const getMenuItems = ({ supabaseUser }: GetMenuItemsProps) => {
       path: '/demo',
       caption: 'Demo',
     },
+    {
+      path: '/tables',
+      pathMatchPattern: [
+        { path: '/table', end: false },
+        { path: '/tables', end: false },
+      ],
+      caption: 'Tables',
+    },
     ...(supabaseUser
       ? [
-        {
-          path: '/tables',
-          pathMatchPattern: [
-            { path: '/table', end: false },
-            { path: '/tables', end: false },
-          ],
-          caption: 'Tables',
-        },
         {
           path: '/profile',
           caption: profileCaption,
