@@ -685,7 +685,8 @@ CREATE TABLE public.content_item (
     published_at timestamp with time zone,
     published_by bigint,
     unpublished_at timestamp with time zone,
-    unpublished_by bigint
+    unpublished_by bigint,
+    published boolean GENERATED ALWAYS AS (((published_at IS NOT NULL) AND (unpublished_at IS NULL))) STORED
 );
 
 
@@ -748,9 +749,16 @@ ALTER FUNCTION public.content_item_new_protect_generated_fields(new public.conte
 CREATE FUNCTION public.content_item_publish(_table_name text, _id integer) RETURNS void
     LANGUAGE plpgsql SECURITY DEFINER
     AS $_$
+-- DECLARE
+--   exception_text TEXT;
 BEGIN
   -- also is checked in before update trigger in content_item_edit_protect_generated_fields()
+  -- exception_text := permission_publish_check();
   PERFORM permission_publish_check();
+
+  -- IF exception_text IS NOT NULL THEN
+  --   RETURN exception_text;
+  -- END IF;
 
   -- SET session_replication_role = replica;
 
@@ -763,6 +771,7 @@ BEGIN
     AND id = _id;
   -- FORMAT('UPDATE %I VALUES ($1,$2)'::text ,v_partition_name) using NEW.id,NEW.datetime;
 
+  -- RETURN NULL;
   -- SET session_replication_role = origin;
 END;
 $_$;
@@ -1102,10 +1111,15 @@ ALTER FUNCTION public.is_claims_admin() OWNER TO postgres;
 CREATE FUNCTION public.permission_publish_check() RETURNS void
     LANGUAGE plpgsql
     AS $$
+-- DECLARE
+--   exception_text TEXT;
 BEGIN
   IF NOT permission_publish_get() THEN
+    -- exception_text := 'Publish permission required';
     RAISE EXCEPTION 'Publish permission required';
+    -- RETURN exception_text;
   END IF;
+  -- RETURN NULL;
 END;
 $$;
 
@@ -1120,7 +1134,7 @@ CREATE FUNCTION public.permission_publish_get() RETURNS boolean
     LANGUAGE plpgsql
     AS $$
 BEGIN
-  RETURN get_my_claim('claim_publish')::varchar::boolean OR is_claims_admin();
+  RETURN COALESCE(get_my_claim('claim_publish')::varchar::boolean, FALSE) OR is_claims_admin();
 END;
 $$;
 
@@ -2868,7 +2882,7 @@ COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_co
 00000000-0000-0000-0000-000000000000	e76b244b-6f9e-42fc-b216-5ea74f94bd4c	authenticated	authenticated	gavriillarin263@inbox.lv	$2a$10$W8/g0R7arxlSsdWrn.5hXOqbolOsyQrpCcAKTOEkoIy2Vekr3vgSS	2023-12-09 05:25:02.817+00	\N		2023-12-09 05:24:14.076+00		2023-12-24 13:21:13.896693+00			\N	2023-12-24 13:21:25.863108+00	{"provider": "email", "providers": ["email"], "profile_id": 19}	\N	\N	2023-12-09 05:24:14.065+00	2023-12-24 23:26:51.847117+00	\N	\N			\N		0	\N		\N	f	\N
 00000000-0000-0000-0000-000000000000	ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d	authenticated	authenticated	d9kd9k@gmail.com	$2a$10$Nn9Lq26n.a2r92jcs25UI./rgH5OBb1gV6db5GhX.phqVA//i/Lmy	2023-12-21 14:03:46.059171+00	\N		2023-12-21 13:53:06.021026+00		2023-12-24 23:31:21.017153+00			\N	2023-12-24 23:31:41.685951+00	{"provider": "email", "providers": ["email"], "profile_id": 21, "claim_edit_all_content": 1}	{}	\N	2023-12-21 13:53:06.009726+00	2023-12-25 10:58:20.440871+00	\N	\N			\N		0	\N		\N	f	\N
 00000000-0000-0000-0000-000000000000	727a5d27-4b66-49ea-a2c1-0bccc7b8e2cd	authenticated	authenticated	d9k@ya.tu	$2a$10$OR4GYiMa8vFpk1ywBfPrEeL8yj0TCJxO3joYXdlRezx8Kk6eBjmQ.	\N	\N	45bc98dfe84800707f48a82df0ce417215a7869ba20ba657b46012c1	2023-12-11 20:49:26.158057+00		\N			\N	\N	{"provider": "email", "providers": ["email"], "profile_id": 20}	{}	\N	2023-12-11 20:49:26.145323+00	2023-12-11 20:49:29.413083+00	\N	\N			\N		0	\N		\N	f	\N
-00000000-0000-0000-0000-000000000000	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	authenticated	authenticated	d9k@ya.ru	$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2	2023-11-30 13:20:52.160287+00	\N		2023-11-30 13:19:57.235919+00		2024-01-16 02:18:40.042545+00			\N	2024-01-16 02:18:53.217209+00	{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}	{}	\N	2023-11-30 13:19:57.22183+00	2024-01-16 13:02:40.273509+00	\N	\N			\N		0	\N		\N	f	\N
+00000000-0000-0000-0000-000000000000	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	authenticated	authenticated	d9k@ya.ru	$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2	2023-11-30 13:20:52.160287+00	\N		2023-11-30 13:19:57.235919+00		2024-01-17 00:45:30.788095+00			\N	2024-01-17 00:45:45.629306+00	{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}	{}	\N	2023-11-30 13:19:57.22183+00	2024-01-17 00:45:45.631061+00	\N	\N			\N		0	\N		\N	f	\N
 \.
 
 
@@ -2909,13 +2923,12 @@ COPY public.content_item (table_name, id, created_at, created_by, updated_at, up
 --
 
 COPY public.country (id, name, created_at, updated_at, found_year, next_rename_year, created_by, updated_by, table_name, published_at, published_by, unpublished_at, unpublished_by) FROM stdin;
-15	Ireland 3	2024-01-14 23:02:41.877146+00	2024-01-16 02:19:21.935411+00	\N	\N	1	1	country	2024-01-16 00:47:35.580885+00	\N	\N	1
-12	India	2023-12-24 13:21:46.821053+00	2024-01-16 16:06:12.242675+00	\N	\N	19	\N	country	2024-01-16 16:06:12.242675+00	\N	\N	\N
-1	Greece 1	2023-11-28 06:50:37.146622+00	2024-01-14 17:54:43.169419+00	-4000	100	\N	\N	country	\N	\N	\N	\N
-11	China 10	2023-12-21 14:12:45.779946+00	2024-01-14 17:54:43.169419+00	\N	\N	21	\N	country	\N	\N	\N	\N
-10	Russia	2023-12-21 10:02:21.791404+00	2024-01-14 17:54:43.169419+00	\N	\N	1	\N	country	\N	\N	\N	\N
-7	Arztocka	2023-12-20 15:31:38.442098+00	2024-01-14 17:54:43.169419+00	\N	\N	1	\N	country	\N	\N	\N	\N
-8	Greece 5	2023-12-21 10:00:36.790762+00	2024-01-14 22:33:25.170627+00	\N	\N	1	1	country	\N	\N	\N	\N
+15	Ireland 4	2024-01-14 23:02:41.877146+00	2024-01-16 22:14:10.656071+00	\N	\N	1	1	country	2024-01-16 22:11:53.227693+00	1	2024-01-16 22:14:10.656071+00	1
+1	Greece 1	2023-11-28 06:50:37.146622+00	2024-01-16 22:14:16.72311+00	-4000	100	\N	1	country	2024-01-16 22:14:16.72311+00	1	\N	\N
+11	China 10	2023-12-21 14:12:45.779946+00	2024-01-16 22:14:35.744117+00	\N	\N	21	1	country	2024-01-16 22:14:35.744117+00	1	\N	\N
+10	Russia	2023-12-21 10:02:21.791404+00	2024-01-16 22:15:24.604677+00	\N	\N	1	1	country	2024-01-16 22:15:24.604677+00	1	\N	\N
+12	India	2023-12-24 13:21:46.821053+00	2024-01-16 22:31:09.410237+00	\N	\N	19	\N	country	2024-01-16 22:31:09.410237+00	\N	\N	\N
+8	Greece 5	2023-12-21 10:00:36.790762+00	2024-01-17 00:44:05.32167+00	\N	\N	1	1	country	2024-01-17 00:43:55.107373+00	1	2024-01-17 00:44:05.32167+00	1
 \.
 
 
@@ -3045,7 +3058,7 @@ COPY vault.secrets (id, name, description, secret, key_id, nonce, created_at, up
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 1248, true);
+SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 1265, true);
 
 
 --

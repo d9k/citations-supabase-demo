@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS "public"."content_item" (
     "published_at" timestamp with time zone,
     "published_by" bigint,
     "unpublished_at" timestamp with time zone,
-    "unpublished_by" bigint
+    "unpublished_by" bigint,
+    "published" boolean GENERATED ALWAYS AS ((("published_at" IS NOT NULL) AND ("unpublished_at" IS NULL))) STORED
 );
 
 ALTER TABLE "public"."content_item" OWNER TO "postgres";
@@ -88,7 +89,12 @@ CREATE OR REPLACE FUNCTION "public"."content_item_publish"("_table_name" "text",
     AS $_$
 BEGIN
   -- also is checked in before update trigger in content_item_edit_protect_generated_fields()
+  -- exception_text := permission_publish_check();
   PERFORM permission_publish_check();
+
+  -- IF exception_text IS NOT NULL THEN
+  --   RETURN exception_text;
+  -- END IF;
 
   -- SET session_replication_role = replica;
 
@@ -101,6 +107,7 @@ BEGIN
     AND id = _id;
   -- FORMAT('UPDATE %I VALUES ($1,$2)'::text ,v_partition_name) using NEW.id,NEW.datetime;
 
+  -- RETURN NULL;
   -- SET session_replication_role = origin;
 END;
 $_$;
@@ -362,8 +369,11 @@ CREATE OR REPLACE FUNCTION "public"."permission_publish_check"() RETURNS "void"
     AS $$
 BEGIN
   IF NOT permission_publish_get() THEN
+    -- exception_text := 'Publish permission required';
     RAISE EXCEPTION 'Publish permission required';
+    -- RETURN exception_text;
   END IF;
+  -- RETURN NULL;
 END;
 $$;
 
@@ -373,7 +383,7 @@ CREATE OR REPLACE FUNCTION "public"."permission_publish_get"() RETURNS boolean
     LANGUAGE "plpgsql"
     AS $$
 BEGIN
-  RETURN get_my_claim('claim_publish')::varchar::boolean OR is_claims_admin();
+  RETURN COALESCE(get_my_claim('claim_publish')::varchar::boolean, FALSE) OR is_claims_admin();
 END;
 $$;
 

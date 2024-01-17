@@ -178,6 +178,7 @@ export interface Database {
           created_at: string
           created_by: number | null
           id: number
+          published: boolean | null
           published_at: string | null
           published_by: number | null
           table_name: string
@@ -190,6 +191,7 @@ export interface Database {
           created_at?: string
           created_by?: number | null
           id: number
+          published?: boolean | null
           published_at?: string | null
           published_by?: number | null
           table_name: string
@@ -202,6 +204,7 @@ export interface Database {
           created_at?: string
           created_by?: number | null
           id?: number
+          published?: boolean | null
           published_at?: string | null
           published_by?: number | null
           table_name?: string
@@ -220,6 +223,7 @@ export interface Database {
           id: number
           name: string
           next_rename_year: number | null
+          published: boolean | null
           published_at: string | null
           published_by: number | null
           table_name: string
@@ -235,6 +239,7 @@ export interface Database {
           id?: number
           name?: string
           next_rename_year?: number | null
+          published?: boolean | null
           published_at?: string | null
           published_by?: number | null
           table_name?: string
@@ -250,6 +255,7 @@ export interface Database {
           id?: number
           name?: string
           next_rename_year?: number | null
+          published?: boolean | null
           published_at?: string | null
           published_by?: number | null
           table_name?: string

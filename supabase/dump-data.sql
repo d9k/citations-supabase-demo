@@ -38,7 +38,7 @@ INSERT INTO "auth"."users" ("instance_id", "id", "aud", "role", "email", "encryp
 	('00000000-0000-0000-0000-000000000000', 'e76b244b-6f9e-42fc-b216-5ea74f94bd4c', 'authenticated', 'authenticated', 'gavriillarin263@inbox.lv', '$2a$10$W8/g0R7arxlSsdWrn.5hXOqbolOsyQrpCcAKTOEkoIy2Vekr3vgSS', '2023-12-09 05:25:02.817+00', NULL, '', '2023-12-09 05:24:14.076+00', '', '2023-12-24 13:21:13.896693+00', '', '', NULL, '2023-12-24 13:21:25.863108+00', '{"provider": "email", "providers": ["email"], "profile_id": 19}', NULL, NULL, '2023-12-09 05:24:14.065+00', '2023-12-24 23:26:51.847117+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
 	('00000000-0000-0000-0000-000000000000', 'ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d', 'authenticated', 'authenticated', 'd9kd9k@gmail.com', '$2a$10$Nn9Lq26n.a2r92jcs25UI./rgH5OBb1gV6db5GhX.phqVA//i/Lmy', '2023-12-21 14:03:46.059171+00', NULL, '', '2023-12-21 13:53:06.021026+00', '', '2023-12-24 23:31:21.017153+00', '', '', NULL, '2023-12-24 23:31:41.685951+00', '{"provider": "email", "providers": ["email"], "profile_id": 21, "claim_edit_all_content": 1}', '{}', NULL, '2023-12-21 13:53:06.009726+00', '2023-12-25 10:58:20.440871+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
 	('00000000-0000-0000-0000-000000000000', '727a5d27-4b66-49ea-a2c1-0bccc7b8e2cd', 'authenticated', 'authenticated', 'd9k@ya.tu', '$2a$10$OR4GYiMa8vFpk1ywBfPrEeL8yj0TCJxO3joYXdlRezx8Kk6eBjmQ.', NULL, NULL, '45bc98dfe84800707f48a82df0ce417215a7869ba20ba657b46012c1', '2023-12-11 20:49:26.158057+00', '', NULL, '', '', NULL, NULL, '{"provider": "email", "providers": ["email"], "profile_id": 20}', '{}', NULL, '2023-12-11 20:49:26.145323+00', '2023-12-11 20:49:29.413083+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL),
-	('00000000-0000-0000-0000-000000000000', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', 'authenticated', 'authenticated', 'd9k@ya.ru', '$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2', '2023-11-30 13:20:52.160287+00', NULL, '', '2023-11-30 13:19:57.235919+00', '', '2024-01-16 02:18:40.042545+00', '', '', NULL, '2024-01-16 02:18:53.217209+00', '{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}', '{}', NULL, '2023-11-30 13:19:57.22183+00', '2024-01-16 13:02:40.273509+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL);
+	('00000000-0000-0000-0000-000000000000', 'b5f563a3-b794-49d0-a0e3-dbf9fffd2321', 'authenticated', 'authenticated', 'd9k@ya.ru', '$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2', '2023-11-30 13:20:52.160287+00', NULL, '', '2023-11-30 13:19:57.235919+00', '', '2024-01-17 00:45:30.788095+00', '', '', NULL, '2024-01-17 00:45:45.629306+00', '{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}', '{}', NULL, '2023-11-30 13:19:57.22183+00', '2024-01-17 00:45:45.631061+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL);
 
 
 --
@@ -136,13 +136,12 @@ INSERT INTO "public"."profile" ("auth_user_id", "updated_at", "username", "full_
 --
 
 INSERT INTO "public"."country" ("id", "name", "created_at", "updated_at", "found_year", "next_rename_year", "created_by", "updated_by", "table_name", "published_at", "published_by", "unpublished_at", "unpublished_by") VALUES
-	(15, 'Ireland 3', '2024-01-14 23:02:41.877146+00', '2024-01-16 02:19:21.935411+00', NULL, NULL, 1, 1, 'country', '2024-01-16 00:47:35.580885+00', NULL, NULL, 1),
-	(12, 'India', '2023-12-24 13:21:46.821053+00', '2024-01-16 16:06:12.242675+00', NULL, NULL, 19, NULL, 'country', '2024-01-16 16:06:12.242675+00', NULL, NULL, NULL),
-	(1, 'Greece 1', '2023-11-28 06:50:37.146622+00', '2024-01-14 17:54:43.169419+00', -4000, 100, NULL, NULL, 'country', NULL, NULL, NULL, NULL),
-	(11, 'China 10', '2023-12-21 14:12:45.779946+00', '2024-01-14 17:54:43.169419+00', NULL, NULL, 21, NULL, 'country', NULL, NULL, NULL, NULL),
-	(10, 'Russia', '2023-12-21 10:02:21.791404+00', '2024-01-14 17:54:43.169419+00', NULL, NULL, 1, NULL, 'country', NULL, NULL, NULL, NULL),
-	(7, 'Arztocka', '2023-12-20 15:31:38.442098+00', '2024-01-14 17:54:43.169419+00', NULL, NULL, 1, NULL, 'country', NULL, NULL, NULL, NULL),
-	(8, 'Greece 5', '2023-12-21 10:00:36.790762+00', '2024-01-14 22:33:25.170627+00', NULL, NULL, 1, 1, 'country', NULL, NULL, NULL, NULL);
+	(15, 'Ireland 4', '2024-01-14 23:02:41.877146+00', '2024-01-16 22:14:10.656071+00', NULL, NULL, 1, 1, 'country', '2024-01-16 22:11:53.227693+00', 1, '2024-01-16 22:14:10.656071+00', 1),
+	(1, 'Greece 1', '2023-11-28 06:50:37.146622+00', '2024-01-16 22:14:16.72311+00', -4000, 100, NULL, 1, 'country', '2024-01-16 22:14:16.72311+00', 1, NULL, NULL),
+	(11, 'China 10', '2023-12-21 14:12:45.779946+00', '2024-01-16 22:14:35.744117+00', NULL, NULL, 21, 1, 'country', '2024-01-16 22:14:35.744117+00', 1, NULL, NULL),
+	(10, 'Russia', '2023-12-21 10:02:21.791404+00', '2024-01-16 22:15:24.604677+00', NULL, NULL, 1, 1, 'country', '2024-01-16 22:15:24.604677+00', 1, NULL, NULL),
+	(12, 'India', '2023-12-24 13:21:46.821053+00', '2024-01-16 22:31:09.410237+00', NULL, NULL, 19, NULL, 'country', '2024-01-16 22:31:09.410237+00', NULL, NULL, NULL),
+	(8, 'Greece 5', '2023-12-21 10:00:36.790762+00', '2024-01-17 00:44:05.32167+00', NULL, NULL, 1, 1, 'country', '2024-01-17 00:43:55.107373+00', 1, '2024-01-17 00:44:05.32167+00', 1);
 
 
 --
@@ -216,7 +215,7 @@ INSERT INTO "storage"."buckets" ("id", "name", "owner", "created_at", "updated_a
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 1248, true);
+SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 1265, true);
 
 
 --
