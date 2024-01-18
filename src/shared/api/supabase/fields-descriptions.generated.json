@@ -1,7 +1,7 @@
 {
   "public": {
     "author": {
-      "lastname_name_patronymic": "separated by spaces",
+      "name_en": "\"lastname name patronymic\" separated by spaces",
       "birth_town": "town of birth (test description)"
     },
     "country": {

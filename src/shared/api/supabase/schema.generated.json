@@ -49,11 +49,11 @@
         "nullable": false,
         "type": "number"
       },
-      "lastname_name_patronymic": {
-        "name": "lastname_name_patronymic",
+      "name_en": {
+        "name": "name_en",
         "nullable": false,
         "type": "string",
-        "description": "separated by spaces"
+        "description": "\"lastname name patronymic\" separated by spaces"
       },
       "updated_at": {
         "name": "updated_at",
@@ -100,11 +100,6 @@
           "foreignTable": "profile"
         }
       },
-      "english_text": {
-        "name": "english_text",
-        "nullable": true,
-        "type": "string"
-      },
       "event_id": {
         "name": "event_id",
         "nullable": true,
@@ -136,6 +131,11 @@
           "isOneToOne": false,
           "foreignTable": "place"
         }
+      },
+      "text_en": {
+        "name": "text_en",
+        "nullable": true,
+        "type": "string"
       },
       "updated_at": {
         "name": "updated_at",
@@ -244,8 +244,8 @@
         "nullable": false,
         "type": "number"
       },
-      "name": {
-        "name": "name",
+      "name_en": {
+        "name": "name_en",
         "nullable": false,
         "type": "string"
       },
@@ -334,8 +334,8 @@
         "nullable": false,
         "type": "number"
       },
-      "name": {
-        "name": "name",
+      "name_en": {
+        "name": "name_en",
         "nullable": false,
         "type": "string"
       },
@@ -399,8 +399,8 @@
         "nullable": false,
         "type": "number"
       },
-      "name": {
-        "name": "name",
+      "name_en": {
+        "name": "name_en",
         "nullable": false,
         "type": "string"
       },
@@ -513,8 +513,8 @@
         "nullable": false,
         "type": "number"
       },
-      "name": {
-        "name": "name",
+      "name_en": {
+        "name": "name_en",
         "nullable": false,
         "type": "string"
       },

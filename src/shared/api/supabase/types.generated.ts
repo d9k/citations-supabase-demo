@@ -43,7 +43,7 @@ export interface Database {
           created_by: number | null
           death_year: number | null
           id: number
-          lastname_name_patronymic: string
+          name_en: string
           updated_at: string
           updated_by: number | null
         }
@@ -55,7 +55,7 @@ export interface Database {
           created_by?: number | null
           death_year?: number | null
           id?: number
-          lastname_name_patronymic: string
+          name_en: string
           updated_at?: string
           updated_by?: number | null
         }
@@ -67,7 +67,7 @@ export interface Database {
           created_by?: number | null
           death_year?: number | null
           id?: number
-          lastname_name_patronymic?: string
+          name_en?: string
           updated_at?: string
           updated_by?: number | null
         }
@@ -100,11 +100,11 @@ export interface Database {
           author_id: number
           created_at: string
           created_by: number | null
-          english_text: string | null
           event_id: number | null
           id: number
           original_language_text: string | null
           place_id: number | null
+          text_en: string | null
           updated_at: string
           updated_by: number | null
           year: number | null
@@ -113,11 +113,11 @@ export interface Database {
           author_id: number
           created_at?: string
           created_by?: number | null
-          english_text?: string | null
           event_id?: number | null
           id?: number
           original_language_text?: string | null
           place_id?: number | null
+          text_en?: string | null
           updated_at?: string
           updated_by?: number | null
           year?: number | null
@@ -126,11 +126,11 @@ export interface Database {
           author_id?: number
           created_at?: string
           created_by?: number | null
-          english_text?: string | null
           event_id?: number | null
           id?: number
           original_language_text?: string | null
           place_id?: number | null
+          text_en?: string | null
           updated_at?: string
           updated_by?: number | null
           year?: number | null
@@ -221,7 +221,7 @@ export interface Database {
           created_by: number | null
           found_year: number | null
           id: number
-          name: string
+          name_en: string
           next_rename_year: number | null
           published: boolean | null
           published_at: string | null
@@ -237,7 +237,7 @@ export interface Database {
           created_by?: number | null
           found_year?: number | null
           id?: number
-          name?: string
+          name_en?: string
           next_rename_year?: number | null
           published?: boolean | null
           published_at?: string | null
@@ -253,7 +253,7 @@ export interface Database {
           created_by?: number | null
           found_year?: number | null
           id?: number
-          name?: string
+          name_en?: string
           next_rename_year?: number | null
           published?: boolean | null
           published_at?: string | null
@@ -288,7 +288,7 @@ export interface Database {
           end_month: number | null
           end_year: number | null
           id: number
-          name: string
+          name_en: string
           place_id: number | null
           start_month: number
           start_year: number
@@ -301,7 +301,7 @@ export interface Database {
           end_month?: number | null
           end_year?: number | null
           id?: number
-          name: string
+          name_en: string
           place_id?: number | null
           start_month: number
           start_year: number
@@ -314,7 +314,7 @@ export interface Database {
           end_month?: number | null
           end_year?: number | null
           id?: number
-          name?: string
+          name_en?: string
           place_id?: number | null
           start_month?: number
           start_year?: number
@@ -350,7 +350,7 @@ export interface Database {
           created_at: string
           created_by: number | null
           id: number
-          name: string
+          name_en: string
           town_id: number
           updated_at: string
           updated_by: number | null
@@ -359,7 +359,7 @@ export interface Database {
           created_at?: string
           created_by?: number | null
           id?: number
-          name?: string
+          name_en?: string
           town_id: number
           updated_at?: string
           updated_by?: number | null
@@ -368,7 +368,7 @@ export interface Database {
           created_at?: string
           created_by?: number | null
           id?: number
-          name?: string
+          name_en?: string
           town_id?: number
           updated_at?: string
           updated_by?: number | null
@@ -444,7 +444,7 @@ export interface Database {
           created_at: string
           created_by: number | null
           id: number
-          name: string
+          name_en: string
           updated_at: string
           updated_by: number | null
         }
@@ -453,7 +453,7 @@ export interface Database {
           created_at?: string
           created_by?: number | null
           id?: number
-          name: string
+          name_en: string
           updated_at?: string
           updated_by?: number | null
         }
@@ -462,7 +462,7 @@ export interface Database {
           created_at?: string
           created_by?: number | null
           id?: number
-          name?: string
+          name_en?: string
           updated_at?: string
           updated_by?: number | null
         }

@@ -5,6 +5,7 @@ import { FieldToForeignTable } from '/~/shared/api/supabase/hooks/foreign-tables
 
 import {
   COLUMN_NAME_DELETABLE,
+  COLUMN_NAME_EDITABLE,
   COLUMN_NAME_PUBLISHED,
 } from '/~/shared/api/supabase/const.ts';
 
@@ -54,6 +55,7 @@ export type UseColumnsArgs = {
   columnsNamesIds: string[];
   columnsNamesLast: string[];
   columnsNamesRequired: string[];
+  hasRlsInfo: boolean;
   foreignidsNames?: IdNameRecord[];
   fieldToForeignTable?: FieldToForeignTable;
   onRowActionDelete?: CellDeletableProps<RecordAny>['onRowDelete'];
@@ -69,6 +71,7 @@ export const useColumns = ({
   columnsNamesIds,
   columnsNamesLast,
   columnsNamesRequired,
+  hasRlsInfo,
   fieldToForeignTable = {},
   foreignidsNames = [],
   onRowActionDelete,
@@ -76,6 +79,15 @@ export const useColumns = ({
   onRowActionUnpublish,
 }: UseColumnsArgs) => {
   const HOOK_NAME = 'useColumns';
+
+  const columnsNamesActual = useMemo(() => {
+    return {
+      ...columnsNames,
+      ...(
+        hasRlsInfo ? [COLUMN_NAME_EDITABLE, COLUMN_NAME_DELETABLE] : []
+      ),
+    };
+  }, [columnsNames, hasRlsInfo]);
 
   const { foreignTableToSelectorItems, foreignTableToIdToSelectorItem } =
     useMemo(
@@ -221,6 +233,7 @@ export const useColumns = ({
 
     return {
       columns,
+      columnsNamesActual,
       fieldsNamesFirst,
       fieldsNamesLast,
       fieldsNamesRestSorted,
@@ -228,6 +241,7 @@ export const useColumns = ({
       foreignTableToSelectorItems,
     };
   }, [
+    columnsNamesActual,
     columnsNamesFirst,
     columnsNamesLast,
     columnsNames,
