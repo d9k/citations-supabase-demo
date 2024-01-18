@@ -456,17 +456,24 @@ $$;
 ALTER FUNCTION "public"."record_fill_updated_by"("r" "record") OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."author" (
-    "id" bigint NOT NULL,
+    "id" bigint,
     "name_en" "text" NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"(),
     "birth_year" bigint,
     "death_year" bigint,
     "approximate_years" boolean DEFAULT false NOT NULL,
-    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone NOT NULL,
     "birth_town" bigint,
     "created_by" bigint,
-    "updated_by" bigint
-);
+    "updated_by" bigint,
+    "published_at" timestamp with time zone,
+    "published_by" bigint,
+    "table_name" "text" DEFAULT 'author'::"text",
+    "unpublished_at" timestamp with time zone,
+    "unpublished_by" bigint,
+    "published" boolean
+)
+INHERITS ("public"."content_item");
 
 ALTER TABLE "public"."author" OWNER TO "postgres";
 
@@ -526,18 +533,25 @@ $$;
 ALTER FUNCTION "public"."rls_check_edit_by_created_by"("created_by" bigint, "allow_trust" boolean, "claim_check" character varying) OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."citation" (
-    "id" bigint NOT NULL,
+    "id" bigint,
     "text_en" "text",
     "author_id" bigint NOT NULL,
     "year" bigint,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "updated_at" timestamp without time zone DEFAULT "now"() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone NOT NULL,
     "original_language_text" "text",
     "place_id" bigint,
     "event_id" bigint,
     "created_by" bigint,
-    "updated_by" bigint
-);
+    "updated_by" bigint,
+    "published_at" timestamp with time zone,
+    "published_by" bigint,
+    "table_name" "text" DEFAULT 'citation'::"text",
+    "unpublished_at" timestamp with time zone,
+    "unpublished_by" bigint,
+    "published" boolean
+)
+INHERITS ("public"."content_item");
 
 ALTER TABLE "public"."citation" OWNER TO "postgres";
 
@@ -582,9 +596,9 @@ $$;
 ALTER FUNCTION "public"."rls_content_item_check_edit"("record" "public"."content_item") OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."event" (
-    "id" bigint NOT NULL,
+    "id" bigint,
     "name_en" "text" NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"(),
     "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "start_year" bigint NOT NULL,
     "start_month" smallint NOT NULL,
@@ -592,8 +606,15 @@ CREATE TABLE IF NOT EXISTS "public"."event" (
     "end_month" smallint,
     "place_id" bigint,
     "created_by" bigint,
-    "updated_by" bigint
-);
+    "updated_by" bigint,
+    "published_at" timestamp with time zone,
+    "published_by" bigint,
+    "table_name" "text" DEFAULT 'event'::"text",
+    "unpublished_at" timestamp with time zone,
+    "unpublished_by" bigint,
+    "published" boolean
+)
+INHERITS ("public"."content_item");
 
 ALTER TABLE "public"."event" OWNER TO "postgres";
 
@@ -618,14 +639,21 @@ $$;
 ALTER FUNCTION "public"."rls_events_edit"("record" "public"."event") OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."place" (
-    "id" bigint NOT NULL,
+    "id" bigint,
     "name_en" "text" DEFAULT 'in'::"text" NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"(),
     "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "town_id" bigint NOT NULL,
     "created_by" bigint,
-    "updated_by" bigint
-);
+    "updated_by" bigint,
+    "published_at" timestamp with time zone,
+    "published_by" bigint,
+    "table_name" "text" DEFAULT 'place'::"text",
+    "unpublished_at" timestamp with time zone,
+    "unpublished_by" bigint,
+    "published" boolean
+)
+INHERITS ("public"."content_item");
 
 ALTER TABLE "public"."place" OWNER TO "postgres";
 
@@ -690,15 +718,22 @@ $$;
 ALTER FUNCTION "public"."rls_profiles_edit"("record" "public"."profile") OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."town" (
-    "id" bigint NOT NULL,
+    "id" bigint,
     "name_en" "text" NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"(),
     "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
     "country_id" bigint NOT NULL,
     "created_by" bigint,
     "updated_by" bigint,
+    "published_at" timestamp with time zone,
+    "published_by" bigint,
+    "table_name" "text" DEFAULT 'town'::"text",
+    "unpublished_at" timestamp with time zone,
+    "unpublished_by" bigint,
+    "published" boolean,
     CONSTRAINT "towns_name_check" CHECK (("length"("name_en") > 0))
-);
+)
+INHERITS ("public"."content_item");
 
 ALTER TABLE "public"."town" OWNER TO "postgres";
 
@@ -982,6 +1017,12 @@ ALTER TABLE "public"."view_rls_edit_for_table" OWNER TO "postgres";
 ALTER TABLE ONLY "public"."author"
     ADD CONSTRAINT "author_pkey" PRIMARY KEY ("id");
 
+ALTER TABLE "public"."author"
+    ADD CONSTRAINT "author_table_name_check" CHECK (("table_name" = 'author'::"text")) NOT VALID;
+
+ALTER TABLE "public"."citation"
+    ADD CONSTRAINT "citation_table_name_check" CHECK (("table_name" = 'citation'::"text")) NOT VALID;
+
 ALTER TABLE ONLY "public"."citation"
     ADD CONSTRAINT "citations_pkey" PRIMARY KEY ("id");
 
@@ -997,8 +1038,14 @@ ALTER TABLE ONLY "public"."country"
 ALTER TABLE ONLY "public"."event"
     ADD CONSTRAINT "event_pkey" PRIMARY KEY ("id");
 
+ALTER TABLE "public"."event"
+    ADD CONSTRAINT "event_table_name_check" CHECK (("table_name" = 'event'::"text")) NOT VALID;
+
 ALTER TABLE ONLY "public"."place"
     ADD CONSTRAINT "place_pkey" PRIMARY KEY ("id");
+
+ALTER TABLE "public"."place"
+    ADD CONSTRAINT "place_table_name_check" CHECK (("table_name" = 'place'::"text")) NOT VALID;
 
 ALTER TABLE ONLY "public"."profile"
     ADD CONSTRAINT "profiles_pkey" PRIMARY KEY ("id");
@@ -1008,6 +1055,9 @@ ALTER TABLE ONLY "public"."profile"
 
 ALTER TABLE ONLY "public"."town"
     ADD CONSTRAINT "town_pkey" PRIMARY KEY ("id");
+
+ALTER TABLE "public"."town"
+    ADD CONSTRAINT "town_table_name_check" CHECK (("table_name" = 'town'::"text")) NOT VALID;
 
 ALTER TABLE ONLY "public"."trust"
     ADD CONSTRAINT "trusts_pkey" PRIMARY KEY ("id");

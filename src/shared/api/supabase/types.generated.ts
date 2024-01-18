@@ -44,6 +44,12 @@ export interface Database {
           death_year: number | null
           id: number
           name_en: string
+          published: boolean | null
+          published_at: string | null
+          published_by: number | null
+          table_name: string
+          unpublished_at: string | null
+          unpublished_by: number | null
           updated_at: string
           updated_by: number | null
         }
@@ -56,7 +62,13 @@ export interface Database {
           death_year?: number | null
           id?: number
           name_en: string
-          updated_at?: string
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
+          updated_at: string
           updated_by?: number | null
         }
         Update: {
@@ -68,6 +80,12 @@ export interface Database {
           death_year?: number | null
           id?: number
           name_en?: string
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
         }
@@ -104,7 +122,13 @@ export interface Database {
           id: number
           original_language_text: string | null
           place_id: number | null
+          published: boolean | null
+          published_at: string | null
+          published_by: number | null
+          table_name: string
           text_en: string | null
+          unpublished_at: string | null
+          unpublished_by: number | null
           updated_at: string
           updated_by: number | null
           year: number | null
@@ -117,8 +141,14 @@ export interface Database {
           id?: number
           original_language_text?: string | null
           place_id?: number | null
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
           text_en?: string | null
-          updated_at?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
+          updated_at: string
           updated_by?: number | null
           year?: number | null
         }
@@ -130,7 +160,13 @@ export interface Database {
           id?: number
           original_language_text?: string | null
           place_id?: number | null
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
           text_en?: string | null
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
           year?: number | null
@@ -290,8 +326,14 @@ export interface Database {
           id: number
           name_en: string
           place_id: number | null
+          published: boolean | null
+          published_at: string | null
+          published_by: number | null
           start_month: number
           start_year: number
+          table_name: string
+          unpublished_at: string | null
+          unpublished_by: number | null
           updated_at: string
           updated_by: number | null
         }
@@ -303,8 +345,14 @@ export interface Database {
           id?: number
           name_en: string
           place_id?: number | null
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
           start_month: number
           start_year: number
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
         }
@@ -316,8 +364,14 @@ export interface Database {
           id?: number
           name_en?: string
           place_id?: number | null
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
           start_month?: number
           start_year?: number
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
         }
@@ -351,7 +405,13 @@ export interface Database {
           created_by: number | null
           id: number
           name_en: string
+          published: boolean | null
+          published_at: string | null
+          published_by: number | null
+          table_name: string
           town_id: number
+          unpublished_at: string | null
+          unpublished_by: number | null
           updated_at: string
           updated_by: number | null
         }
@@ -360,7 +420,13 @@ export interface Database {
           created_by?: number | null
           id?: number
           name_en?: string
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
           town_id: number
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
         }
@@ -369,7 +435,13 @@ export interface Database {
           created_by?: number | null
           id?: number
           name_en?: string
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
           town_id?: number
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
         }
@@ -445,6 +517,12 @@ export interface Database {
           created_by: number | null
           id: number
           name_en: string
+          published: boolean | null
+          published_at: string | null
+          published_by: number | null
+          table_name: string
+          unpublished_at: string | null
+          unpublished_by: number | null
           updated_at: string
           updated_by: number | null
         }
@@ -454,6 +532,12 @@ export interface Database {
           created_by?: number | null
           id?: number
           name_en: string
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
         }
@@ -463,6 +547,12 @@ export interface Database {
           created_by?: number | null
           id?: number
           name_en?: string
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
         }

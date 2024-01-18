@@ -1237,17 +1237,24 @@ ALTER FUNCTION public.record_fill_updated_by(r record) OWNER TO postgres;
 --
 
 CREATE TABLE public.author (
-    id bigint NOT NULL,
+    id bigint,
     name_en text NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
     birth_year bigint,
     death_year bigint,
     approximate_years boolean DEFAULT false NOT NULL,
-    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone NOT NULL,
     birth_town bigint,
     created_by bigint,
-    updated_by bigint
-);
+    updated_by bigint,
+    published_at timestamp with time zone,
+    published_by bigint,
+    table_name text DEFAULT 'author'::text,
+    unpublished_at timestamp with time zone,
+    unpublished_by bigint,
+    published boolean
+)
+INHERITS (public.content_item);
 
 
 ALTER TABLE public.author OWNER TO postgres;
@@ -1346,18 +1353,25 @@ ALTER FUNCTION public.rls_check_edit_by_created_by(created_by bigint, allow_trus
 --
 
 CREATE TABLE public.citation (
-    id bigint NOT NULL,
+    id bigint,
     text_en text,
     author_id bigint NOT NULL,
     year bigint,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone NOT NULL,
     original_language_text text,
     place_id bigint,
     event_id bigint,
     created_by bigint,
-    updated_by bigint
-);
+    updated_by bigint,
+    published_at timestamp with time zone,
+    published_by bigint,
+    table_name text DEFAULT 'citation'::text,
+    unpublished_at timestamp with time zone,
+    unpublished_by bigint,
+    published boolean
+)
+INHERITS (public.content_item);
 
 
 ALTER TABLE public.citation OWNER TO postgres;
@@ -1427,9 +1441,9 @@ ALTER FUNCTION public.rls_content_item_check_edit(record public.content_item) OW
 --
 
 CREATE TABLE public.event (
-    id bigint NOT NULL,
+    id bigint,
     name_en text NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     start_year bigint NOT NULL,
     start_month smallint NOT NULL,
@@ -1437,8 +1451,15 @@ CREATE TABLE public.event (
     end_month smallint,
     place_id bigint,
     created_by bigint,
-    updated_by bigint
-);
+    updated_by bigint,
+    published_at timestamp with time zone,
+    published_by bigint,
+    table_name text DEFAULT 'event'::text,
+    unpublished_at timestamp with time zone,
+    unpublished_by bigint,
+    published boolean
+)
+INHERITS (public.content_item);
 
 
 ALTER TABLE public.event OWNER TO postgres;
@@ -1478,14 +1499,21 @@ ALTER FUNCTION public.rls_events_edit(record public.event) OWNER TO postgres;
 --
 
 CREATE TABLE public.place (
-    id bigint NOT NULL,
+    id bigint,
     name_en text DEFAULT 'in'::text NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     town_id bigint NOT NULL,
     created_by bigint,
-    updated_by bigint
-);
+    updated_by bigint,
+    published_at timestamp with time zone,
+    published_by bigint,
+    table_name text DEFAULT 'place'::text,
+    unpublished_at timestamp with time zone,
+    unpublished_by bigint,
+    published boolean
+)
+INHERITS (public.content_item);
 
 
 ALTER TABLE public.place OWNER TO postgres;
@@ -1580,15 +1608,22 @@ ALTER FUNCTION public.rls_profiles_edit(record public.profile) OWNER TO postgres
 --
 
 CREATE TABLE public.town (
-    id bigint NOT NULL,
+    id bigint,
     name_en text NOT NULL,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     country_id bigint NOT NULL,
     created_by bigint,
     updated_by bigint,
+    published_at timestamp with time zone,
+    published_by bigint,
+    table_name text DEFAULT 'town'::text,
+    unpublished_at timestamp with time zone,
+    unpublished_by bigint,
+    published boolean,
     CONSTRAINT towns_name_check CHECK ((length(name_en) > 0))
-);
+)
+INHERITS (public.content_item);
 
 
 ALTER TABLE public.town OWNER TO postgres;
@@ -2882,7 +2917,7 @@ COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_co
 00000000-0000-0000-0000-000000000000	e76b244b-6f9e-42fc-b216-5ea74f94bd4c	authenticated	authenticated	gavriillarin263@inbox.lv	$2a$10$W8/g0R7arxlSsdWrn.5hXOqbolOsyQrpCcAKTOEkoIy2Vekr3vgSS	2023-12-09 05:25:02.817+00	\N		2023-12-09 05:24:14.076+00		2023-12-24 13:21:13.896693+00			\N	2023-12-24 13:21:25.863108+00	{"provider": "email", "providers": ["email"], "profile_id": 19}	\N	\N	2023-12-09 05:24:14.065+00	2023-12-24 23:26:51.847117+00	\N	\N			\N		0	\N		\N	f	\N
 00000000-0000-0000-0000-000000000000	ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d	authenticated	authenticated	d9kd9k@gmail.com	$2a$10$Nn9Lq26n.a2r92jcs25UI./rgH5OBb1gV6db5GhX.phqVA//i/Lmy	2023-12-21 14:03:46.059171+00	\N		2023-12-21 13:53:06.021026+00		2023-12-24 23:31:21.017153+00			\N	2023-12-24 23:31:41.685951+00	{"provider": "email", "providers": ["email"], "profile_id": 21, "claim_edit_all_content": 1}	{}	\N	2023-12-21 13:53:06.009726+00	2023-12-25 10:58:20.440871+00	\N	\N			\N		0	\N		\N	f	\N
 00000000-0000-0000-0000-000000000000	727a5d27-4b66-49ea-a2c1-0bccc7b8e2cd	authenticated	authenticated	d9k@ya.tu	$2a$10$OR4GYiMa8vFpk1ywBfPrEeL8yj0TCJxO3joYXdlRezx8Kk6eBjmQ.	\N	\N	45bc98dfe84800707f48a82df0ce417215a7869ba20ba657b46012c1	2023-12-11 20:49:26.158057+00		\N			\N	\N	{"provider": "email", "providers": ["email"], "profile_id": 20}	{}	\N	2023-12-11 20:49:26.145323+00	2023-12-11 20:49:29.413083+00	\N	\N			\N		0	\N		\N	f	\N
-00000000-0000-0000-0000-000000000000	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	authenticated	authenticated	d9k@ya.ru	$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2	2023-11-30 13:20:52.160287+00	\N		2023-11-30 13:19:57.235919+00	e6ca5328d534f247be9929263949e456596c737a05c8ca4a4df4fba0	2024-01-17 18:02:45.022822+00			\N	2024-01-17 00:45:45.629306+00	{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}	{}	\N	2023-11-30 13:19:57.22183+00	2024-01-17 18:56:30.666588+00	\N	\N			\N		0	\N		\N	f	\N
+00000000-0000-0000-0000-000000000000	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	authenticated	authenticated	d9k@ya.ru	$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2	2023-11-30 13:20:52.160287+00	\N		2023-11-30 13:19:57.235919+00	e6ca5328d534f247be9929263949e456596c737a05c8ca4a4df4fba0	2024-01-17 18:02:45.022822+00			\N	2024-01-17 00:45:45.629306+00	{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}	{}	\N	2023-11-30 13:19:57.22183+00	2024-01-18 08:07:32.689833+00	\N	\N			\N		0	\N		\N	f	\N
 \.
 
 
@@ -2898,7 +2933,7 @@ COPY pgsodium.key (id, status, created, expires, key_type, key_id, key_context, 
 -- Data for Name: author; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.author (id, name_en, created_at, birth_year, death_year, approximate_years, updated_at, birth_town, created_by, updated_by) FROM stdin;
+COPY public.author (id, name_en, created_at, birth_year, death_year, approximate_years, updated_at, birth_town, created_by, updated_by, published_at, published_by, table_name, unpublished_at, unpublished_by) FROM stdin;
 \.
 
 
@@ -2906,7 +2941,7 @@ COPY public.author (id, name_en, created_at, birth_year, death_year, approximate
 -- Data for Name: citation; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.citation (id, text_en, author_id, year, created_at, updated_at, original_language_text, place_id, event_id, created_by, updated_by) FROM stdin;
+COPY public.citation (id, text_en, author_id, year, created_at, updated_at, original_language_text, place_id, event_id, created_by, updated_by, published_at, published_by, table_name, unpublished_at, unpublished_by) FROM stdin;
 \.
 
 
@@ -2936,7 +2971,7 @@ COPY public.country (id, name_en, created_at, updated_at, found_year, next_renam
 -- Data for Name: event; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.event (id, name_en, created_at, updated_at, start_year, start_month, end_year, end_month, place_id, created_by, updated_by) FROM stdin;
+COPY public.event (id, name_en, created_at, updated_at, start_year, start_month, end_year, end_month, place_id, created_by, updated_by, published_at, published_by, table_name, unpublished_at, unpublished_by) FROM stdin;
 \.
 
 
@@ -2944,7 +2979,7 @@ COPY public.event (id, name_en, created_at, updated_at, start_year, start_month,
 -- Data for Name: place; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.place (id, name_en, created_at, updated_at, town_id, created_by, updated_by) FROM stdin;
+COPY public.place (id, name_en, created_at, updated_at, town_id, created_by, updated_by, published_at, published_by, table_name, unpublished_at, unpublished_by) FROM stdin;
 \.
 
 
@@ -2964,9 +2999,9 @@ ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d	\N	d9kd9k	D9kD9k	\N	\N	21	2023-12-24 19:26:
 -- Data for Name: town; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.town (id, name_en, created_at, updated_at, country_id, created_by, updated_by) FROM stdin;
-8	Moscow	2023-12-24 23:14:18.601477+00	2023-12-24 23:53:06.468419+00	10	\N	21
-10	Lipetsk	2023-12-24 23:36:11.73928+00	2023-12-26 04:07:48.785688+00	10	1	1
+COPY public.town (id, name_en, created_at, updated_at, country_id, created_by, updated_by, published_at, published_by, table_name, unpublished_at, unpublished_by) FROM stdin;
+8	Moscow	2023-12-24 23:14:18.601477+00	2023-12-24 23:53:06.468419+00	10	\N	21	\N	\N	town	\N	\N
+10	Lipetsk	2023-12-24 23:36:11.73928+00	2023-12-26 04:07:48.785688+00	10	1	1	\N	\N	town	\N	\N
 \.
 
 
@@ -3045,6 +3080,7 @@ COPY supabase_migrations.schema_migrations (version, statements, name) FROM stdi
 20240116024740	{"drop trigger if exists \\"on_country_new\\" on \\"public\\".\\"country\\"","set check_function_bodies = off","CREATE OR REPLACE FUNCTION public.equal_or_both_null(a anycompatible, b anycompatible)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nDECLARE\n  result BOOLEAN;\nBEGIN\n  result := (a = b) OR (a IS NULL AND b IS NULL);\n  IF result IS NULL THEN\n    RETURN FALSE;\n  END IF;\n  RETURN result;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.protect_generated_field_from_change(a anyelement, b anyelement, variable_name text)\n RETURNS void\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n  IF NOT (equal_or_both_null(a, b)) THEN\n    RAISE EXCEPTION '\\"%\\" is autogenerated field. Change not allowed', variable_name;\n  END IF;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.protect_generated_field_from_init(a anyelement, variable_name text)\n RETURNS void\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n  IF a IS NOT NULL THEN\n    RAISE EXCEPTION '\\"%\\" is autogenerated field. Init is not allowed', variable_name;\n  END IF;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.content_item_edit_protect_generated_fields(new content_item, old content_item)\n RETURNS void\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n\n  PERFORM protect_generated_field_from_change(new.id, old.id, 'id');\n  PERFORM protect_generated_field_from_change(new.table_name, old.table_name, 'table_name');\n  PERFORM protect_generated_field_from_change(new.created_at, old.created_at, 'created_at');\n  PERFORM protect_generated_field_from_change(new.created_by, old.created_by, 'created_by');\n  PERFORM protect_generated_field_from_change(new.updated_at, old.updated_at, 'updated_at');\n  PERFORM protect_generated_field_from_change(new.updated_by, old.updated_by, 'updated_by');\n  PERFORM protect_generated_field_from_change(new.published_at, old.published_at, 'published_at');\n  PERFORM protect_generated_field_from_change(new.published_by, old.published_by, 'published_by');\n  PERFORM protect_generated_field_from_change(new.unpublished_at, old.unpublished_at, 'unpublished_at');\n  PERFORM protect_generated_field_from_change(new.unpublished_by, old.unpublished_by, 'unpublished_by');\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.content_item_new_protect_generated_fields(new content_item)\n RETURNS void\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n  -- PERFORM protect_generated_field_from_init(new.table_name, 'table_name');\n  -- PERFORM protect_generated_field_from_init(new.created_at, 'created_at');\n  PERFORM protect_generated_field_from_init(new.created_by, 'created_by');\n  -- PERFORM protect_generated_field_from_init(new.updated_at, 'updated_at');\n  PERFORM protect_generated_field_from_init(new.updated_by, 'updated_by');\n  PERFORM protect_generated_field_from_init(new.published_at, 'published_at');\n  PERFORM protect_generated_field_from_init(new.published_by, 'published_by');\n  PERFORM protect_generated_field_from_init(new.published_by, 'unpublished_at');\n  PERFORM protect_generated_field_from_init(new.published_by, 'unpublished_by');\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.handle_content_item_edit()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\nDECLARE\n\tcheck_result BOOLEAN;\nBEGIN\n  -- check_result := content_item_protect_generated_fields(NEW, OLD);\n\n  -- IF NOT check_result THEN\n  --   RETURN NULL;\n  -- END IF;\n\n  -- IF NEW.published_at <> OLD.published_at THEN\n  --   RAISE EXCEPTION 'published_at is autogenerated field. Change not allowed';\n  --   RETURN NULL;\n  --   -- RETURN FALSE;\n  -- END IF;\n\n  PERFORM content_item_edit_protect_generated_fields(NEW, OLD);\n\n  RETURN record_fill_updated_by(record_fill_updated_at(NEW));\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.handle_content_item_new()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\nBEGIN\n  PERFORM content_item_new_protect_generated_fields(NEW);\n\n  RETURN record_fill_created_by(NEW);\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.string_limit(s character varying, max_length integer)\n RETURNS character varying\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN CASE WHEN length(s) > max_length\n      THEN substring(s, 1, max_length - 3) || '...'\n      ELSE s\n      END;\nEND;\n$function$","CREATE TRIGGER on_country_new BEFORE INSERT ON public.country FOR EACH ROW EXECUTE FUNCTION handle_content_item_new()"}	country_protect_generated_fields
 20240116200127	{"set check_function_bodies = off","CREATE OR REPLACE FUNCTION public.content_item_publish(_table_name text, _id integer)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\nBEGIN\n  -- also is checked in before update trigger in content_item_edit_protect_generated_fields()\n  PERFORM permission_publish_check();\n\n  -- SET session_replication_role = replica;\n\n  UPDATE content_item\n  SET published_at = NOW(),\n      published_by = get_my_claim('profile_id')::int,\n      unpublished_at = NULL,\n      unpublished_by = NULL\n  WHERE table_name = _table_name \n    AND id = _id;\n  -- FORMAT('UPDATE %I VALUES ($1,$2)'::text ,v_partition_name) using NEW.id,NEW.datetime;\n\n  -- SET session_replication_role = origin;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.content_item_unpublish(_table_name text, _id integer)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\nBEGIN\n  -- also is checked in before update trigger in content_item_edit_protect_generated_fields()\n  PERFORM permission_publish_check();\n\n  UPDATE content_item\n  SET unpublished_at = NOW(),\n      unpublished_by = get_my_claim('profile_id')::int\n  WHERE table_name = _table_name \n    AND id = _id;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.permission_publish_check()\n RETURNS void\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n  IF NOT permission_publish_get() THEN\n    RAISE EXCEPTION 'Publish permission required';\n  END IF;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.permission_publish_get()\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n  RETURN get_my_claim('claim_publish')::varchar::boolean OR is_claims_admin();\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.content_item_edit_protect_generated_fields(new content_item, old content_item)\n RETURNS void\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n  PERFORM protect_generated_field_from_change(new.id, old.id, 'id');\n  PERFORM protect_generated_field_from_change(new.table_name, old.table_name, 'table_name');\n  PERFORM protect_generated_field_from_change(new.created_at, old.created_at, 'created_at');\n  PERFORM protect_generated_field_from_change(new.created_by, old.created_by, 'created_by');\n  PERFORM protect_generated_field_from_change(new.updated_at, old.updated_at, 'updated_at');\n  PERFORM protect_generated_field_from_change(new.updated_by, old.updated_by, 'updated_by');\n\n  IF NOT permission_publish_get() THEN\n    PERFORM protect_generated_field_from_change(new.published_at, old.published_at, 'published_at');\n    PERFORM protect_generated_field_from_change(new.published_by, old.published_by, 'published_by');  \n    PERFORM protect_generated_field_from_change(new.unpublished_at, old.unpublished_at, 'unpublished_at');  \n    PERFORM protect_generated_field_from_change(new.unpublished_by, old.unpublished_by, 'unpublished_by');  \n  END IF;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.content_item_new_protect_generated_fields(new content_item)\n RETURNS void\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n  -- PERFORM protect_generated_field_from_init(new.table_name, 'table_name');\n  -- PERFORM protect_generated_field_from_init(new.created_at, 'created_at');\n  PERFORM protect_generated_field_from_init(new.created_by, 'created_by');\n  -- PERFORM protect_generated_field_from_init(new.updated_at, 'updated_at');\n  PERFORM protect_generated_field_from_init(new.updated_by, 'updated_by');\n  PERFORM protect_generated_field_from_init(new.published_at, 'published_at');\n  PERFORM protect_generated_field_from_init(new.published_by, 'published_by');  \n  PERFORM protect_generated_field_from_init(new.published_by, 'unpublished_at');  \n  PERFORM protect_generated_field_from_init(new.published_by, 'unpublished_by');  \nEND;\n$function$","CREATE OR REPLACE FUNCTION public.equal_or_both_null(a anycompatible, b anycompatible)\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nDECLARE\n  result BOOLEAN;\nBEGIN\n  result := (a = b) OR (a IS NULL AND b IS NULL);\n  IF result IS NULL THEN \n    RETURN FALSE;\n  END IF;\n  RETURN result;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.handle_content_item_edit()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\nDECLARE\n\tcheck_result BOOLEAN;  \nBEGIN\n  -- check_result := content_item_protect_generated_fields(NEW, OLD);\n\n  -- IF NOT check_result THEN\n  --   RETURN NULL;\n  -- END IF;\n\n  -- IF NEW.published_at <> OLD.published_at THEN\n  --   RAISE EXCEPTION 'published_at is autogenerated field. Change not allowed';\n  --   RETURN NULL;\n  --   -- RETURN FALSE;\n  -- END IF;\n\n  PERFORM content_item_edit_protect_generated_fields(NEW, OLD);\n\n  RETURN record_fill_updated_by(record_fill_updated_at(NEW));\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.string_limit(s character varying, max_length integer)\n RETURNS character varying\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n    RETURN CASE WHEN length(s) > max_length \n      THEN substring(s, 1, max_length - 3) || '...' \n      ELSE s\n      END;\nEND;\n$function$"}	publish_fns_country
 20240117005735	{"drop view if exists \\"public\\".\\"view_id_name\\"","alter table \\"public\\".\\"content_item\\" add column \\"published\\" boolean generated always as (((published_at IS NOT NULL) AND (unpublished_at IS NULL))) stored","alter table \\"public\\".\\"country\\" add column \\"published\\" boolean generated always as (((published_at IS NOT NULL) AND (unpublished_at IS NULL))) stored","set check_function_bodies = off","CREATE OR REPLACE FUNCTION public.content_item_publish(_table_name text, _id integer)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\n-- DECLARE\n--   exception_text TEXT;\nBEGIN\n  -- also is checked in before update trigger in content_item_edit_protect_generated_fields()\n  -- exception_text := permission_publish_check();\n  PERFORM permission_publish_check();\n\n  -- IF exception_text IS NOT NULL THEN\n  --   RETURN exception_text;\n  -- END IF;\n\n  -- SET session_replication_role = replica;\n\n  UPDATE content_item\n  SET published_at = NOW(),\n      published_by = get_my_claim('profile_id')::int,\n      unpublished_at = NULL,\n      unpublished_by = NULL\n  WHERE table_name = _table_name\n    AND id = _id;\n  -- FORMAT('UPDATE %I VALUES ($1,$2)'::text ,v_partition_name) using NEW.id,NEW.datetime;\n\n  -- RETURN NULL;\n  -- SET session_replication_role = origin;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.permission_publish_check()\n RETURNS void\n LANGUAGE plpgsql\nAS $function$\n-- DECLARE\n--   exception_text TEXT;\nBEGIN\n  IF NOT permission_publish_get() THEN\n    -- exception_text := 'Publish permission required';\n    RAISE EXCEPTION 'Publish permission required';\n    -- RETURN exception_text;\n  END IF;\n  -- RETURN NULL;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.permission_publish_get()\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n  RETURN COALESCE(get_my_claim('claim_publish')::varchar::boolean, FALSE) OR is_claims_admin();\nEND;\n$function$","-- create or replace view \\"public\\".\\"view_id_name\\" as  SELECT 'author'::text AS table_name,\n--     author.id,\n--     author.lastname_name_patronymic AS name,\n--     string_limit((author.lastname_name_patronymic)::character varying, 20) AS short_name\n--    FROM author\n-- UNION\n--  SELECT 'citation'::text AS table_name,\n--     citation.id,\n--     string_limit((citation.english_text)::character varying, 40) AS name,\n--     string_limit((citation.english_text)::character varying, 20) AS short_name\n--    FROM citation\n-- UNION\n--  SELECT 'country'::text AS table_name,\n--     country.id,\n--     country.name,\n--     string_limit((country.name)::character varying, 20) AS short_name\n--    FROM country\n-- UNION\n--  SELECT 'place'::text AS table_name,\n--     place.id,\n--     place.name,\n--     string_limit((place.name)::character varying, 20) AS short_name\n--    FROM place\n-- UNION\n--  SELECT 'profile'::text AS table_name,\n--     profile.id,\n--     (((profile.full_name || ' ('::text) || profile.username) || ')'::text) AS name,\n--     profile.username AS short_name\n--    FROM profile\n-- UNION\n--  SELECT 'town'::text AS table_name,\n--     town.id,\n--     town.name,\n--     string_limit((town.name)::character varying, 20) AS short_name\n--    FROM town\n--   ORDER BY 1, 4;"}	publish_country_fix
+20240117192135	{"drop policy \\"RLS: country: select\\" on \\"public\\".\\"country\\"","alter table \\"public\\".\\"country\\" drop constraint \\"countries_name_check\\"","alter table \\"public\\".\\"country\\" drop constraint \\"countries_name_key\\"","alter table \\"public\\".\\"town\\" drop constraint \\"towns_name_check\\"","drop view if exists \\"public\\".\\"view_rls_edit_for_table\\"","drop index if exists \\"public\\".\\"countries_name_key\\"","alter table \\"public\\".\\"author\\" drop column \\"lastname_name_patronymic\\"","alter table \\"public\\".\\"author\\" add column \\"name_en\\" text not null","alter table \\"public\\".\\"citation\\" drop column \\"english_text\\"","alter table \\"public\\".\\"citation\\" add column \\"text_en\\" text","alter table \\"public\\".\\"event\\" drop column \\"name\\"","alter table \\"public\\".\\"event\\" add column \\"name_en\\" text not null","alter table \\"public\\".\\"place\\" drop column \\"name\\"","alter table \\"public\\".\\"place\\" add column \\"name_en\\" text not null default 'in'::text","alter table \\"public\\".\\"town\\" drop column \\"name\\"","alter table \\"public\\".\\"town\\" add column \\"name_en\\" text not null","alter table \\"public\\".\\"country\\" drop column \\"name\\"","alter table \\"public\\".\\"country\\" add column \\"name_en\\" text not null default ''::text","CREATE UNIQUE INDEX countries_name_key ON public.country USING btree (name_en)","alter table \\"public\\".\\"country\\" add constraint \\"countries_name_check\\" CHECK ((length(name_en) > 0)) not valid","alter table \\"public\\".\\"country\\" validate constraint \\"countries_name_check\\"","alter table \\"public\\".\\"country\\" add constraint \\"countries_name_key\\" UNIQUE using index \\"countries_name_key\\"","alter table \\"public\\".\\"town\\" add constraint \\"towns_name_check\\" CHECK ((length(name_en) > 0)) not valid","alter table \\"public\\".\\"town\\" validate constraint \\"towns_name_check\\"","set check_function_bodies = off","create or replace view \\"public\\".\\"view_id_name\\" as  SELECT 'author'::text AS table_name,\n    author.id,\n    author.name_en AS name,\n    string_limit((author.name_en)::character varying, 20) AS short_name\n   FROM author\nUNION\n SELECT 'citation'::text AS table_name,\n    citation.id,\n    string_limit((citation.text_en)::character varying, 40) AS name,\n    string_limit((citation.text_en)::character varying, 20) AS short_name\n   FROM citation\nUNION\n SELECT 'country'::text AS table_name,\n    country.id,\n    country.name_en AS name,\n    string_limit((country.name_en)::character varying, 20) AS short_name\n   FROM country\nUNION\n SELECT 'place'::text AS table_name,\n    place.id,\n    place.name_en AS name,\n    string_limit((place.name_en)::character varying, 20) AS short_name\n   FROM place\nUNION\n SELECT 'profile'::text AS table_name,\n    profile.id,\n    (((profile.full_name || ' ('::text) || profile.username) || ')'::text) AS name,\n    profile.username AS short_name\n   FROM profile\nUNION\n SELECT 'town'::text AS table_name,\n    town.id,\n    town.name_en AS name,\n    string_limit((town.name_en)::character varying, 20) AS short_name\n   FROM town\n  ORDER BY 1, 4","CREATE OR REPLACE FUNCTION public.content_item_publish(_table_name text, _id integer)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\n-- DECLARE\n--   exception_text TEXT;\nBEGIN\n  -- also is checked in before update trigger in content_item_edit_protect_generated_fields()\n  -- exception_text := permission_publish_check();\n  PERFORM permission_publish_check();\n\n  -- IF exception_text IS NOT NULL THEN\n  --   RETURN exception_text;\n  -- END IF;\n\n  -- SET session_replication_role = replica;\n\n  UPDATE content_item\n  SET published_at = NOW(),\n      published_by = get_my_claim('profile_id')::int,\n      unpublished_at = NULL,\n      unpublished_by = NULL\n  WHERE table_name = _table_name \n    AND id = _id;\n  -- FORMAT('UPDATE %I VALUES ($1,$2)'::text ,v_partition_name) using NEW.id,NEW.datetime;\n\n  -- RETURN NULL;\n  -- SET session_replication_role = origin;\nEND;\n$function$","create or replace view \\"public\\".\\"view_rls_edit_for_table\\" as  SELECT view_rls_content_item.table_name,\n    view_rls_content_item.id,\n    view_rls_content_item.editable,\n    view_rls_content_item.deletable\n   FROM view_rls_content_item\nUNION\n SELECT 'author'::text AS table_name,\n    author.id,\n    rls_authors_edit(author.*) AS editable,\n    rls_authors_delete(author.*) AS deletable\n   FROM author\nUNION\n SELECT 'citation'::text AS table_name,\n    citation.id,\n    rls_citations_edit(citation.*) AS editable,\n    rls_citations_delete(citation.*) AS deletable\n   FROM citation\nUNION\n SELECT 'event'::text AS table_name,\n    event.id,\n    rls_events_edit(event.*) AS editable,\n    rls_events_delete(event.*) AS deletable\n   FROM event\nUNION\n SELECT 'place'::text AS table_name,\n    place.id,\n    rls_places_edit(place.*) AS editable,\n    rls_places_delete(place.*) AS deletable\n   FROM place\nUNION\n SELECT 'profile'::text AS table_name,\n    profile.id,\n    rls_profiles_edit(profile.*) AS editable,\n    false AS deletable\n   FROM profile\nUNION\n SELECT 'town'::text AS table_name,\n    town.id,\n    rls_towns_edit(town.*) AS editable,\n    rls_towns_delete(town.*) AS deletable\n   FROM town\nUNION\n SELECT 'trust'::text AS table_name,\n    trust.id,\n    rls_trusts_edit(trust.*) AS editable,\n    rls_trusts_edit(trust.*) AS deletable\n   FROM trust\n  ORDER BY 1, 2","create policy \\"RLS: country: select (guest)\\"\non \\"public\\".\\"country\\"\nas permissive\nfor select\nto anon\nusing (published)","create policy \\"RLS: country: select\\"\non \\"public\\".\\"country\\"\nas permissive\nfor select\nto authenticated\nusing (true)"}	data_loss_name_en_col_unify
 \.
 
 
@@ -3060,7 +3096,7 @@ COPY vault.secrets (id, name, description, secret, key_id, nonce, created_at, up
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 1272, true);
+SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 1316, true);
 
 
 --
@@ -3295,6 +3331,22 @@ ALTER TABLE ONLY public.author
 
 
 --
+-- Name: author author_table_name_check; Type: CHECK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.author
+    ADD CONSTRAINT author_table_name_check CHECK ((table_name = 'author'::text)) NOT VALID;
+
+
+--
+-- Name: citation citation_table_name_check; Type: CHECK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.citation
+    ADD CONSTRAINT citation_table_name_check CHECK ((table_name = 'citation'::text)) NOT VALID;
+
+
+--
 -- Name: citation citations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3335,11 +3387,27 @@ ALTER TABLE ONLY public.event
 
 
 --
+-- Name: event event_table_name_check; Type: CHECK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.event
+    ADD CONSTRAINT event_table_name_check CHECK ((table_name = 'event'::text)) NOT VALID;
+
+
+--
 -- Name: place place_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.place
     ADD CONSTRAINT place_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: place place_table_name_check; Type: CHECK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.place
+    ADD CONSTRAINT place_table_name_check CHECK ((table_name = 'place'::text)) NOT VALID;
 
 
 --
@@ -3364,6 +3432,14 @@ ALTER TABLE ONLY public.profile
 
 ALTER TABLE ONLY public.town
     ADD CONSTRAINT town_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: town town_table_name_check; Type: CHECK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.town
+    ADD CONSTRAINT town_table_name_check CHECK ((table_name = 'town'::text)) NOT VALID;
 
 
 --

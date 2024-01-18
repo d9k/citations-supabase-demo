@@ -55,6 +55,36 @@
         "type": "string",
         "description": "\"lastname name patronymic\" separated by spaces"
       },
+      "published": {
+        "name": "published",
+        "nullable": true,
+        "type": "boolean"
+      },
+      "published_at": {
+        "name": "published_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "published_by": {
+        "name": "published_by",
+        "nullable": true,
+        "type": "number"
+      },
+      "table_name": {
+        "name": "table_name",
+        "nullable": false,
+        "type": "string"
+      },
+      "unpublished_at": {
+        "name": "unpublished_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_by": {
+        "name": "unpublished_by",
+        "nullable": true,
+        "type": "number"
+      },
       "updated_at": {
         "name": "updated_at",
         "nullable": false,
@@ -132,10 +162,40 @@
           "foreignTable": "place"
         }
       },
+      "published": {
+        "name": "published",
+        "nullable": true,
+        "type": "boolean"
+      },
+      "published_at": {
+        "name": "published_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "published_by": {
+        "name": "published_by",
+        "nullable": true,
+        "type": "number"
+      },
+      "table_name": {
+        "name": "table_name",
+        "nullable": false,
+        "type": "string"
+      },
       "text_en": {
         "name": "text_en",
         "nullable": true,
         "type": "string"
+      },
+      "unpublished_at": {
+        "name": "unpublished_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_by": {
+        "name": "unpublished_by",
+        "nullable": true,
+        "type": "number"
       },
       "updated_at": {
         "name": "updated_at",
@@ -350,6 +410,21 @@
           "foreignTable": "place"
         }
       },
+      "published": {
+        "name": "published",
+        "nullable": true,
+        "type": "boolean"
+      },
+      "published_at": {
+        "name": "published_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "published_by": {
+        "name": "published_by",
+        "nullable": true,
+        "type": "number"
+      },
       "start_month": {
         "name": "start_month",
         "nullable": false,
@@ -358,6 +433,21 @@
       "start_year": {
         "name": "start_year",
         "nullable": false,
+        "type": "number"
+      },
+      "table_name": {
+        "name": "table_name",
+        "nullable": false,
+        "type": "string"
+      },
+      "unpublished_at": {
+        "name": "unpublished_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_by": {
+        "name": "unpublished_by",
+        "nullable": true,
         "type": "number"
       },
       "updated_at": {
@@ -404,6 +494,26 @@
         "nullable": false,
         "type": "string"
       },
+      "published": {
+        "name": "published",
+        "nullable": true,
+        "type": "boolean"
+      },
+      "published_at": {
+        "name": "published_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "published_by": {
+        "name": "published_by",
+        "nullable": true,
+        "type": "number"
+      },
+      "table_name": {
+        "name": "table_name",
+        "nullable": false,
+        "type": "string"
+      },
       "town_id": {
         "name": "town_id",
         "nullable": false,
@@ -414,6 +524,16 @@
           "isOneToOne": false,
           "foreignTable": "town"
         }
+      },
+      "unpublished_at": {
+        "name": "unpublished_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_by": {
+        "name": "unpublished_by",
+        "nullable": true,
+        "type": "number"
       },
       "updated_at": {
         "name": "updated_at",
@@ -517,6 +637,36 @@
         "name": "name_en",
         "nullable": false,
         "type": "string"
+      },
+      "published": {
+        "name": "published",
+        "nullable": true,
+        "type": "boolean"
+      },
+      "published_at": {
+        "name": "published_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "published_by": {
+        "name": "published_by",
+        "nullable": true,
+        "type": "number"
+      },
+      "table_name": {
+        "name": "table_name",
+        "nullable": false,
+        "type": "string"
+      },
+      "unpublished_at": {
+        "name": "unpublished_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_by": {
+        "name": "unpublished_by",
+        "nullable": true,
+        "type": "number"
       },
       "updated_at": {
         "name": "updated_at",
