@@ -2132,7 +2132,18 @@ on \"public\".\"country\"
 as permissive
 for select
 to authenticated
-using (true)"}', 'data_loss_name_en_col_unify');
+using (true)"}', 'data_loss_name_en_col_unify'),
+	('20240117134053', '{"drop policy \"RLS: country: select\" on \"public\".\"country\"","set check_function_bodies = off","create policy \"RLS: country: select (guest)\"
+on \"public\".\"country\"
+as permissive
+for select
+to anon
+using (published)","create policy \"RLS: country: select\"
+on \"public\".\"country\"
+as permissive
+for select
+to authenticated
+using (true)"}', 'published_country_for_guest');
 
 
 --

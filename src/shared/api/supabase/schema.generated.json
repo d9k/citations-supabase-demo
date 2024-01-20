@@ -87,7 +87,7 @@
       },
       "updated_at": {
         "name": "updated_at",
-        "nullable": false,
+        "nullable": true,
         "type": "string"
       },
       "updated_by": {

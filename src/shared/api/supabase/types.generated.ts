@@ -50,7 +50,7 @@ export interface Database {
           table_name: string
           unpublished_at: string | null
           unpublished_by: number | null
-          updated_at: string
+          updated_at: string | null
           updated_by: number | null
         }
         Insert: {
@@ -68,7 +68,7 @@ export interface Database {
           table_name?: string
           unpublished_at?: string | null
           unpublished_by?: number | null
-          updated_at: string
+          updated_at?: string | null
           updated_by?: number | null
         }
         Update: {
@@ -86,7 +86,7 @@ export interface Database {
           table_name?: string
           unpublished_at?: string | null
           unpublished_by?: number | null
-          updated_at?: string
+          updated_at?: string | null
           updated_by?: number | null
         }
         Relationships: [
