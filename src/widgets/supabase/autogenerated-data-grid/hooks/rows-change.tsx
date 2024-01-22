@@ -108,8 +108,7 @@ export const useOnRowsChange = ({
         message: `${insertModeTextCapital} successfull`,
       });
 
-      onReloadRequired?.();
-      setCurrentRow(null);
+      await onReloadRequired?.();
     }
   }, []);
 };

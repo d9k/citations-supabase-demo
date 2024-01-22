@@ -26,6 +26,11 @@
     "./src/shared/ui/layout-header.stories.tsx",
     "./src/shared/ui/data-grid/data-grid.stories.tsx"
   ],
+  "search.excludeFolders": [
+    ".git",
+    ".project-copy-with-imports-transformed-to-relative",
+    ".ultra"
+  ],
   "emeraldwalk.runonsave": {
     "shell": "/usr/bin/bash",
     "commands": [

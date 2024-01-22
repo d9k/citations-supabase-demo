@@ -20,16 +20,17 @@ export const useSupabaseQueryTableData = (
 ) => {
   const supabase = useSupabase();
 
-  const { data: resultTableData, isFetched, error } = useQuery({
-    queryKey: [`${HOOK_NAME}_${queryKeyUniqueSuffix}`],
-    queryFn: () => {
-      const request = supabase?.from(tableName).select('*');
-      if (orderByColumn) {
-        request?.order(orderByColumn);
-      }
-      return request;
-    },
-  });
+  const { data: resultTableData, refetch: refetchTableData, isFetched, error } =
+    useQuery({
+      queryKey: [`${HOOK_NAME}_${queryKeyUniqueSuffix}`],
+      queryFn: () => {
+        const request = supabase?.from(tableName).select('*');
+        if (orderByColumn) {
+          request?.order(orderByColumn);
+        }
+        return request;
+      },
+    });
 
   // TODO Supabase type
   const tableData = useMemo(() => ((resultTableData || {}) as RecordAny).data, [
@@ -39,10 +40,11 @@ export const useSupabaseQueryTableData = (
   const tableDataIds = useMemo(() => map(tableData, 'id') || [], [tableData]);
 
   return {
+    errorTableData: error,
+    isFetchedTableData: isFetched,
+    refetchTableData,
+    resultTableData,
     tableDataIds,
     tableData,
-    resultTableData,
-    isFetchedTableData: isFetched,
-    errorTableData: error,
   };
 };
