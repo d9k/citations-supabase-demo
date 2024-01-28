@@ -9,6 +9,7 @@
     "start": "ULTRA_MODE=production deno run --no-npm -A --no-remote ./server.js",
     "storybook": "pnpm run storybook",
     "storybook:build": "pnpm run storybook:build",
+    "sb": "pnpm run sb",
     "cache:client": "deno cache --no-npm ./client.tsx",
     "cache:server": "deno cache --no-npm ./server.tsx",
     "cache": "deno task cache:server && deno task cache:client",

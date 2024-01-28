@@ -12,7 +12,7 @@ export type UseSupabaseQueryRlsInfoArgs = WithQueryKeyUniqueSuffix & {
   tableDataIds: number[];
 };
 
-export type RlsInfoById = { [id: number]: RlsEditForTableRecord };
+export type RlsInfoById = { [id: string | number]: RlsEditForTableRecord };
 
 export const HOOK_NAME = 'useSupabaseQueryRlsInfo';
 
