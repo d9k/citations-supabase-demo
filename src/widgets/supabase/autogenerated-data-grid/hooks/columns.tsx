@@ -93,12 +93,12 @@ export const useColumns = ({
   const HOOK_NAME = 'useColumns';
 
   const columnsNamesActual = useMemo(() => {
-    return {
+    return [
       ...columnsNames,
       ...(
         hasRlsInfo ? [COLUMN_NAME_EDITABLE, COLUMN_NAME_DELETABLE] : []
       ),
-    };
+    ];
   }, [columnsNames, hasRlsInfo]);
 
   const { foreignTableToSelectorItems, foreignTableToIdToSelectorItem } =
@@ -148,11 +148,11 @@ export const useColumns = ({
   return useMemo(() => {
     const fieldsNamesFirst = intersection(
       columnsNamesFirst,
-      columnsNames,
+      columnsNamesActual,
     );
-    const fieldsNamesLast = intersection(columnsNamesLast, columnsNames);
+    const fieldsNamesLast = intersection(columnsNamesLast, columnsNamesActual);
     const fieldsNamesRest = difference(
-      columnsNames,
+      columnsNamesActual,
       columnsNamesFirst,
       columnsNamesLast,
     );
