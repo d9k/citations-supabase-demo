@@ -10,6 +10,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '/~': path.resolve(__dirname, './src'),
+      'ultra': path.resolve(
+        __dirname,
+        './src/shared/lib/deno-stubs-for-node/ultra',
+      ),
       // "fela": "https://esm.sh/fela@12.2.1",
       // "fela-dom": "https://esm.sh/fela-dom@12.2.1",
       // "fela-beautifier": "https://esm.sh/fela-beautifier@12.2.1",
