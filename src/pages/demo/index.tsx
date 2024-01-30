@@ -10,6 +10,7 @@ import { usePageFrameLayoutContext } from '/~/shared/providers/layout/page-frame
 import { randomRange } from '/~/shared/lib/math/random.ts';
 const Comments = lazy(() => import('/~/entities/ui/comments.tsx'));
 import { useQueryKeyUniqueSuffix } from '/~/shared/lib/react/query/key.ts';
+import { PageTitle } from '/~/shared/ui/page-title.tsx';
 
 const DemoPage = () => {
   console.log('DemoPage');
@@ -32,9 +33,9 @@ const DemoPage = () => {
 
   return (
     <PageFrameComponent>
-      <h1>
+      <PageTitle>
         Demo
-      </h1>
+      </PageTitle>
 
       <h2>Fela component demo:</h2>
 

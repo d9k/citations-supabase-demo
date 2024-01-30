@@ -1,6 +1,8 @@
-import { useSupabaseUser } from '/~/shared/providers/supabase/user.ts';
-import { MenuItem } from '/~/shared/ui/layout-header.tsx';
 import { User } from '@supabase/supabase-js';
+import {
+  profileCaptionFromUserName,
+  userNameFromEmail,
+} from '/~/shared/lib/user.ts';
 
 export type GetMenuItemsProps = {
   supabaseUser: User | null;
@@ -8,7 +10,8 @@ export type GetMenuItemsProps = {
 
 export const getMenuItems = ({ supabaseUser }: GetMenuItemsProps) => {
   const email = supabaseUser?.email;
-  const userName = email?.split('@')[0];
+  const userName = userNameFromEmail(email);
+  const profileCaption = profileCaptionFromUserName(userName);
 
   return [
     {
@@ -19,19 +22,19 @@ export const getMenuItems = ({ supabaseUser }: GetMenuItemsProps) => {
       path: '/demo',
       caption: 'Demo',
     },
+    {
+      path: '/tables',
+      pathMatchPattern: [
+        { path: '/table', end: false },
+        { path: '/tables', end: false },
+      ],
+      caption: 'Tables',
+    },
     ...(supabaseUser
       ? [
         {
-          path: '/tables',
-          pathMatchPattern: [
-            { path: '/table', end: false },
-            { path: '/tables', end: false },
-          ],
-          caption: 'Tables',
-        },
-        {
           path: '/profile',
-          caption: `${userName} profile`,
+          caption: profileCaption,
         },
         {
           path: '/logout',

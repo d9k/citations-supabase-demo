@@ -1,6 +1,6 @@
 {
   "public": {
-    "authors": {
+    "author": {
       "approximate_years": {
         "name": "approximate_years",
         "nullable": false,
@@ -12,9 +12,9 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "authors_birth_town_fkey",
+          "fkName": "author_birth_town_fkey",
           "isOneToOne": false,
-          "foreignTable": "towns"
+          "foreignTable": "town"
         },
         "description": "town of birth (test description)"
       },
@@ -34,9 +34,9 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "authors_created_by_fkey",
+          "fkName": "author_created_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "profile"
         }
       },
       "death_year": {
@@ -49,15 +49,50 @@
         "nullable": false,
         "type": "number"
       },
-      "lastname_name_patronymic": {
-        "name": "lastname_name_patronymic",
+      "name_en": {
+        "name": "name_en",
         "nullable": false,
         "type": "string",
-        "description": "separated by spaces"
+        "description": "\"lastname name patronymic\" separated by spaces"
+      },
+      "name_orig": {
+        "name": "name_orig",
+        "nullable": true,
+        "type": "string"
+      },
+      "published": {
+        "name": "published",
+        "nullable": true,
+        "type": "boolean"
+      },
+      "published_at": {
+        "name": "published_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "published_by": {
+        "name": "published_by",
+        "nullable": true,
+        "type": "number"
+      },
+      "table_name": {
+        "name": "table_name",
+        "nullable": false,
+        "type": "string"
+      },
+      "unpublished_at": {
+        "name": "unpublished_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_by": {
+        "name": "unpublished_by",
+        "nullable": true,
+        "type": "number"
       },
       "updated_at": {
         "name": "updated_at",
-        "nullable": false,
+        "nullable": true,
         "type": "string"
       },
       "updated_by": {
@@ -66,22 +101,22 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "authors_updated_by_fkey",
+          "fkName": "author_updated_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "profile"
         }
       }
     },
-    "citations": {
+    "citation": {
       "author_id": {
         "name": "author_id",
         "nullable": false,
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "citations_author_id_fkey",
+          "fkName": "citation_author_id_fkey",
           "isOneToOne": false,
-          "foreignTable": "authors"
+          "foreignTable": "author"
         }
       },
       "created_at": {
@@ -95,15 +130,10 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "citations_created_by_fkey",
+          "fkName": "citation_created_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "profile"
         }
-      },
-      "english_text": {
-        "name": "english_text",
-        "nullable": true,
-        "type": "string"
       },
       "event_id": {
         "name": "event_id",
@@ -111,9 +141,9 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "citations_event_id_fkey",
+          "fkName": "citation_event_id_fkey",
           "isOneToOne": false,
-          "foreignTable": "events"
+          "foreignTable": "event"
         }
       },
       "id": {
@@ -132,14 +162,49 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "citations_place_id_fkey",
+          "fkName": "citation_place_id_fkey",
           "isOneToOne": false,
-          "foreignTable": "places"
+          "foreignTable": "place"
         }
+      },
+      "published": {
+        "name": "published",
+        "nullable": true,
+        "type": "boolean"
+      },
+      "published_at": {
+        "name": "published_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "published_by": {
+        "name": "published_by",
+        "nullable": true,
+        "type": "number"
+      },
+      "table_name": {
+        "name": "table_name",
+        "nullable": false,
+        "type": "string"
+      },
+      "text_en": {
+        "name": "text_en",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_at": {
+        "name": "unpublished_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_by": {
+        "name": "unpublished_by",
+        "nullable": true,
+        "type": "number"
       },
       "updated_at": {
         "name": "updated_at",
-        "nullable": false,
+        "nullable": true,
         "type": "string"
       },
       "updated_by": {
@@ -148,9 +213,9 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "citations_updated_by_fkey",
+          "fkName": "citation_updated_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "profile"
         }
       },
       "year": {
@@ -159,7 +224,64 @@
         "type": "number"
       }
     },
-    "countries": {
+    "content_item": {
+      "created_at": {
+        "name": "created_at",
+        "nullable": false,
+        "type": "string"
+      },
+      "created_by": {
+        "name": "created_by",
+        "nullable": true,
+        "type": "number"
+      },
+      "id": {
+        "name": "id",
+        "nullable": false,
+        "type": "number"
+      },
+      "published": {
+        "name": "published",
+        "nullable": true,
+        "type": "boolean"
+      },
+      "published_at": {
+        "name": "published_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "published_by": {
+        "name": "published_by",
+        "nullable": true,
+        "type": "number"
+      },
+      "table_name": {
+        "name": "table_name",
+        "nullable": false,
+        "type": "string"
+      },
+      "unpublished_at": {
+        "name": "unpublished_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_by": {
+        "name": "unpublished_by",
+        "nullable": true,
+        "type": "number"
+      },
+      "updated_at": {
+        "name": "updated_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "updated_by": {
+        "name": "updated_by",
+        "nullable": true,
+        "type": "number"
+      }
+    },
+    "country": {
       "created_at": {
         "name": "created_at",
         "nullable": false,
@@ -171,9 +293,9 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "countries_created_by_fkey",
+          "fkName": "country_created_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "profile"
         }
       },
       "found_year": {
@@ -187,9 +309,14 @@
         "nullable": false,
         "type": "number"
       },
-      "name": {
-        "name": "name",
+      "name_en": {
+        "name": "name_en",
         "nullable": false,
+        "type": "string"
+      },
+      "name_orig": {
+        "name": "name_orig",
+        "nullable": true,
         "type": "string"
       },
       "next_rename_year": {
@@ -197,6 +324,36 @@
         "nullable": true,
         "type": "number",
         "description": "maximum next rename year"
+      },
+      "published": {
+        "name": "published",
+        "nullable": true,
+        "type": "boolean"
+      },
+      "published_at": {
+        "name": "published_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "published_by": {
+        "name": "published_by",
+        "nullable": true,
+        "type": "number"
+      },
+      "table_name": {
+        "name": "table_name",
+        "nullable": false,
+        "type": "string"
+      },
+      "unpublished_at": {
+        "name": "unpublished_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_by": {
+        "name": "unpublished_by",
+        "nullable": true,
+        "type": "number"
       },
       "updated_at": {
         "name": "updated_at",
@@ -209,13 +366,13 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "countries_updated_by_fkey",
+          "fkName": "country_updated_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "profile"
         }
       }
     },
-    "events": {
+    "event": {
       "created_at": {
         "name": "created_at",
         "nullable": false,
@@ -227,9 +384,9 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "events_created_by_fkey",
+          "fkName": "event_created_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "profile"
         }
       },
       "end_month": {
@@ -247,9 +404,14 @@
         "nullable": false,
         "type": "number"
       },
-      "name": {
-        "name": "name",
+      "name_en": {
+        "name": "name_en",
         "nullable": false,
+        "type": "string"
+      },
+      "name_orig": {
+        "name": "name_orig",
+        "nullable": true,
         "type": "string"
       },
       "place_id": {
@@ -258,10 +420,25 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "events_place_id_fkey",
+          "fkName": "event_place_id_fkey",
           "isOneToOne": false,
-          "foreignTable": "places"
+          "foreignTable": "place"
         }
+      },
+      "published": {
+        "name": "published",
+        "nullable": true,
+        "type": "boolean"
+      },
+      "published_at": {
+        "name": "published_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "published_by": {
+        "name": "published_by",
+        "nullable": true,
+        "type": "number"
       },
       "start_month": {
         "name": "start_month",
@@ -273,6 +450,21 @@
         "nullable": false,
         "type": "number"
       },
+      "table_name": {
+        "name": "table_name",
+        "nullable": false,
+        "type": "string"
+      },
+      "unpublished_at": {
+        "name": "unpublished_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_by": {
+        "name": "unpublished_by",
+        "nullable": true,
+        "type": "number"
+      },
       "updated_at": {
         "name": "updated_at",
         "nullable": false,
@@ -284,13 +476,13 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "events_updated_by_fkey",
+          "fkName": "event_updated_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "profile"
         }
       }
     },
-    "places": {
+    "place": {
       "created_at": {
         "name": "created_at",
         "nullable": false,
@@ -302,9 +494,9 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "places_created_by_fkey",
+          "fkName": "place_created_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "profile"
         }
       },
       "id": {
@@ -312,8 +504,28 @@
         "nullable": false,
         "type": "number"
       },
-      "name": {
-        "name": "name",
+      "name_en": {
+        "name": "name_en",
+        "nullable": false,
+        "type": "string"
+      },
+      "published": {
+        "name": "published",
+        "nullable": true,
+        "type": "boolean"
+      },
+      "published_at": {
+        "name": "published_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "published_by": {
+        "name": "published_by",
+        "nullable": true,
+        "type": "number"
+      },
+      "table_name": {
+        "name": "table_name",
         "nullable": false,
         "type": "string"
       },
@@ -323,10 +535,20 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "places_town_id_fkey",
+          "fkName": "place_town_id_fkey",
           "isOneToOne": false,
-          "foreignTable": "towns"
+          "foreignTable": "town"
         }
+      },
+      "unpublished_at": {
+        "name": "unpublished_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_by": {
+        "name": "unpublished_by",
+        "nullable": true,
+        "type": "number"
       },
       "updated_at": {
         "name": "updated_at",
@@ -339,20 +561,20 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "places_updated_by_fkey",
+          "fkName": "place_updated_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "profile"
         }
       }
     },
-    "profiles": {
+    "profile": {
       "auth_user_id": {
         "name": "auth_user_id",
         "nullable": false,
         "type": "string",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "profiles_id_fkey",
+          "fkName": "profile_auth_user_id_fkey",
           "isOneToOne": false,
           "foreignTable": "users"
         }
@@ -393,16 +615,16 @@
         "type": "string"
       }
     },
-    "towns": {
+    "town": {
       "country_id": {
         "name": "country_id",
         "nullable": false,
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "towns_country_id_fkey",
+          "fkName": "town_country_id_fkey",
           "isOneToOne": false,
-          "foreignTable": "countries"
+          "foreignTable": "country"
         }
       },
       "created_at": {
@@ -416,9 +638,9 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "towns_created_by_fkey",
+          "fkName": "town_created_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "profile"
         }
       },
       "id": {
@@ -426,10 +648,45 @@
         "nullable": false,
         "type": "number"
       },
-      "name": {
-        "name": "name",
+      "name_en": {
+        "name": "name_en",
         "nullable": false,
         "type": "string"
+      },
+      "name_orig": {
+        "name": "name_orig",
+        "nullable": true,
+        "type": "string"
+      },
+      "published": {
+        "name": "published",
+        "nullable": true,
+        "type": "boolean"
+      },
+      "published_at": {
+        "name": "published_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "published_by": {
+        "name": "published_by",
+        "nullable": true,
+        "type": "number"
+      },
+      "table_name": {
+        "name": "table_name",
+        "nullable": false,
+        "type": "string"
+      },
+      "unpublished_at": {
+        "name": "unpublished_at",
+        "nullable": true,
+        "type": "string"
+      },
+      "unpublished_by": {
+        "name": "unpublished_by",
+        "nullable": true,
+        "type": "number"
       },
       "updated_at": {
         "name": "updated_at",
@@ -442,13 +699,13 @@
         "type": "number",
         "fkInfo": {
           "foreignField": "id",
-          "fkName": "towns_updated_by_fkey",
+          "fkName": "town_updated_by_fkey",
           "isOneToOne": false,
-          "foreignTable": "profiles"
+          "foreignTable": "profile"
         }
       }
     },
-    "trusts": {
+    "trust": {
       "end_at": {
         "name": "end_at",
         "nullable": false,

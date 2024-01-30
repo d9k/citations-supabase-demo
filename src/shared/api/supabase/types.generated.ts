@@ -34,7 +34,7 @@ export interface Database {
   }
   public: {
     Tables: {
-      authors: {
+      author: {
         Row: {
           approximate_years: boolean
           birth_town: number | null
@@ -43,8 +43,15 @@ export interface Database {
           created_by: number | null
           death_year: number | null
           id: number
-          lastname_name_patronymic: string
-          updated_at: string
+          name_en: string
+          name_orig: string | null
+          published: boolean | null
+          published_at: string | null
+          published_by: number | null
+          table_name: string
+          unpublished_at: string | null
+          unpublished_by: number | null
+          updated_at: string | null
           updated_by: number | null
         }
         Insert: {
@@ -55,8 +62,15 @@ export interface Database {
           created_by?: number | null
           death_year?: number | null
           id?: number
-          lastname_name_patronymic: string
-          updated_at?: string
+          name_en: string
+          name_orig?: string | null
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
+          updated_at?: string | null
           updated_by?: number | null
         }
         Update: {
@@ -67,45 +81,58 @@ export interface Database {
           created_by?: number | null
           death_year?: number | null
           id?: number
-          lastname_name_patronymic?: string
-          updated_at?: string
+          name_en?: string
+          name_orig?: string | null
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
+          updated_at?: string | null
           updated_by?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "authors_birth_town_fkey"
+            foreignKeyName: "author_birth_town_fkey"
             columns: ["birth_town"]
             isOneToOne: false
-            referencedRelation: "towns"
+            referencedRelation: "town"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "authors_created_by_fkey"
+            foreignKeyName: "author_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "authors_updated_by_fkey"
+            foreignKeyName: "author_updated_by_fkey"
             columns: ["updated_by"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           }
         ]
       }
-      citations: {
+      citation: {
         Row: {
           author_id: number
           created_at: string
           created_by: number | null
-          english_text: string | null
           event_id: number | null
           id: number
           original_language_text: string | null
           place_id: number | null
-          updated_at: string
+          published: boolean | null
+          published_at: string | null
+          published_by: number | null
+          table_name: string
+          text_en: string | null
+          unpublished_at: string | null
+          unpublished_by: number | null
+          updated_at: string | null
           updated_by: number | null
           year: number | null
         }
@@ -113,12 +140,18 @@ export interface Database {
           author_id: number
           created_at?: string
           created_by?: number | null
-          english_text?: string | null
           event_id?: number | null
           id?: number
           original_language_text?: string | null
           place_id?: number | null
-          updated_at?: string
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          text_en?: string | null
+          unpublished_at?: string | null
+          unpublished_by?: number | null
+          updated_at?: string | null
           updated_by?: number | null
           year?: number | null
         }
@@ -126,61 +159,116 @@ export interface Database {
           author_id?: number
           created_at?: string
           created_by?: number | null
-          english_text?: string | null
           event_id?: number | null
           id?: number
           original_language_text?: string | null
           place_id?: number | null
-          updated_at?: string
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          text_en?: string | null
+          unpublished_at?: string | null
+          unpublished_by?: number | null
+          updated_at?: string | null
           updated_by?: number | null
           year?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "citations_author_id_fkey"
+            foreignKeyName: "citation_author_id_fkey"
             columns: ["author_id"]
             isOneToOne: false
-            referencedRelation: "authors"
+            referencedRelation: "author"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "citations_created_by_fkey"
+            foreignKeyName: "citation_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "citations_event_id_fkey"
+            foreignKeyName: "citation_event_id_fkey"
             columns: ["event_id"]
             isOneToOne: false
-            referencedRelation: "events"
+            referencedRelation: "event"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "citations_place_id_fkey"
+            foreignKeyName: "citation_place_id_fkey"
             columns: ["place_id"]
             isOneToOne: false
-            referencedRelation: "places"
+            referencedRelation: "place"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "citations_updated_by_fkey"
+            foreignKeyName: "citation_updated_by_fkey"
             columns: ["updated_by"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           }
         ]
       }
-      countries: {
+      content_item: {
+        Row: {
+          created_at: string
+          created_by: number | null
+          id: number
+          published: boolean | null
+          published_at: string | null
+          published_by: number | null
+          table_name: string
+          unpublished_at: string | null
+          unpublished_by: number | null
+          updated_at: string | null
+          updated_by: number | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: number | null
+          id: number
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
+          updated_at?: string | null
+          updated_by?: number | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: number | null
+          id?: number
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
+          updated_at?: string | null
+          updated_by?: number | null
+        }
+        Relationships: []
+      }
+      country: {
         Row: {
           created_at: string
           created_by: number | null
           found_year: number | null
           id: number
-          name: string
+          name_en: string
+          name_orig: string | null
           next_rename_year: number | null
+          published: boolean | null
+          published_at: string | null
+          published_by: number | null
+          table_name: string
+          unpublished_at: string | null
+          unpublished_by: number | null
           updated_at: string | null
           updated_by: number | null
         }
@@ -189,8 +277,15 @@ export interface Database {
           created_by?: number | null
           found_year?: number | null
           id?: number
-          name?: string
+          name_en?: string
+          name_orig?: string | null
           next_rename_year?: number | null
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string | null
           updated_by?: number | null
         }
@@ -199,39 +294,53 @@ export interface Database {
           created_by?: number | null
           found_year?: number | null
           id?: number
-          name?: string
+          name_en?: string
+          name_orig?: string | null
           next_rename_year?: number | null
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string | null
           updated_by?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "countries_created_by_fkey"
+            foreignKeyName: "country_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "countries_updated_by_fkey"
+            foreignKeyName: "country_updated_by_fkey"
             columns: ["updated_by"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           }
         ]
       }
-      events: {
+      event: {
         Row: {
           created_at: string
           created_by: number | null
           end_month: number | null
           end_year: number | null
           id: number
-          name: string
+          name_en: string
+          name_orig: string | null
           place_id: number | null
+          published: boolean | null
+          published_at: string | null
+          published_by: number | null
           start_month: number
           start_year: number
+          table_name: string
+          unpublished_at: string | null
+          unpublished_by: number | null
           updated_at: string
           updated_by: number | null
         }
@@ -241,10 +350,17 @@ export interface Database {
           end_month?: number | null
           end_year?: number | null
           id?: number
-          name: string
+          name_en: string
+          name_orig?: string | null
           place_id?: number | null
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
           start_month: number
           start_year: number
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
         }
@@ -254,44 +370,57 @@ export interface Database {
           end_month?: number | null
           end_year?: number | null
           id?: number
-          name?: string
+          name_en?: string
+          name_orig?: string | null
           place_id?: number | null
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
           start_month?: number
           start_year?: number
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "events_created_by_fkey"
+            foreignKeyName: "event_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "events_place_id_fkey"
+            foreignKeyName: "event_place_id_fkey"
             columns: ["place_id"]
             isOneToOne: false
-            referencedRelation: "places"
+            referencedRelation: "place"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "events_updated_by_fkey"
+            foreignKeyName: "event_updated_by_fkey"
             columns: ["updated_by"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           }
         ]
       }
-      places: {
+      place: {
         Row: {
           created_at: string
           created_by: number | null
           id: number
-          name: string
+          name_en: string
+          published: boolean | null
+          published_at: string | null
+          published_by: number | null
+          table_name: string
           town_id: number
+          unpublished_at: string | null
+          unpublished_by: number | null
           updated_at: string
           updated_by: number | null
         }
@@ -299,8 +428,14 @@ export interface Database {
           created_at?: string
           created_by?: number | null
           id?: number
-          name?: string
+          name_en?: string
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
           town_id: number
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
         }
@@ -308,36 +443,42 @@ export interface Database {
           created_at?: string
           created_by?: number | null
           id?: number
-          name?: string
+          name_en?: string
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
           town_id?: number
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "places_created_by_fkey"
+            foreignKeyName: "place_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "places_town_id_fkey"
+            foreignKeyName: "place_town_id_fkey"
             columns: ["town_id"]
             isOneToOne: false
-            referencedRelation: "towns"
+            referencedRelation: "town"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "places_updated_by_fkey"
+            foreignKeyName: "place_updated_by_fkey"
             columns: ["updated_by"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           }
         ]
       }
-      profiles: {
+      profile: {
         Row: {
           auth_user_id: string
           avatar_url: string | null
@@ -370,7 +511,7 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "profiles_id_fkey"
+            foreignKeyName: "profile_auth_user_id_fkey"
             columns: ["auth_user_id"]
             isOneToOne: false
             referencedRelation: "users"
@@ -378,13 +519,20 @@ export interface Database {
           }
         ]
       }
-      towns: {
+      town: {
         Row: {
           country_id: number
           created_at: string
           created_by: number | null
           id: number
-          name: string
+          name_en: string
+          name_orig: string | null
+          published: boolean | null
+          published_at: string | null
+          published_by: number | null
+          table_name: string
+          unpublished_at: string | null
+          unpublished_by: number | null
           updated_at: string
           updated_by: number | null
         }
@@ -393,7 +541,14 @@ export interface Database {
           created_at?: string
           created_by?: number | null
           id?: number
-          name: string
+          name_en: string
+          name_orig?: string | null
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
         }
@@ -402,35 +557,42 @@ export interface Database {
           created_at?: string
           created_by?: number | null
           id?: number
-          name?: string
+          name_en?: string
+          name_orig?: string | null
+          published?: boolean | null
+          published_at?: string | null
+          published_by?: number | null
+          table_name?: string
+          unpublished_at?: string | null
+          unpublished_by?: number | null
           updated_at?: string
           updated_by?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "towns_country_id_fkey"
+            foreignKeyName: "town_country_id_fkey"
             columns: ["country_id"]
             isOneToOne: false
-            referencedRelation: "countries"
+            referencedRelation: "country"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "towns_created_by_fkey"
+            foreignKeyName: "town_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "towns_updated_by_fkey"
+            foreignKeyName: "town_updated_by_fkey"
             columns: ["updated_by"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           }
         ]
       }
-      trusts: {
+      trust: {
         Row: {
           end_at: string
           id: number
@@ -462,6 +624,27 @@ export interface Database {
         }
         Relationships: []
       }
+      view_rls_content_item: {
+        Row: {
+          deletable: boolean | null
+          editable: boolean | null
+          id: number | null
+          table_name: string | null
+        }
+        Insert: {
+          deletable?: never
+          editable?: never
+          id?: number | null
+          table_name?: string | null
+        }
+        Update: {
+          deletable?: never
+          editable?: never
+          id?: number | null
+          table_name?: string | null
+        }
+        Relationships: []
+      }
       view_rls_edit_for_table: {
         Row: {
           deletable: boolean | null
@@ -473,12 +656,52 @@ export interface Database {
       }
     }
     Functions: {
+      content_item_edit_protect_generated_fields: {
+        Args: {
+          new: unknown
+          old: unknown
+        }
+        Returns: undefined
+      }
+      content_item_new_protect_generated_fields: {
+        Args: {
+          new: unknown
+        }
+        Returns: undefined
+      }
+      content_item_publish: {
+        Args: {
+          _table_name: string
+          _id: number
+        }
+        Returns: undefined
+      }
+      content_item_unpublish: {
+        Args: {
+          _table_name: string
+          _id: number
+        }
+        Returns: undefined
+      }
       delete_claim: {
         Args: {
           uid: string
           claim: string
         }
         Returns: string
+      }
+      equal_or_both_null: {
+        Args: {
+          a: unknown
+          b: unknown
+        }
+        Returns: boolean
+      }
+      fn_any_type: {
+        Args: {
+          r: Record<string, unknown>
+        }
+        Returns: Record<string, unknown>
       }
       get_claim: {
         Args: {
@@ -506,6 +729,47 @@ export interface Database {
       is_claims_admin: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      permission_publish_check: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      permission_publish_get: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      protect_generated_field_from_change: {
+        Args: {
+          a: unknown
+          b: unknown
+          variable_name: string
+        }
+        Returns: undefined
+      }
+      protect_generated_field_from_init: {
+        Args: {
+          a: unknown
+          variable_name: string
+        }
+        Returns: undefined
+      }
+      record_fill_created_by: {
+        Args: {
+          r: Record<string, unknown>
+        }
+        Returns: Record<string, unknown>
+      }
+      record_fill_updated_at: {
+        Args: {
+          r: Record<string, unknown>
+        }
+        Returns: Record<string, unknown>
+      }
+      record_fill_updated_by: {
+        Args: {
+          r: Record<string, unknown>
+        }
+        Returns: Record<string, unknown>
       }
       rls_authors_delete: {
         Args: {
@@ -547,13 +811,13 @@ export interface Database {
         }
         Returns: boolean
       }
-      rls_countries_delete: {
+      rls_content_item_check_delete: {
         Args: {
           record: unknown
         }
         Returns: boolean
       }
-      rls_countries_edit: {
+      rls_content_item_check_edit: {
         Args: {
           record: unknown
         }

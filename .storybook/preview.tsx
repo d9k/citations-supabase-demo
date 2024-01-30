@@ -2,7 +2,7 @@ import type { Preview } from '@storybook/react';
 import { FelaRendererProviderConstructor } from '../src/app/providers-constructors/fela.tsx';
 import { MantineProviderConstructor } from '../src/pages/providers-constructors/mantine.tsx';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { useCcommonHeaderScriptsArray } from '/~/app/templates/headerScripts';
+import { useCommonHeaderScriptsArray } from '/~/app/templates/headerScripts';
 import { MantineColorSchemeScript } from '/~/pages/providers-constructors/helpers/colorSchemeScript.tsx';
 import { useMantineColorScheme } from '@mantine/core';
 import React, { useEffect } from 'react';
@@ -58,7 +58,7 @@ const preview: Preview = {
           <FelaRendererProviderConstructor>
             <>
               <Helmet>
-                {useCcommonHeaderScriptsArray()}
+                {useCommonHeaderScriptsArray()}
               </Helmet>
               <MantineColorSchemeScript />
               <MantineProviderConstructor defaultColorScheme='dark'>

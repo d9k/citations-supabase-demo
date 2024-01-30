@@ -1,5 +1,3 @@
-import { RecordAny } from '/~/shared/lib/ts/record-any.ts';
-
 export type DbFnArgs = {
   [agrName: string]: string;
 };

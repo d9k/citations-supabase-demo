@@ -4,6 +4,7 @@
     "example2": "env-cmd --use-shell \"echo test > \\$EXAMPLE_FILE_PATH\"",
     "storybook": "storybook dev --no-open -p 6006",
     "storybook:build": "storybook build",
+    "sb": "pnpm run storybook",
     "db:dump": "pnpm run db:dump:data && pnpm run db:dump:schema && pnpm run db:dump:migrations",
     "db:dump:schema": "env-cmd --use-shell \"supabase db dump > \\$SUPABASE_DUMP_SCHEMA_PATH\"",
     "db:dump:data": "pnpm run db:dump:data:with-auth-logs && pnpm run db:dump:data:cleaning",
@@ -16,7 +17,7 @@
     "db:gen:json-schema-add-descriptions": "tsx script-node/db-json-schema-add-descriptions.ts",
     "db:gen:typescript": "env-cmd --use-shell \"supabase gen types typescript --linked > \\$SUPABASE_GENERATED_TYPES_PATH\"",
     "db:migrations": "env-cmd -x supabase migration list",
-    "db:migrations:create:from-remote": "env-cmd -x supabase db pull --schema auth,public,extensions && pnpm run db:migrations"
+    "db:migrations:create:from-remote": "pnpm run db:migrations && env-cmd -x supabase db pull --schema auth,public,extensions && pnpm run db:migrations"
   },
   "dependencies": {
     "@mantine/core": "7.1.2",
@@ -79,6 +80,7 @@
     "supabase": "^1.115.5",
     "tsx": "^4.6.2",
     "typescript": "^5.0.2",
+    "ultra": "link:src/shared/lib/deno-stubs-for-node/ultra",
     "vite": "^4.4.5"
   },
   "resolutions": {

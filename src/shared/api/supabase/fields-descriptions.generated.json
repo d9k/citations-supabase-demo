@@ -1,10 +1,10 @@
 {
   "public": {
-    "authors": {
-      "lastname_name_patronymic": "separated by spaces",
+    "author": {
+      "name_en": "\"lastname name patronymic\" separated by spaces",
       "birth_town": "town of birth (test description)"
     },
-    "countries": {
+    "country": {
       "found_year": "minimum found year",
       "next_rename_year": "maximum next rename year"
     }

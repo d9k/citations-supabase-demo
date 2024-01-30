@@ -187,6 +187,9 @@ devDependencies:
   typescript:
     specifier: ^5.0.2
     version: 5.2.2
+  ultra:
+    specifier: link:src/shared/lib/deno-stubs-for-node/ultra
+    version: link:src/shared/lib/deno-stubs-for-node/ultra
   vite:
     specifier: ^4.4.5
     version: 4.5.0
