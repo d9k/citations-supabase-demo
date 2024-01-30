@@ -1,5 +1,7 @@
 # citations-supabase-demo
 
+[Demo](http://citations.d9k.ru)
+
 ## Techologies used
 
 - [React](https://react.dev), [React query](https://tanstack.com/query)
