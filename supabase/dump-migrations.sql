@@ -2413,7 +2413,44 @@ as permissive
 for select
 to authenticated
 using (true)","CREATE TRIGGER on_author_edit BEFORE UPDATE ON public.author FOR EACH ROW EXECUTE FUNCTION handle_content_item_edit()","CREATE TRIGGER on_author_new BEFORE INSERT ON public.author FOR EACH ROW EXECUTE FUNCTION handle_content_item_new()","CREATE TRIGGER on_citation_edit BEFORE UPDATE ON public.citation FOR EACH ROW EXECUTE FUNCTION handle_content_item_edit()","CREATE TRIGGER on_citation_new BEFORE INSERT ON public.citation FOR EACH ROW EXECUTE FUNCTION handle_content_item_new()","CREATE TRIGGER on_event_edit BEFORE UPDATE ON public.event FOR EACH ROW EXECUTE FUNCTION handle_content_item_edit()","CREATE TRIGGER on_event_new BEFORE INSERT ON public.event FOR EACH ROW EXECUTE FUNCTION handle_content_item_new()","CREATE TRIGGER on_place_edit BEFORE UPDATE ON public.place FOR EACH ROW EXECUTE FUNCTION handle_content_item_edit()","CREATE TRIGGER on_place_new BEFORE INSERT ON public.place FOR EACH ROW EXECUTE FUNCTION handle_content_item_new()","CREATE TRIGGER on_town_edit BEFORE UPDATE ON public.town FOR EACH ROW EXECUTE FUNCTION handle_content_item_edit()","CREATE TRIGGER on_town_new BEFORE INSERT ON public.town FOR EACH ROW EXECUTE FUNCTION handle_content_item_new()"}', 'content_item_rls_trigger'),
-	('20240129235821', '{"alter table \"public\".\"country\" drop constraint \"countries_name_check\"","alter table \"public\".\"town\" drop constraint \"towns_name_check\"","alter table \"public\".\"author\" drop constraint \"author_name_en_check\"","alter table \"public\".\"author\" drop constraint \"author_table_name_check\"","alter table \"public\".\"citation\" drop constraint \"citation_table_name_check\"","alter table \"public\".\"event\" drop constraint \"event_table_name_check\"","alter table \"public\".\"place\" drop constraint \"place_table_name_check\"","alter table \"public\".\"town\" drop constraint \"town_table_name_check\"","alter table \"public\".\"citation\" add constraint \"citation_text_en_check\" CHECK ((length(text_en) >= 5)) not valid","alter table \"public\".\"citation\" validate constraint \"citation_text_en_check\"","alter table \"public\".\"country\" add constraint \"country_name_en_check\" CHECK ((length(name_en) >= 2)) not valid","alter table \"public\".\"country\" validate constraint \"country_name_en_check\"","alter table \"public\".\"event\" add constraint \"event_name_en_check\" CHECK ((length(name_en) >= 2)) not valid","alter table \"public\".\"event\" validate constraint \"event_name_en_check\"","alter table \"public\".\"place\" add constraint \"place_name_en_check\" CHECK ((length(name_en) >= 2)) not valid","alter table \"public\".\"place\" validate constraint \"place_name_en_check\"","alter table \"public\".\"town\" add constraint \"town_name_en_check\" CHECK ((length(name_en) >= 2)) not valid","alter table \"public\".\"town\" validate constraint \"town_name_en_check\"","alter table \"public\".\"author\" add constraint \"author_name_en_check\" CHECK ((length(name_en) >= 2)) not valid","alter table \"public\".\"author\" validate constraint \"author_name_en_check\"","alter table \"public\".\"author\" add constraint \"author_table_name_check\" CHECK ((table_name = ''author''::text)) NOT VALID not valid","alter table \"public\".\"author\" validate constraint \"author_table_name_check\"","alter table \"public\".\"citation\" add constraint \"citation_table_name_check\" CHECK ((table_name = ''citation''::text)) NOT VALID not valid","alter table \"public\".\"citation\" validate constraint \"citation_table_name_check\"","alter table \"public\".\"event\" add constraint \"event_table_name_check\" CHECK ((table_name = ''event''::text)) NOT VALID not valid","alter table \"public\".\"event\" validate constraint \"event_table_name_check\"","alter table \"public\".\"place\" add constraint \"place_table_name_check\" CHECK ((table_name = ''place''::text)) NOT VALID not valid","alter table \"public\".\"place\" validate constraint \"place_table_name_check\"","alter table \"public\".\"town\" add constraint \"town_table_name_check\" CHECK ((table_name = ''town''::text)) NOT VALID not valid","alter table \"public\".\"town\" validate constraint \"town_table_name_check\""}', 'name_en_constraint');
+	('20240129235821', '{"alter table \"public\".\"country\" drop constraint \"countries_name_check\"","alter table \"public\".\"town\" drop constraint \"towns_name_check\"","alter table \"public\".\"author\" drop constraint \"author_name_en_check\"","alter table \"public\".\"author\" drop constraint \"author_table_name_check\"","alter table \"public\".\"citation\" drop constraint \"citation_table_name_check\"","alter table \"public\".\"event\" drop constraint \"event_table_name_check\"","alter table \"public\".\"place\" drop constraint \"place_table_name_check\"","alter table \"public\".\"town\" drop constraint \"town_table_name_check\"","alter table \"public\".\"citation\" add constraint \"citation_text_en_check\" CHECK ((length(text_en) >= 5)) not valid","alter table \"public\".\"citation\" validate constraint \"citation_text_en_check\"","alter table \"public\".\"country\" add constraint \"country_name_en_check\" CHECK ((length(name_en) >= 2)) not valid","alter table \"public\".\"country\" validate constraint \"country_name_en_check\"","alter table \"public\".\"event\" add constraint \"event_name_en_check\" CHECK ((length(name_en) >= 2)) not valid","alter table \"public\".\"event\" validate constraint \"event_name_en_check\"","alter table \"public\".\"place\" add constraint \"place_name_en_check\" CHECK ((length(name_en) >= 2)) not valid","alter table \"public\".\"place\" validate constraint \"place_name_en_check\"","alter table \"public\".\"town\" add constraint \"town_name_en_check\" CHECK ((length(name_en) >= 2)) not valid","alter table \"public\".\"town\" validate constraint \"town_name_en_check\"","alter table \"public\".\"author\" add constraint \"author_name_en_check\" CHECK ((length(name_en) >= 2)) not valid","alter table \"public\".\"author\" validate constraint \"author_name_en_check\"","alter table \"public\".\"author\" add constraint \"author_table_name_check\" CHECK ((table_name = ''author''::text)) NOT VALID not valid","alter table \"public\".\"author\" validate constraint \"author_table_name_check\"","alter table \"public\".\"citation\" add constraint \"citation_table_name_check\" CHECK ((table_name = ''citation''::text)) NOT VALID not valid","alter table \"public\".\"citation\" validate constraint \"citation_table_name_check\"","alter table \"public\".\"event\" add constraint \"event_table_name_check\" CHECK ((table_name = ''event''::text)) NOT VALID not valid","alter table \"public\".\"event\" validate constraint \"event_table_name_check\"","alter table \"public\".\"place\" add constraint \"place_table_name_check\" CHECK ((table_name = ''place''::text)) NOT VALID not valid","alter table \"public\".\"place\" validate constraint \"place_table_name_check\"","alter table \"public\".\"town\" add constraint \"town_table_name_check\" CHECK ((table_name = ''town''::text)) NOT VALID not valid","alter table \"public\".\"town\" validate constraint \"town_table_name_check\""}', 'name_en_constraint'),
+	('20240130010055', '{"drop view if exists \"public\".\"view_id_name\"","alter table \"public\".\"author\" add column \"name_orig\" text","alter table \"public\".\"country\" add column \"name_orig\" text","alter table \"public\".\"event\" add column \"name_orig\" text","alter table \"public\".\"town\" add column \"name_orig\" text","create or replace view \"public\".\"view_id_name\" as  SELECT author.table_name,
+    author.id,
+    author.name_en AS name,
+    string_limit((author.name_en)::character varying, 20) AS short_name
+   FROM author
+UNION
+ SELECT citation.table_name,
+    citation.id,
+    string_limit((citation.text_en)::character varying, 40) AS name,
+    string_limit((citation.text_en)::character varying, 20) AS short_name
+   FROM citation
+UNION
+ SELECT country.table_name,
+    country.id,
+    country.name_en AS name,
+    string_limit((country.name_en)::character varying, 20) AS short_name
+   FROM country
+UNION
+ SELECT place.table_name,
+    place.id,
+    place.name_en AS name,
+    string_limit((place.name_en)::character varying, 20) AS short_name
+   FROM place
+UNION
+ SELECT ''profile''::text AS table_name,
+    profile.id,
+    (((profile.full_name || '' (''::text) || profile.username) || '')''::text) AS name,
+    profile.username AS short_name
+   FROM profile
+UNION
+ SELECT town.table_name,
+    town.id,
+    (((town.name_en || '' (''::text) || country.name_en) || '')''::text) AS name,
+    ((((string_limit((town.name_en)::character varying, 20))::text || '' (''::text) || (string_limit((country.name_en)::character varying, 10))::text) || '')''::text) AS short_name
+   FROM (town
+     LEFT JOIN country ON ((town.country_id = country.id)))
+  ORDER BY 1, 4"}', 'town_name_with_country_and_add_name_orig');
 
 
 --

@@ -1,0 +1,1 @@
+alter table "public"."citation" alter column "updated_at" drop not null;

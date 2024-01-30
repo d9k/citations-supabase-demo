@@ -540,7 +540,7 @@ CREATE TABLE IF NOT EXISTS "public"."citation" (
     "author_id" bigint NOT NULL,
     "year" bigint,
     "created_at" timestamp with time zone DEFAULT "now"(),
-    "updated_at" timestamp with time zone NOT NULL,
+    "updated_at" timestamp with time zone,
     "original_language_text" "text",
     "place_id" bigint,
     "event_id" bigint,

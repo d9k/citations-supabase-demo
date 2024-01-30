@@ -132,7 +132,7 @@ export interface Database {
           text_en: string | null
           unpublished_at: string | null
           unpublished_by: number | null
-          updated_at: string
+          updated_at: string | null
           updated_by: number | null
           year: number | null
         }
@@ -151,7 +151,7 @@ export interface Database {
           text_en?: string | null
           unpublished_at?: string | null
           unpublished_by?: number | null
-          updated_at: string
+          updated_at?: string | null
           updated_by?: number | null
           year?: number | null
         }
@@ -170,7 +170,7 @@ export interface Database {
           text_en?: string | null
           unpublished_at?: string | null
           unpublished_by?: number | null
-          updated_at?: string
+          updated_at?: string | null
           updated_by?: number | null
           year?: number | null
         }
