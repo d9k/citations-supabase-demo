@@ -44,6 +44,7 @@ export interface Database {
           death_year: number | null
           id: number
           name_en: string
+          name_orig: string | null
           published: boolean | null
           published_at: string | null
           published_by: number | null
@@ -62,6 +63,7 @@ export interface Database {
           death_year?: number | null
           id?: number
           name_en: string
+          name_orig?: string | null
           published?: boolean | null
           published_at?: string | null
           published_by?: number | null
@@ -80,6 +82,7 @@ export interface Database {
           death_year?: number | null
           id?: number
           name_en?: string
+          name_orig?: string | null
           published?: boolean | null
           published_at?: string | null
           published_by?: number | null
@@ -258,6 +261,7 @@ export interface Database {
           found_year: number | null
           id: number
           name_en: string
+          name_orig: string | null
           next_rename_year: number | null
           published: boolean | null
           published_at: string | null
@@ -274,6 +278,7 @@ export interface Database {
           found_year?: number | null
           id?: number
           name_en?: string
+          name_orig?: string | null
           next_rename_year?: number | null
           published?: boolean | null
           published_at?: string | null
@@ -290,6 +295,7 @@ export interface Database {
           found_year?: number | null
           id?: number
           name_en?: string
+          name_orig?: string | null
           next_rename_year?: number | null
           published?: boolean | null
           published_at?: string | null
@@ -325,6 +331,7 @@ export interface Database {
           end_year: number | null
           id: number
           name_en: string
+          name_orig: string | null
           place_id: number | null
           published: boolean | null
           published_at: string | null
@@ -344,6 +351,7 @@ export interface Database {
           end_year?: number | null
           id?: number
           name_en: string
+          name_orig?: string | null
           place_id?: number | null
           published?: boolean | null
           published_at?: string | null
@@ -363,6 +371,7 @@ export interface Database {
           end_year?: number | null
           id?: number
           name_en?: string
+          name_orig?: string | null
           place_id?: number | null
           published?: boolean | null
           published_at?: string | null
@@ -517,6 +526,7 @@ export interface Database {
           created_by: number | null
           id: number
           name_en: string
+          name_orig: string | null
           published: boolean | null
           published_at: string | null
           published_by: number | null
@@ -532,6 +542,7 @@ export interface Database {
           created_by?: number | null
           id?: number
           name_en: string
+          name_orig?: string | null
           published?: boolean | null
           published_at?: string | null
           published_by?: number | null
@@ -547,6 +558,7 @@ export interface Database {
           created_by?: number | null
           id?: number
           name_en?: string
+          name_orig?: string | null
           published?: boolean | null
           published_at?: string | null
           published_by?: number | null

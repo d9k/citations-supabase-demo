@@ -55,6 +55,11 @@
         "type": "string",
         "description": "\"lastname name patronymic\" separated by spaces"
       },
+      "name_orig": {
+        "name": "name_orig",
+        "nullable": true,
+        "type": "string"
+      },
       "published": {
         "name": "published",
         "nullable": true,
@@ -309,6 +314,11 @@
         "nullable": false,
         "type": "string"
       },
+      "name_orig": {
+        "name": "name_orig",
+        "nullable": true,
+        "type": "string"
+      },
       "next_rename_year": {
         "name": "next_rename_year",
         "nullable": true,
@@ -397,6 +407,11 @@
       "name_en": {
         "name": "name_en",
         "nullable": false,
+        "type": "string"
+      },
+      "name_orig": {
+        "name": "name_orig",
+        "nullable": true,
         "type": "string"
       },
       "place_id": {
@@ -636,6 +651,11 @@
       "name_en": {
         "name": "name_en",
         "nullable": false,
+        "type": "string"
+      },
+      "name_orig": {
+        "name": "name_orig",
+        "nullable": true,
         "type": "string"
       },
       "published": {

@@ -31,6 +31,9 @@ export const COLUMNS_SHOW_FIRST = [
   COLUMN_NAME_EDITABLE,
   'name',
   'name_en',
+  'name_orig',
+  'text_en',
+  'text_orig',
 ];
 export const COLUMNS_SHOW_LAST = [
   'created_by',

@@ -472,6 +472,7 @@ CREATE TABLE IF NOT EXISTS "public"."author" (
     "unpublished_at" timestamp with time zone,
     "unpublished_by" bigint,
     "published" boolean,
+    "name_orig" "text",
     CONSTRAINT "author_name_en_check" CHECK (("length"("name_en") >= 2))
 )
 INHERITS ("public"."content_item");
@@ -615,6 +616,7 @@ CREATE TABLE IF NOT EXISTS "public"."event" (
     "unpublished_at" timestamp with time zone,
     "unpublished_by" bigint,
     "published" boolean,
+    "name_orig" "text",
     CONSTRAINT "event_name_en_check" CHECK (("length"("name_en") >= 2))
 )
 INHERITS ("public"."content_item");
@@ -735,6 +737,7 @@ CREATE TABLE IF NOT EXISTS "public"."town" (
     "unpublished_at" timestamp with time zone,
     "unpublished_by" bigint,
     "published" boolean,
+    "name_orig" "text",
     CONSTRAINT "town_name_en_check" CHECK (("length"("name_en") >= 2))
 )
 INHERITS ("public"."content_item");
@@ -855,6 +858,7 @@ CREATE TABLE IF NOT EXISTS "public"."country" (
     "published_by" bigint,
     "unpublished_at" timestamp with time zone,
     "unpublished_by" bigint,
+    "name_orig" "text",
     CONSTRAINT "country_name_en_check" CHECK (("length"("name_en") >= 2)),
     CONSTRAINT "country_table_name_check" CHECK (("table_name" = 'country'::"text"))
 )
@@ -949,9 +953,10 @@ UNION
 UNION
  SELECT "town"."table_name",
     "town"."id",
-    "town"."name_en" AS "name",
-    "public"."string_limit"(("town"."name_en")::character varying, 20) AS "short_name"
-   FROM "public"."town"
+    ((("town"."name_en" || ' ('::"text") || "country"."name_en") || ')'::"text") AS "name",
+    (((("public"."string_limit"(("town"."name_en")::character varying, 20))::"text" || ' ('::"text") || ("public"."string_limit"(("country"."name_en")::character varying, 10))::"text") || ')'::"text") AS "short_name"
+   FROM ("public"."town"
+     LEFT JOIN "public"."country" ON (("town"."country_id" = "country"."id")))
   ORDER BY 1, 4;
 
 ALTER TABLE "public"."view_id_name" OWNER TO "postgres";
