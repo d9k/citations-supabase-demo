@@ -55,6 +55,8 @@ export type ForeignTableToIdToSelectorItem = {
   [foreignTableName: string]: ForeignIdToSelectorItem;
 };
 
+export const COLUMN_TEXT_LONG_WIDTH = 600;
+
 export type UseColumnsArgs = {
   allowEdit?: boolean;
   allowPublish?: boolean;
@@ -64,6 +66,7 @@ export type UseColumnsArgs = {
   columnsNamesIds: string[];
   columnsNamesLast: string[];
   columnsNamesRequired: string[];
+  columnsNamesTextLong?: string[];
   hasRlsInfo: boolean;
   foreignidsNames?: IdNameRecord[];
   fieldToForeignTable?: FieldToForeignTable;
@@ -83,6 +86,7 @@ export const useColumns = ({
   columnsNamesIds,
   columnsNamesLast,
   columnsNamesRequired,
+  columnsNamesTextLong = [],
   hasRlsInfo,
   fieldToForeignTable = {},
   foreignidsNames = [],
@@ -191,6 +195,7 @@ export const useColumns = ({
         frozen: columnsNamesIds.includes(fieldName),
         key: fieldName,
         name: `${fieldName}${required ? ' *' : ''}`,
+
         ...(foreignTable
           ? {
             renderCell: (renderProps) => (
@@ -202,6 +207,7 @@ export const useColumns = ({
             ),
           }
           : {}),
+
         ...(fieldName === COLUMN_NAME_DELETABLE
           ? {
             renderCell: (renderProps) => (
@@ -213,6 +219,7 @@ export const useColumns = ({
             ),
           }
           : {}),
+
         ...(editable && allowEdit
           ? {
             renderEditCell: (
@@ -228,6 +235,7 @@ export const useColumns = ({
             ),
           }
           : {}),
+
         ...(fieldInfo?.type === 'boolean'
           ? {
             renderCell: (renderProps) => <CellBoolean {...renderProps} />,
@@ -236,6 +244,7 @@ export const useColumns = ({
             ),
           }
           : {}),
+
         editable: (row: RecordAny) => {
           if (rowIsEditable?.(row) === false) {
             return false;
@@ -243,6 +252,7 @@ export const useColumns = ({
 
           return editable;
         },
+
         ...(fieldName === COLUMN_NAME_PUBLISHED
           ? {
             renderCell: (renderProps) => (
@@ -255,6 +265,12 @@ export const useColumns = ({
               />
             ),
             renderEditCell: undefined,
+          }
+          : {}),
+
+        ...(columnsNamesTextLong.includes(fieldName)
+          ? {
+            width: COLUMN_TEXT_LONG_WIDTH,
           }
           : {}),
       };
