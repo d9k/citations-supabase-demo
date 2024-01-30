@@ -1253,7 +1253,7 @@ CREATE TABLE public.author (
     unpublished_at timestamp with time zone,
     unpublished_by bigint,
     published boolean,
-    CONSTRAINT author_name_en_check CHECK ((length(name_en) > 0))
+    CONSTRAINT author_name_en_check CHECK ((length(name_en) >= 2))
 )
 INHERITS (public.content_item);
 
@@ -1370,7 +1370,8 @@ CREATE TABLE public.citation (
     table_name text DEFAULT 'citation'::text,
     unpublished_at timestamp with time zone,
     unpublished_by bigint,
-    published boolean
+    published boolean,
+    CONSTRAINT citation_text_en_check CHECK ((length(text_en) >= 5))
 )
 INHERITS (public.content_item);
 
@@ -1458,7 +1459,8 @@ CREATE TABLE public.event (
     table_name text DEFAULT 'event'::text,
     unpublished_at timestamp with time zone,
     unpublished_by bigint,
-    published boolean
+    published boolean,
+    CONSTRAINT event_name_en_check CHECK ((length(name_en) >= 2))
 )
 INHERITS (public.content_item);
 
@@ -1512,7 +1514,8 @@ CREATE TABLE public.place (
     table_name text DEFAULT 'place'::text,
     unpublished_at timestamp with time zone,
     unpublished_by bigint,
-    published boolean
+    published boolean,
+    CONSTRAINT place_name_en_check CHECK ((length(name_en) >= 2))
 )
 INHERITS (public.content_item);
 
@@ -1622,7 +1625,7 @@ CREATE TABLE public.town (
     unpublished_at timestamp with time zone,
     unpublished_by bigint,
     published boolean,
-    CONSTRAINT towns_name_check CHECK ((length(name_en) > 0))
+    CONSTRAINT town_name_en_check CHECK ((length(name_en) >= 2))
 )
 INHERITS (public.content_item);
 
@@ -2437,7 +2440,7 @@ CREATE TABLE public.country (
     published_by bigint,
     unpublished_at timestamp with time zone,
     unpublished_by bigint,
-    CONSTRAINT countries_name_check CHECK ((length(name_en) > 0)),
+    CONSTRAINT country_name_en_check CHECK ((length(name_en) >= 2)),
     CONSTRAINT country_table_name_check CHECK ((table_name = 'country'::text))
 )
 INHERITS (public.content_item);
@@ -2676,7 +2679,7 @@ ALTER TABLE storage.migrations OWNER TO supabase_storage_admin;
 --
 
 CREATE TABLE storage.objects (
-    id uuid DEFAULT extensions.uuid_generate_v4() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     bucket_id text,
     name text,
     owner uuid,
@@ -2886,9 +2889,9 @@ COPY auth.sso_providers (id, resource_id, created_at, updated_at) FROM stdin;
 
 COPY auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, invited_at, confirmation_token, confirmation_sent_at, recovery_token, recovery_sent_at, email_change_token_new, email_change, email_change_sent_at, last_sign_in_at, raw_app_meta_data, raw_user_meta_data, is_super_admin, created_at, updated_at, phone, phone_confirmed_at, phone_change, phone_change_token, phone_change_sent_at, email_change_token_current, email_change_confirm_status, banned_until, reauthentication_token, reauthentication_sent_at, is_sso_user, deleted_at) FROM stdin;
 00000000-0000-0000-0000-000000000000	e76b244b-6f9e-42fc-b216-5ea74f94bd4c	authenticated	authenticated	gavriillarin263@inbox.lv	$2a$10$W8/g0R7arxlSsdWrn.5hXOqbolOsyQrpCcAKTOEkoIy2Vekr3vgSS	2023-12-09 05:25:02.817+00	\N		2023-12-09 05:24:14.076+00		2023-12-24 13:21:13.896693+00			\N	2023-12-24 13:21:25.863108+00	{"provider": "email", "providers": ["email"], "profile_id": 19}	\N	\N	2023-12-09 05:24:14.065+00	2023-12-24 23:26:51.847117+00	\N	\N			\N		0	\N		\N	f	\N
-00000000-0000-0000-0000-000000000000	ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d	authenticated	authenticated	d9kd9k@gmail.com	$2a$10$Nn9Lq26n.a2r92jcs25UI./rgH5OBb1gV6db5GhX.phqVA//i/Lmy	2023-12-21 14:03:46.059171+00	\N		2023-12-21 13:53:06.021026+00		2023-12-24 23:31:21.017153+00			\N	2023-12-24 23:31:41.685951+00	{"provider": "email", "providers": ["email"], "profile_id": 21, "claim_edit_all_content": 1}	{}	\N	2023-12-21 13:53:06.009726+00	2023-12-25 10:58:20.440871+00	\N	\N			\N		0	\N		\N	f	\N
+00000000-0000-0000-0000-000000000000	ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d	authenticated	authenticated	d9kd9k@gmail.com	$2a$10$Nn9Lq26n.a2r92jcs25UI./rgH5OBb1gV6db5GhX.phqVA//i/Lmy	2023-12-21 14:03:46.059171+00	\N		2023-12-21 13:53:06.021026+00		2024-01-29 23:40:04.859264+00			\N	2024-01-29 23:40:17.330731+00	{"provider": "email", "providers": ["email"], "profile_id": 21, "claim_publish": 1, "claim_edit_all_content": 1, "claim_delete_all_content": 1}	{}	\N	2023-12-21 13:53:06.009726+00	2024-01-29 23:53:21.700592+00	\N	\N			\N		0	\N		\N	f	\N
+00000000-0000-0000-0000-000000000000	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	authenticated	authenticated	d9k@ya.ru	$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2	2023-11-30 13:20:52.160287+00	\N		2023-11-30 13:19:57.235919+00		2024-01-29 22:53:03.124764+00			\N	2024-01-29 22:53:21.417097+00	{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}	{}	\N	2023-11-30 13:19:57.22183+00	2024-01-29 22:53:21.429512+00	\N	\N			\N		0	\N		\N	f	\N
 00000000-0000-0000-0000-000000000000	727a5d27-4b66-49ea-a2c1-0bccc7b8e2cd	authenticated	authenticated	d9k@ya.tu	$2a$10$OR4GYiMa8vFpk1ywBfPrEeL8yj0TCJxO3joYXdlRezx8Kk6eBjmQ.	\N	\N	45bc98dfe84800707f48a82df0ce417215a7869ba20ba657b46012c1	2023-12-11 20:49:26.158057+00		\N			\N	\N	{"provider": "email", "providers": ["email"], "profile_id": 20}	{}	\N	2023-12-11 20:49:26.145323+00	2023-12-11 20:49:29.413083+00	\N	\N			\N		0	\N		\N	f	\N
-00000000-0000-0000-0000-000000000000	b5f563a3-b794-49d0-a0e3-dbf9fffd2321	authenticated	authenticated	d9k@ya.ru	$2a$10$BNL19FnvkC6EyYVshokk.e1R3HwylfiHqAp/PEtQY49PgNHxf0Nk2	2023-11-30 13:20:52.160287+00	\N		2023-11-30 13:19:57.235919+00		2024-01-20 15:44:13.19378+00			\N	2024-01-20 15:44:25.183424+00	{"provider": "email", "providers": ["email"], "profile_id": 1, "claim_edit_all_profiles": 1}	{}	\N	2023-11-30 13:19:57.22183+00	2024-01-20 20:07:13.179153+00	\N	\N			\N		0	\N		\N	f	\N
 \.
 
 
@@ -2934,14 +2937,13 @@ COPY public.content_item (table_name, id, created_at, created_by, updated_at, up
 --
 
 COPY public.country (id, name_en, created_at, updated_at, found_year, next_rename_year, created_by, updated_by, table_name, published_at, published_by, unpublished_at, unpublished_by) FROM stdin;
-15	Ireland 4	2024-01-14 23:02:41.877146+00	2024-01-16 22:14:10.656071+00	\N	\N	1	1	country	2024-01-16 22:11:53.227693+00	1	2024-01-16 22:14:10.656071+00	1
-1	Greece 1	2023-11-28 06:50:37.146622+00	2024-01-16 22:14:16.72311+00	-4000	100	\N	1	country	2024-01-16 22:14:16.72311+00	1	\N	\N
-11	China 10	2023-12-21 14:12:45.779946+00	2024-01-16 22:14:35.744117+00	\N	\N	21	1	country	2024-01-16 22:14:35.744117+00	1	\N	\N
 10	Russia	2023-12-21 10:02:21.791404+00	2024-01-16 22:15:24.604677+00	\N	\N	1	1	country	2024-01-16 22:15:24.604677+00	1	\N	\N
 12	India	2023-12-24 13:21:46.821053+00	2024-01-16 22:31:09.410237+00	\N	\N	19	\N	country	2024-01-16 22:31:09.410237+00	\N	\N	\N
-8	Greece 5	2023-12-21 10:00:36.790762+00	2024-01-17 00:44:05.32167+00	\N	\N	1	1	country	2024-01-17 00:43:55.107373+00	1	2024-01-17 00:44:05.32167+00	1
 21	Zimbabwe	2024-01-18 14:41:34.349983+00	2024-01-18 14:41:34.349983+00	\N	\N	1	\N	country	\N	\N	\N	\N
 22	Uganda	2024-01-18 14:49:56.943884+00	2024-01-18 14:49:56.943884+00	\N	\N	1	\N	country	\N	\N	\N	\N
+1	Greece	2023-11-28 06:50:37.146622+00	2024-01-29 23:05:53.381923+00	-4000	100	\N	21	country	2024-01-16 22:14:16.72311+00	1	\N	\N
+11	China	2023-12-21 14:12:45.779946+00	2024-01-29 23:39:29.834493+00	\N	\N	21	21	country	2024-01-16 22:14:35.744117+00	1	\N	\N
+15	Ireland	2024-01-14 23:02:41.877146+00	2024-01-29 23:52:05.738804+00	\N	\N	1	21	country	2024-01-29 23:52:05.738804+00	21	\N	\N
 \.
 
 
@@ -3007,24 +3009,26 @@ avatars	avatars	\N	2023-11-29 11:39:09.672841+00	2023-11-29 11:39:09.672841+00	f
 --
 
 COPY storage.migrations (id, name, hash, executed_at) FROM stdin;
-0	create-migrations-table	e18db593bcde2aca2a408c4d1100f6abba2195df	2023-09-30 14:57:55.230971
-1	initialmigration	6ab16121fbaa08bbd11b712d05f358f9b555d777	2023-09-30 14:57:55.233989
-2	pathtoken-column	49756be03be4c17bb85fe70d4a861f27de7e49ad	2023-09-30 14:57:55.235646
-3	add-migrations-rls	bb5d124c53d68635a883e399426c6a5a25fc893d	2023-09-30 14:57:55.25644
-4	add-size-functions	6d79007d04f5acd288c9c250c42d2d5fd286c54d	2023-09-30 14:57:55.264052
-5	change-column-name-in-get-size	fd65688505d2ffa9fbdc58a944348dd8604d688c	2023-09-30 14:57:55.266722
-6	add-rls-to-buckets	63e2bab75a2040fee8e3fb3f15a0d26f3380e9b6	2023-09-30 14:57:55.269521
-7	add-public-to-buckets	82568934f8a4d9e0a85f126f6fb483ad8214c418	2023-09-30 14:57:55.271418
-8	fix-search-function	1a43a40eddb525f2e2f26efd709e6c06e58e059c	2023-09-30 14:57:55.27366
-9	search-files-search-function	34c096597eb8b9d077fdfdde9878c88501b2fafc	2023-09-30 14:57:55.27584
-10	add-trigger-to-auto-update-updated_at-column	37d6bb964a70a822e6d37f22f457b9bca7885928	2023-09-30 14:57:55.280227
-11	add-automatic-avif-detection-flag	bd76c53a9c564c80d98d119c1b3a28e16c8152db	2023-09-30 14:57:55.282798
-12	add-bucket-custom-limits	cbe0a4c32a0e891554a21020433b7a4423c07ee7	2023-09-30 14:57:55.284853
-13	use-bytes-for-max-size	7a158ebce8a0c2801c9c65b7e9b2f98f68b3874e	2023-09-30 14:57:55.287117
-14	add-can-insert-object-function	273193826bca7e0990b458d1ba72f8aa27c0d825	2023-09-30 14:57:55.298843
-15	add-version	e821a779d26612899b8c2dfe20245f904a327c4f	2023-09-30 14:57:55.301151
-16	drop-owner-foreign-key	536b33f8878eed09d0144219777dcac96bdb25da	2023-11-27 23:24:15.501288
-17	add_owner_id_column_deprecate_owner	7545f216a39358b5487df75d941d05dbcd75eb46	2023-11-27 23:24:15.507358
+0	create-migrations-table	e18db593bcde2aca2a408c4d1100f6abba2195df	2024-01-26 13:09:40.27228
+1	initialmigration	6ab16121fbaa08bbd11b712d05f358f9b555d777	2024-01-26 13:09:40.27228
+2	storage-schema	5c7968fd083fcea04050c1b7f6253c9771b99011	2024-01-26 13:09:40.27228
+3	pathtoken-column	2cb1b0004b817b29d5b0a971af16bafeede4b70d	2024-01-26 13:09:40.27228
+4	add-migrations-rls	427c5b63fe1c5937495d9c635c263ee7a5905058	2024-01-26 13:09:40.27228
+5	add-size-functions	79e081a1455b63666c1294a440f8ad4b1e6a7f84	2024-01-26 13:09:40.27228
+6	change-column-name-in-get-size	f93f62afdf6613ee5e7e815b30d02dc990201044	2024-01-26 13:09:40.27228
+7	add-rls-to-buckets	e7e7f86adbc51049f341dfe8d30256c1abca17aa	2024-01-26 13:09:40.27228
+8	add-public-to-buckets	fd670db39ed65f9d08b01db09d6202503ca2bab3	2024-01-26 13:09:40.27228
+9	fix-search-function	3a0af29f42e35a4d101c259ed955b67e1bee6825	2024-01-26 13:09:40.27228
+10	search-files-search-function	68dc14822daad0ffac3746a502234f486182ef6e	2024-01-26 13:09:40.27228
+11	add-trigger-to-auto-update-updated_at-column	7425bdb14366d1739fa8a18c83100636d74dcaa2	2024-01-26 13:09:40.27228
+12	add-automatic-avif-detection-flag	8e92e1266eb29518b6a4c5313ab8f29dd0d08df9	2024-01-26 13:09:40.27228
+13	add-bucket-custom-limits	cce962054138135cd9a8c4bcd531598684b25e7d	2024-01-26 13:09:40.27228
+14	use-bytes-for-max-size	941c41b346f9802b411f06f30e972ad4744dad27	2024-01-26 13:09:40.27228
+15	add-can-insert-object-function	934146bc38ead475f4ef4b555c524ee5d66799e5	2024-01-26 13:09:40.27228
+16	add-version	76debf38d3fd07dcfc747ca49096457d95b1221b	2024-01-26 13:09:40.27228
+17	drop-owner-foreign-key	f1cbb288f1b7a4c1eb8c38504b80ae2a0153d101	2024-01-26 13:09:40.27228
+18	add_owner_id_column_deprecate_owner	e7a511b379110b08e2f214be852c35414749fe66	2024-01-26 13:09:40.27228
+19	alter-default-value-objects-id	02e5e22a78626187e00d173dc45f58fa66a4f043	2024-01-26 13:09:40.322143
 \.
 
 
@@ -3061,6 +3065,7 @@ COPY supabase_migrations.schema_migrations (version, statements, name) FROM stdi
 20240117005735	{"drop view if exists \\"public\\".\\"view_id_name\\"","alter table \\"public\\".\\"content_item\\" add column \\"published\\" boolean generated always as (((published_at IS NOT NULL) AND (unpublished_at IS NULL))) stored","alter table \\"public\\".\\"country\\" add column \\"published\\" boolean generated always as (((published_at IS NOT NULL) AND (unpublished_at IS NULL))) stored","set check_function_bodies = off","CREATE OR REPLACE FUNCTION public.content_item_publish(_table_name text, _id integer)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\n-- DECLARE\n--   exception_text TEXT;\nBEGIN\n  -- also is checked in before update trigger in content_item_edit_protect_generated_fields()\n  -- exception_text := permission_publish_check();\n  PERFORM permission_publish_check();\n\n  -- IF exception_text IS NOT NULL THEN\n  --   RETURN exception_text;\n  -- END IF;\n\n  -- SET session_replication_role = replica;\n\n  UPDATE content_item\n  SET published_at = NOW(),\n      published_by = get_my_claim('profile_id')::int,\n      unpublished_at = NULL,\n      unpublished_by = NULL\n  WHERE table_name = _table_name\n    AND id = _id;\n  -- FORMAT('UPDATE %I VALUES ($1,$2)'::text ,v_partition_name) using NEW.id,NEW.datetime;\n\n  -- RETURN NULL;\n  -- SET session_replication_role = origin;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.permission_publish_check()\n RETURNS void\n LANGUAGE plpgsql\nAS $function$\n-- DECLARE\n--   exception_text TEXT;\nBEGIN\n  IF NOT permission_publish_get() THEN\n    -- exception_text := 'Publish permission required';\n    RAISE EXCEPTION 'Publish permission required';\n    -- RETURN exception_text;\n  END IF;\n  -- RETURN NULL;\nEND;\n$function$","CREATE OR REPLACE FUNCTION public.permission_publish_get()\n RETURNS boolean\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n  RETURN COALESCE(get_my_claim('claim_publish')::varchar::boolean, FALSE) OR is_claims_admin();\nEND;\n$function$","-- create or replace view \\"public\\".\\"view_id_name\\" as  SELECT 'author'::text AS table_name,\n--     author.id,\n--     author.lastname_name_patronymic AS name,\n--     string_limit((author.lastname_name_patronymic)::character varying, 20) AS short_name\n--    FROM author\n-- UNION\n--  SELECT 'citation'::text AS table_name,\n--     citation.id,\n--     string_limit((citation.english_text)::character varying, 40) AS name,\n--     string_limit((citation.english_text)::character varying, 20) AS short_name\n--    FROM citation\n-- UNION\n--  SELECT 'country'::text AS table_name,\n--     country.id,\n--     country.name,\n--     string_limit((country.name)::character varying, 20) AS short_name\n--    FROM country\n-- UNION\n--  SELECT 'place'::text AS table_name,\n--     place.id,\n--     place.name,\n--     string_limit((place.name)::character varying, 20) AS short_name\n--    FROM place\n-- UNION\n--  SELECT 'profile'::text AS table_name,\n--     profile.id,\n--     (((profile.full_name || ' ('::text) || profile.username) || ')'::text) AS name,\n--     profile.username AS short_name\n--    FROM profile\n-- UNION\n--  SELECT 'town'::text AS table_name,\n--     town.id,\n--     town.name,\n--     string_limit((town.name)::character varying, 20) AS short_name\n--    FROM town\n--   ORDER BY 1, 4;"}	publish_country_fix
 20240117192135	{"drop policy \\"RLS: country: select\\" on \\"public\\".\\"country\\"","alter table \\"public\\".\\"country\\" drop constraint \\"countries_name_check\\"","alter table \\"public\\".\\"country\\" drop constraint \\"countries_name_key\\"","alter table \\"public\\".\\"town\\" drop constraint \\"towns_name_check\\"","drop view if exists \\"public\\".\\"view_rls_edit_for_table\\"","drop index if exists \\"public\\".\\"countries_name_key\\"","alter table \\"public\\".\\"author\\" drop column \\"lastname_name_patronymic\\"","alter table \\"public\\".\\"author\\" add column \\"name_en\\" text not null","alter table \\"public\\".\\"citation\\" drop column \\"english_text\\"","alter table \\"public\\".\\"citation\\" add column \\"text_en\\" text","alter table \\"public\\".\\"event\\" drop column \\"name\\"","alter table \\"public\\".\\"event\\" add column \\"name_en\\" text not null","alter table \\"public\\".\\"place\\" drop column \\"name\\"","alter table \\"public\\".\\"place\\" add column \\"name_en\\" text not null default 'in'::text","alter table \\"public\\".\\"town\\" drop column \\"name\\"","alter table \\"public\\".\\"town\\" add column \\"name_en\\" text not null","alter table \\"public\\".\\"country\\" drop column \\"name\\"","alter table \\"public\\".\\"country\\" add column \\"name_en\\" text not null default ''::text","CREATE UNIQUE INDEX countries_name_key ON public.country USING btree (name_en)","alter table \\"public\\".\\"country\\" add constraint \\"countries_name_check\\" CHECK ((length(name_en) > 0)) not valid","alter table \\"public\\".\\"country\\" validate constraint \\"countries_name_check\\"","alter table \\"public\\".\\"country\\" add constraint \\"countries_name_key\\" UNIQUE using index \\"countries_name_key\\"","alter table \\"public\\".\\"town\\" add constraint \\"towns_name_check\\" CHECK ((length(name_en) > 0)) not valid","alter table \\"public\\".\\"town\\" validate constraint \\"towns_name_check\\"","set check_function_bodies = off","create or replace view \\"public\\".\\"view_id_name\\" as  SELECT 'author'::text AS table_name,\n    author.id,\n    author.name_en AS name,\n    string_limit((author.name_en)::character varying, 20) AS short_name\n   FROM author\nUNION\n SELECT 'citation'::text AS table_name,\n    citation.id,\n    string_limit((citation.text_en)::character varying, 40) AS name,\n    string_limit((citation.text_en)::character varying, 20) AS short_name\n   FROM citation\nUNION\n SELECT 'country'::text AS table_name,\n    country.id,\n    country.name_en AS name,\n    string_limit((country.name_en)::character varying, 20) AS short_name\n   FROM country\nUNION\n SELECT 'place'::text AS table_name,\n    place.id,\n    place.name_en AS name,\n    string_limit((place.name_en)::character varying, 20) AS short_name\n   FROM place\nUNION\n SELECT 'profile'::text AS table_name,\n    profile.id,\n    (((profile.full_name || ' ('::text) || profile.username) || ')'::text) AS name,\n    profile.username AS short_name\n   FROM profile\nUNION\n SELECT 'town'::text AS table_name,\n    town.id,\n    town.name_en AS name,\n    string_limit((town.name_en)::character varying, 20) AS short_name\n   FROM town\n  ORDER BY 1, 4","CREATE OR REPLACE FUNCTION public.content_item_publish(_table_name text, _id integer)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\nAS $function$\n-- DECLARE\n--   exception_text TEXT;\nBEGIN\n  -- also is checked in before update trigger in content_item_edit_protect_generated_fields()\n  -- exception_text := permission_publish_check();\n  PERFORM permission_publish_check();\n\n  -- IF exception_text IS NOT NULL THEN\n  --   RETURN exception_text;\n  -- END IF;\n\n  -- SET session_replication_role = replica;\n\n  UPDATE content_item\n  SET published_at = NOW(),\n      published_by = get_my_claim('profile_id')::int,\n      unpublished_at = NULL,\n      unpublished_by = NULL\n  WHERE table_name = _table_name \n    AND id = _id;\n  -- FORMAT('UPDATE %I VALUES ($1,$2)'::text ,v_partition_name) using NEW.id,NEW.datetime;\n\n  -- RETURN NULL;\n  -- SET session_replication_role = origin;\nEND;\n$function$","create or replace view \\"public\\".\\"view_rls_edit_for_table\\" as  SELECT view_rls_content_item.table_name,\n    view_rls_content_item.id,\n    view_rls_content_item.editable,\n    view_rls_content_item.deletable\n   FROM view_rls_content_item\nUNION\n SELECT 'author'::text AS table_name,\n    author.id,\n    rls_authors_edit(author.*) AS editable,\n    rls_authors_delete(author.*) AS deletable\n   FROM author\nUNION\n SELECT 'citation'::text AS table_name,\n    citation.id,\n    rls_citations_edit(citation.*) AS editable,\n    rls_citations_delete(citation.*) AS deletable\n   FROM citation\nUNION\n SELECT 'event'::text AS table_name,\n    event.id,\n    rls_events_edit(event.*) AS editable,\n    rls_events_delete(event.*) AS deletable\n   FROM event\nUNION\n SELECT 'place'::text AS table_name,\n    place.id,\n    rls_places_edit(place.*) AS editable,\n    rls_places_delete(place.*) AS deletable\n   FROM place\nUNION\n SELECT 'profile'::text AS table_name,\n    profile.id,\n    rls_profiles_edit(profile.*) AS editable,\n    false AS deletable\n   FROM profile\nUNION\n SELECT 'town'::text AS table_name,\n    town.id,\n    rls_towns_edit(town.*) AS editable,\n    rls_towns_delete(town.*) AS deletable\n   FROM town\nUNION\n SELECT 'trust'::text AS table_name,\n    trust.id,\n    rls_trusts_edit(trust.*) AS editable,\n    rls_trusts_edit(trust.*) AS deletable\n   FROM trust\n  ORDER BY 1, 2","create policy \\"RLS: country: select (guest)\\"\non \\"public\\".\\"country\\"\nas permissive\nfor select\nto anon\nusing (published)","create policy \\"RLS: country: select\\"\non \\"public\\".\\"country\\"\nas permissive\nfor select\nto authenticated\nusing (true)"}	data_loss_name_en_col_unify
 20240117134053	{"drop policy \\"RLS: country: select\\" on \\"public\\".\\"country\\"","set check_function_bodies = off","create policy \\"RLS: country: select (guest)\\"\non \\"public\\".\\"country\\"\nas permissive\nfor select\nto anon\nusing (published)","create policy \\"RLS: country: select\\"\non \\"public\\".\\"country\\"\nas permissive\nfor select\nto authenticated\nusing (true)"}	published_country_for_guest
+20240118092256	{"drop view if exists \\"public\\".\\"view_id_name\\"","alter table \\"public\\".\\"author\\" drop column \\"created_at\\"","alter table \\"public\\".\\"author\\" drop column \\"created_by\\"","alter table \\"public\\".\\"author\\" drop column \\"id\\"","alter table \\"public\\".\\"author\\" drop column \\"updated_at\\"","alter table \\"public\\".\\"author\\" drop column \\"updated_by\\"","alter table \\"public\\".\\"author\\" add column \\"published\\" boolean generated always as (((published_at IS NOT NULL) AND (unpublished_at IS NULL))) stored","alter table \\"public\\".\\"author\\" add column \\"published_at\\" timestamp with time zone","alter table \\"public\\".\\"author\\" add column \\"published_by\\" bigint","alter table \\"public\\".\\"author\\" add column \\"table_name\\" text not null default 'author'::text","alter table \\"public\\".\\"author\\" add column \\"unpublished_at\\" timestamp with time zone","alter table \\"public\\".\\"author\\" add column \\"unpublished_by\\" bigint","alter table \\"public\\".\\"citation\\" drop column \\"created_at\\"","alter table \\"public\\".\\"citation\\" drop column \\"created_by\\"","alter table \\"public\\".\\"citation\\" drop column \\"id\\"","alter table \\"public\\".\\"citation\\" drop column \\"updated_at\\"","alter table \\"public\\".\\"citation\\" drop column \\"updated_by\\"","alter table \\"public\\".\\"citation\\" add column \\"published\\" boolean generated always as (((published_at IS NOT NULL) AND (unpublished_at IS NULL))) stored","alter table \\"public\\".\\"citation\\" add column \\"published_at\\" timestamp with time zone","alter table \\"public\\".\\"citation\\" add column \\"published_by\\" bigint","alter table \\"public\\".\\"citation\\" add column \\"table_name\\" text not null default 'citation'::text","alter table \\"public\\".\\"citation\\" add column \\"unpublished_at\\" timestamp with time zone","alter table \\"public\\".\\"citation\\" add column \\"unpublished_by\\" bigint","alter table \\"public\\".\\"event\\" drop column \\"created_at\\"","alter table \\"public\\".\\"event\\" drop column \\"created_by\\"","alter table \\"public\\".\\"event\\" drop column \\"id\\"","alter table \\"public\\".\\"event\\" drop column \\"updated_at\\"","alter table \\"public\\".\\"event\\" drop column \\"updated_by\\"","alter table \\"public\\".\\"event\\" add column \\"published\\" boolean generated always as (((published_at IS NOT NULL) AND (unpublished_at IS NULL))) stored","alter table \\"public\\".\\"event\\" add column \\"published_at\\" timestamp with time zone","alter table \\"public\\".\\"event\\" add column \\"published_by\\" bigint","alter table \\"public\\".\\"event\\" add column \\"table_name\\" text not null default 'event'::text","alter table \\"public\\".\\"event\\" add column \\"unpublished_at\\" timestamp with time zone","alter table \\"public\\".\\"event\\" add column \\"unpublished_by\\" bigint","alter table \\"public\\".\\"place\\" drop column \\"created_at\\"","alter table \\"public\\".\\"place\\" drop column \\"created_by\\"","alter table \\"public\\".\\"place\\" drop column \\"id\\"","alter table \\"public\\".\\"place\\" drop column \\"updated_at\\"","alter table \\"public\\".\\"place\\" drop column \\"updated_by\\"","alter table \\"public\\".\\"place\\" add column \\"published\\" boolean generated always as (((published_at IS NOT NULL) AND (unpublished_at IS NULL))) stored","alter table \\"public\\".\\"place\\" add column \\"published_at\\" timestamp with time zone","alter table \\"public\\".\\"place\\" add column \\"published_by\\" bigint","alter table \\"public\\".\\"place\\" add column \\"table_name\\" text not null default 'place'::text","alter table \\"public\\".\\"place\\" add column \\"unpublished_at\\" timestamp with time zone","alter table \\"public\\".\\"place\\" add column \\"unpublished_by\\" bigint","alter table \\"public\\".\\"town\\" drop column \\"created_at\\"","alter table \\"public\\".\\"town\\" drop column \\"created_by\\"","alter table \\"public\\".\\"town\\" drop column \\"id\\"","alter table \\"public\\".\\"town\\" drop column \\"updated_at\\"","alter table \\"public\\".\\"town\\" drop column \\"updated_by\\"","alter table \\"public\\".\\"town\\" add column \\"published\\" boolean generated always as (((published_at IS NOT NULL) AND (unpublished_at IS NULL))) stored","alter table \\"public\\".\\"town\\" add column \\"published_at\\" timestamp with time zone","alter table \\"public\\".\\"town\\" add column \\"published_by\\" bigint","alter table \\"public\\".\\"town\\" add column \\"table_name\\" text not null default 'town'::text","alter table \\"public\\".\\"town\\" add column \\"unpublished_at\\" timestamp with time zone","alter table \\"public\\".\\"town\\" add column \\"unpublished_by\\" bigint","alter table \\"public\\".\\"author\\" add constraint \\"author_table_name_check\\" CHECK ((table_name = 'author'::text)) NOT VALID not valid","alter table \\"public\\".\\"author\\" validate constraint \\"author_table_name_check\\"","alter table \\"public\\".\\"citation\\" add constraint \\"citation_table_name_check\\" CHECK ((table_name = 'citation'::text)) NOT VALID not valid","alter table \\"public\\".\\"citation\\" validate constraint \\"citation_table_name_check\\"","alter table \\"public\\".\\"event\\" add constraint \\"event_table_name_check\\" CHECK ((table_name = 'event'::text)) NOT VALID not valid","alter table \\"public\\".\\"event\\" validate constraint \\"event_table_name_check\\"","alter table \\"public\\".\\"place\\" add constraint \\"place_table_name_check\\" CHECK ((table_name = 'place'::text)) NOT VALID not valid","alter table \\"public\\".\\"place\\" validate constraint \\"place_table_name_check\\"","alter table \\"public\\".\\"town\\" add constraint \\"town_table_name_check\\" CHECK ((table_name = 'town'::text)) NOT VALID not valid","alter table \\"public\\".\\"town\\" validate constraint \\"town_table_name_check\\"","alter table \\"public\\".\\"author\\" inherit \\"public\\".\\"content_item\\"\n\nalter table \\"public\\".\\"citation\\" inherit \\"public\\".\\"content_item\\"\n\nalter table \\"public\\".\\"event\\" inherit \\"public\\".\\"content_item\\"\n\nalter table \\"public\\".\\"place\\" inherit \\"public\\".\\"content_item\\"\n\nalter table \\"public\\".\\"town\\" inherit \\"public\\".\\"content_item\\"\n\nset check_function_bodies = off","create or replace view \\"public\\".\\"view_rls_edit_for_table\\" as  SELECT view_rls_content_item.table_name,\n    view_rls_content_item.id,\n    view_rls_content_item.editable,\n    view_rls_content_item.deletable\n   FROM view_rls_content_item\nUNION\n SELECT 'profile'::text AS table_name,\n    profile.id,\n    rls_profiles_edit(profile.*) AS editable,\n    false AS deletable\n   FROM profile\nUNION\n SELECT 'trust'::text AS table_name,\n    trust.id,\n    rls_trusts_edit(trust.*) AS editable,\n    rls_trusts_edit(trust.*) AS deletable\n   FROM trust\n  ORDER BY 1, 2","create or replace view \\"public\\".\\"view_id_name\\" as  SELECT author.table_name,\n    author.id,\n    author.name_en AS name,\n    string_limit((author.name_en)::character varying, 20) AS short_name\n   FROM author\nUNION\n SELECT citation.table_name,\n    citation.id,\n    string_limit((citation.text_en)::character varying, 40) AS name,\n    string_limit((citation.text_en)::character varying, 20) AS short_name\n   FROM citation\nUNION\n SELECT country.table_name,\n    country.id,\n    country.name_en AS name,\n    string_limit((country.name_en)::character varying, 20) AS short_name\n   FROM country\nUNION\n SELECT place.table_name,\n    place.id,\n    place.name_en AS name,\n    string_limit((place.name_en)::character varying, 20) AS short_name\n   FROM place\nUNION\n SELECT 'profile'::text AS table_name,\n    profile.id,\n    (((profile.full_name || ' ('::text) || profile.username) || ')'::text) AS name,\n    profile.username AS short_name\n   FROM profile\nUNION\n SELECT town.table_name,\n    town.id,\n    town.name_en AS name,\n    string_limit((town.name_en)::character varying, 20) AS short_name\n   FROM town\n  ORDER BY 1, 4"}	content_item_inherit
 \.
 
 
@@ -3076,7 +3081,7 @@ COPY vault.secrets (id, name, description, secret, key_id, nonce, created_at, up
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 1347, true);
+SELECT pg_catalog.setval('auth.refresh_tokens_id_seq', 1392, true);
 
 
 --
@@ -5055,6 +5060,30 @@ GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, v
 GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, variables jsonb, extensions jsonb) TO anon;
 GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, variables jsonb, extensions jsonb) TO authenticated;
 GRANT ALL ON FUNCTION graphql_public.graphql("operationName" text, query text, variables jsonb, extensions jsonb) TO service_role;
+
+
+--
+-- Name: FUNCTION lo_export(oid, text); Type: ACL; Schema: pg_catalog; Owner: supabase_admin
+--
+
+REVOKE ALL ON FUNCTION pg_catalog.lo_export(oid, text) FROM postgres;
+GRANT ALL ON FUNCTION pg_catalog.lo_export(oid, text) TO supabase_admin;
+
+
+--
+-- Name: FUNCTION lo_import(text); Type: ACL; Schema: pg_catalog; Owner: supabase_admin
+--
+
+REVOKE ALL ON FUNCTION pg_catalog.lo_import(text) FROM postgres;
+GRANT ALL ON FUNCTION pg_catalog.lo_import(text) TO supabase_admin;
+
+
+--
+-- Name: FUNCTION lo_import(text, oid); Type: ACL; Schema: pg_catalog; Owner: supabase_admin
+--
+
+REVOKE ALL ON FUNCTION pg_catalog.lo_import(text, oid) FROM postgres;
+GRANT ALL ON FUNCTION pg_catalog.lo_import(text, oid) TO supabase_admin;
 
 
 --

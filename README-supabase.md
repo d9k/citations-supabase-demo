@@ -14,6 +14,27 @@ Supabase URL & anon key for `.env` configuration:
 
 https://supabase.com/dashboard/project/_/settings/api
 
+## Adding admin permissions
+
+Get user id from schema `auth`, table `users`, column `id`. Id example: `ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d`.
+
+Example query to add claim:
+
+```sql
+SELECT set_claim('ccdcd9a1-2df3-4cdf-8298-a37cd209dd0d'::uuid, 'claim_edit_all_content', '1');
+```
+
+User must relogin to use updated permissions.
+
+Function `set_claim` installed from [custom claims](https://github.com/supabase-community/supabase-custom-claims) project.
+
+### Available claims:
+
+- `claim_edit_all_content` - edit content created by other users
+- `claim_delete_all_content` - delete content created by other users
+- `claim_edit_all_profiles` - edit other users profiles
+- `claim_publish` - publish and unpublish content rows (make visible for guests).
+
 ## Connecting (linking) to Supabase
 
 ### Login to Supabase

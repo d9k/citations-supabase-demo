@@ -472,7 +472,7 @@ CREATE TABLE IF NOT EXISTS "public"."author" (
     "unpublished_at" timestamp with time zone,
     "unpublished_by" bigint,
     "published" boolean,
-    CONSTRAINT "author_name_en_check" CHECK (("length"("name_en") > 0))
+    CONSTRAINT "author_name_en_check" CHECK (("length"("name_en") >= 2))
 )
 INHERITS ("public"."content_item");
 
@@ -550,7 +550,8 @@ CREATE TABLE IF NOT EXISTS "public"."citation" (
     "table_name" "text" DEFAULT 'citation'::"text",
     "unpublished_at" timestamp with time zone,
     "unpublished_by" bigint,
-    "published" boolean
+    "published" boolean,
+    CONSTRAINT "citation_text_en_check" CHECK (("length"("text_en") >= 5))
 )
 INHERITS ("public"."content_item");
 
@@ -613,7 +614,8 @@ CREATE TABLE IF NOT EXISTS "public"."event" (
     "table_name" "text" DEFAULT 'event'::"text",
     "unpublished_at" timestamp with time zone,
     "unpublished_by" bigint,
-    "published" boolean
+    "published" boolean,
+    CONSTRAINT "event_name_en_check" CHECK (("length"("name_en") >= 2))
 )
 INHERITS ("public"."content_item");
 
@@ -652,7 +654,8 @@ CREATE TABLE IF NOT EXISTS "public"."place" (
     "table_name" "text" DEFAULT 'place'::"text",
     "unpublished_at" timestamp with time zone,
     "unpublished_by" bigint,
-    "published" boolean
+    "published" boolean,
+    CONSTRAINT "place_name_en_check" CHECK (("length"("name_en") >= 2))
 )
 INHERITS ("public"."content_item");
 
@@ -732,7 +735,7 @@ CREATE TABLE IF NOT EXISTS "public"."town" (
     "unpublished_at" timestamp with time zone,
     "unpublished_by" bigint,
     "published" boolean,
-    CONSTRAINT "towns_name_check" CHECK (("length"("name_en") > 0))
+    CONSTRAINT "town_name_en_check" CHECK (("length"("name_en") >= 2))
 )
 INHERITS ("public"."content_item");
 
@@ -852,7 +855,7 @@ CREATE TABLE IF NOT EXISTS "public"."country" (
     "published_by" bigint,
     "unpublished_at" timestamp with time zone,
     "unpublished_by" bigint,
-    CONSTRAINT "countries_name_check" CHECK (("length"("name_en") > 0)),
+    CONSTRAINT "country_name_en_check" CHECK (("length"("name_en") >= 2)),
     CONSTRAINT "country_table_name_check" CHECK (("table_name" = 'country'::"text"))
 )
 INHERITS ("public"."content_item");

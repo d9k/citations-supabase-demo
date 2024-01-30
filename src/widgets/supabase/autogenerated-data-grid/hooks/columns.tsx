@@ -213,19 +213,6 @@ export const useColumns = ({
             ),
           }
           : {}),
-        ...(fieldName === COLUMN_NAME_PUBLISHED
-          ? {
-            renderCell: (renderProps) => (
-              <CellPublished
-                {...renderProps}
-                allowPublish={allowPublish}
-                key={`${fieldName}_cell_published`}
-                onRowPublish={onRowActionPublish}
-                onRowUnpublish={onRowActionUnpublish}
-              />
-            ),
-          }
-          : {}),
         ...(editable && allowEdit
           ? {
             renderEditCell: (
@@ -256,6 +243,20 @@ export const useColumns = ({
 
           return editable;
         },
+        ...(fieldName === COLUMN_NAME_PUBLISHED
+          ? {
+            renderCell: (renderProps) => (
+              <CellPublished
+                {...renderProps}
+                allowPublish={allowPublish}
+                key={`${fieldName}_cell_published`}
+                onRowPublish={onRowActionPublish}
+                onRowUnpublish={onRowActionUnpublish}
+              />
+            ),
+            renderEditCell: undefined,
+          }
+          : {}),
       };
 
       return column;

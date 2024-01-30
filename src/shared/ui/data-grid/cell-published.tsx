@@ -1,5 +1,7 @@
 import { Anchor } from '@mantine/core';
 
+// import { FlexWra
+
 // @deno-types="@types/react-data-grid"
 import { RenderCellProps } from 'react-data-grid';
 
@@ -38,7 +40,7 @@ export function CellPublished<TRow, TSummaryRow>({
   }
 
   return (
-    <Group>
+    <Group wrap='nowrap'>
       <span>{value ? 'yes' : 'no'}</span>
 
       {allowPublish
