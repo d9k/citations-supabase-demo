@@ -24,6 +24,8 @@ import {
   CellPublishedProps,
 } from '/~/shared/ui/data-grid/cell-published.tsx';
 
+import { CellTextArea } from '/~/shared/ui/data-grid/cell-text-area.tsx';
+
 import { RecordAny } from '/~/shared/lib/ts/record-any.ts';
 
 //@deno-types="@types/lodash"
@@ -271,6 +273,12 @@ export const useColumns = ({
         ...(columnsNamesTextLong.includes(fieldName)
           ? {
             width: COLUMN_TEXT_LONG_WIDTH,
+            renderEditCell: (renderProps) => (
+              <CellTextArea
+                key={`${fieldName}_input`}
+                {...renderProps}
+              />
+            ),
           }
           : {}),
       };
