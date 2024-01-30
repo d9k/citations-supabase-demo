@@ -7,6 +7,7 @@
     "build:with-relative-imports-transform": "deno run --no-npm -A ./script/build-with-relative-imports-transform.ts",
     "prebuild:copy-and-transform-imports-to-relative": "deno run --no-npm --allow-env --allow-read --allow-write ./script/copy-and-transform-imports-to-relative.ts",
     "start": "ULTRA_MODE=production deno run --no-npm -A --no-remote ./server.js",
+    "autorestart": "ULTRA_MODE=production denon run --no-npm -A --no-remote ./server.js",
     "storybook": "pnpm run storybook",
     "storybook:build": "pnpm run storybook:build",
     "cache:client": "deno cache --no-npm ./client.tsx",
