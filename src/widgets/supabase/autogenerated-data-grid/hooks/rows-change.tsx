@@ -110,5 +110,5 @@ export const useOnRowsChange = ({
 
       await onReloadRequired?.();
     }
-  }, []);
+  }, [rows]);
 };
