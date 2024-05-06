@@ -25,6 +25,7 @@ import {
 } from '/~/shared/ui/data-grid/cell-published.tsx';
 
 import { CellTextArea } from '/~/shared/ui/data-grid/cell-text-area.tsx';
+import { CellTextAreaView } from '/~/shared/ui/data-grid/cell-text-area-view.tsx';
 
 import { RecordAny } from '/~/shared/lib/ts/record-any.ts';
 
@@ -275,6 +276,12 @@ export const useColumns = ({
             width: COLUMN_TEXT_LONG_WIDTH,
             renderEditCell: (renderProps) => (
               <CellTextArea
+                key={`${fieldName}_input`}
+                {...renderProps}
+              />
+            ),
+            renderCell: (renderProps) => (
+              <CellTextAreaView
                 key={`${fieldName}_input`}
                 {...renderProps}
               />
